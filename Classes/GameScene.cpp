@@ -5,8 +5,8 @@
 //  Created by André Vants on 13/12/22.
 //
 
-#include "GameScene.hpp"
-#include "Nodes/ObstacleNode.hpp"
+#include "GameScene.h"
+#include "Nodes/ObstacleNode.h"
 
 USING_NS_AX;
 

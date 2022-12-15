@@ -5,7 +5,7 @@
 //  Created by André Vants on 14/12/22.
 //
 
-#include "ObstacleNode.hpp"
+#include "ObstacleNode.h"
 
 USING_NS_AX;
 

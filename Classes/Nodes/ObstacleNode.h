@@ -1,12 +1,12 @@
 //
-//  ObstacleNode.hpp
+//  ObstacleNode.h
 //  RollingThunderCpp
 //
 //  Created by André Vants on 14/12/22.
 //
 
-#ifndef ObstacleNode_hpp
-#define ObstacleNode_hpp
+#ifndef ObstacleNode_h
+#define ObstacleNode_h
 
 #include "axmol.h"
 
@@ -22,4 +22,4 @@ private:
     ax::Sprite* _sprite;
 };
 
-#endif /* ObstacleNode_hpp */
+#endif /* ObstacleNode_h */

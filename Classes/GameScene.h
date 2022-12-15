@@ -1,12 +1,12 @@
 //
-//  GameScene.hpp
+//  GameScene.h
 //  RollingThunderCpp
 //
 //  Created by André Vants on 13/12/22.
 //
 
-#ifndef GameScene_hpp
-#define GameScene_hpp
+#ifndef GameScene_h
+#define GameScene_h
 
 #include "axmol.h"
 
@@ -24,4 +24,4 @@ private:
     Node* aNode;
 };
 
-#endif /* GameScene_hpp */
+#endif /* GameScene_h */

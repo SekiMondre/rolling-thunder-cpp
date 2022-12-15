@@ -24,7 +24,7 @@
  ****************************************************************************/
 
 #include "HelloWorldScene.h"
-#include "GameScene.hpp"
+#include "GameScene.h"
 
 USING_NS_AX;
 

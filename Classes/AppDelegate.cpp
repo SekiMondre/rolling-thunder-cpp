@@ -25,8 +25,8 @@
 
 #include "AppDelegate.h"
 #include "HelloWorldScene.h"
-#include "Debug/DebugAnimationScene.hpp"
-#include "GameScene.hpp"
+#include "Debug/DebugAnimationScene.h"
+#include "GameScene.h"
 
 #define USE_AUDIO_ENGINE 1
 
