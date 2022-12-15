@@ -1,0 +1,12 @@
+==================================================
+// NOTES:
+==================================================
+
+- C++ `inline` keyword allows code inlining of functions during compilation
+
+- Color4B static constants to declare "enum" constants
+
+- Vector<T> iterator:
+    for (auto& frame : frames) {
+        frame->getSpriteFrame()->getTexture()->setAliasTexParameters();
+    }

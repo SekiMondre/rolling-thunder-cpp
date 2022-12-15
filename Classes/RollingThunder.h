@@ -9,6 +9,9 @@
 #define RollingThunder_h
 
 #include "GameScene.h"
+
+#include "Subsystems/SpriteLoader.h"
+
 #include "Nodes/PlayerNode.h"
 #include "Nodes/ObstacleNode.h"
 #include "Nodes/RollingRockNode.h"

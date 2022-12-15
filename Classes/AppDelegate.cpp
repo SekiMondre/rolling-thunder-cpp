@@ -124,9 +124,9 @@ bool AppDelegate::applicationDidFinishLaunching()
 
     // create a scene. it's an autorelease object
 //    auto scene = utils::createInstance<HelloWorld>();
-//    auto scene = utils::createInstance<DebugAnimationScene>();
+    auto scene = utils::createInstance<DebugAnimationScene>();
 //    auto scene = utils::createInstance<GameScene>();
-    auto scene = GameScene::create();
+//    auto scene = GameScene::create();
 //    auto aaa = DebugAnimationScene::create();
 
     // run
