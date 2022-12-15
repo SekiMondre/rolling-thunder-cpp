@@ -6,7 +6,6 @@
 //
 
 #include "GameScene.h"
-#include "Nodes/ObstacleNode.h"
 
 USING_NS_AX;
 

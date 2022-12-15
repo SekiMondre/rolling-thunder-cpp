@@ -9,6 +9,7 @@
 #define GameScene_h
 
 #include "axmol.h"
+#include "RollingThunder.h"
 
 //class ObstacleNode;
 

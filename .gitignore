@@ -24,7 +24,7 @@ buildsrc/
 *.ilk
 *.log
 [Bb]in
-[Dd]ebug/
+# [Dd]ebug/
 [Dd]ebug.win32/
 *.sbr
 *.sdf

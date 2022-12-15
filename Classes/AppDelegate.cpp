@@ -24,9 +24,9 @@
  ****************************************************************************/
 
 #include "AppDelegate.h"
+#include "RollingThunder.h"
+#include "Debug.h" // Add DEBUG flag
 #include "HelloWorldScene.h"
-#include "Debug/DebugAnimationScene.h"
-#include "GameScene.h"
 
 #define USE_AUDIO_ENGINE 1
 
