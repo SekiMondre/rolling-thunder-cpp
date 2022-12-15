@@ -1,0 +1,28 @@
+==================================================
+// ISSUES:
+==================================================
+
+- Warp background support (or redesign)
+
+- SFX Audio formats: iOS (.caf) and Android (.ogg)
+
+- Sprite atlas packing and loading
+
+- Math functions (lerp, trigonometry, etc)
+
+- Level spawn: Nodes instantiation
+    * Evaluate the need to use design patterns: Object Pool, Prototype
+    
+- Android setup & build
+
+
+
+==================================================
+// BONUS FEATURES:
+==================================================
+
+- Fastlane integration
+
+- Online leaderboard
+
+- Monetization: Ads, In-App purchase
