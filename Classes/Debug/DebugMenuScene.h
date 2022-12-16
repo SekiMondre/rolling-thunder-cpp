@@ -19,6 +19,9 @@ public:
 private:
     DebugMenuScene();
     ~DebugMenuScene();
+    void presentGameScene();
+    void presentAnimationScene();
+    void presentCollisionScene();
 };
 
 #endif /* DebugMenuScene_h */

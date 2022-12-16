@@ -122,12 +122,15 @@ bool AppDelegate::applicationDidFinishLaunching()
 
     register_all_packages();
 
+    director->setClearColor(Color4F(0.1, 0.1, 0.1, 1));
+    
     // create a scene. it's an autorelease object
 //    auto scene = utils::createInstance<HelloWorld>();
-    auto scene = utils::createInstance<DebugAnimationScene>();
+//    auto scene = utils::createInstance<DebugAnimationScene>();
 //    auto scene = utils::createInstance<GameScene>();
 //    auto scene = GameScene::create();
 //    auto aaa = DebugAnimationScene::create();
+    auto scene = DebugMenuScene::create();
 
     // run
     director->runWithScene(scene);
