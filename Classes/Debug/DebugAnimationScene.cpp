@@ -41,21 +41,47 @@ bool DebugAnimationScene::init()
     root->setPosition(Vec2(visibleSize.width * 0.5 + origin.x, origin.y));
     addChild(root);
     
-//    auto aa = SpriteLoader::BACKGROUND;
-    auto bg = SpriteLoader::createBackground();
+    auto bg = SpriteLoader::load(BACKGROUND);
     bg->setAnchorPoint(Vec2(0.5, 0));
     root->addChild(bg);
     
-    auto bgSize = bg->getContentSize();
-    log("Background size: {%.1f, %.1f}", bgSize.x, bgSize.y);
+    for (int i = 0; i < 3; i++)
+    {
+        auto rock = SpriteLoader::load(ROCK_BIG);
+        rock->setPosition(Vec2(152 * (i - 1), visibleSize.height - 76));
+        root->addChild(rock);
+    }
     
-    auto rock = SpriteLoader::createRock();
-    rock->setPosition(Vec2(0, 500));
-    root->addChild(rock);
+    auto enemy1 = SpriteLoader::loadAnimated(ENEMY_COMMON, 8);
+    enemy1->setPosition(Vec2(-152 - 16, visibleSize.height - 152 - 76));
+    root->addChild(enemy1);
     
-    auto coin = SpriteLoader::createCoinAnimation();
-    coin->setPosition(Vec2(0, 200));
-    root->addChild(coin);
+    auto enemy2 = SpriteLoader::loadAnimated(ENEMY_BIG, 8);
+    enemy2->setPosition(Vec2(0, visibleSize.height - 152 - 76));
+    root->addChild(enemy2);
+    
+    auto enemy3 = SpriteLoader::loadAnimatedEnemy3();
+    enemy3->setPosition(Vec2(152 + 16, visibleSize.height - 152 - 76));
+    root->addChild(enemy3);
+    
+    for (int i = 0; i < 5; i++)
+    {
+        auto coin = SpriteLoader::loadAnimated(GOLD_COIN, 8);
+        coin->setPosition(Vec2(76 * (i - 2), visibleSize.height * 0.65));
+        root->addChild(coin);
+    }
+    
+    auto r1 = SpriteLoader::load(ROCK_MEDIUM);
+    r1->setPosition(Vec2(-150, 300));
+    root->addChild(r1);
+    
+    auto r2 = SpriteLoader::load(ROCK_SMALL);
+    r2->setPosition(Vec2(-150, 500));
+    root->addChild(r2);
+    
+    auto b = SpriteLoader::load(GOLD_BAR_3X);
+    b->setPosition(Vec2(0, 200));
+    root->addChild(b);
     
     auto exitButton = Debug::createColorButton("X", 32, Vec2(64, 64), Color4B::RED);
     exitButton->setCallback(AX_CALLBACK_0(DebugAnimationScene::exitScene, this));
