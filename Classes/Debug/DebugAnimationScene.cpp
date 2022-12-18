@@ -71,12 +71,28 @@ bool DebugAnimationScene::init()
         root->addChild(coin);
     }
     
+    auto playerIdle = SpriteLoader::loadPlayerIdle();
+    playerIdle->setPosition(Vec2(-152, visibleSize.height * 0.55));
+    root->addChild(playerIdle);
+    
+    auto playerRoll = SpriteLoader::loadAnimated("tatu-1-ball", 3);
+    playerRoll->setPosition(Vec2(0, visibleSize.height * 0.55));
+    root->addChild(playerRoll);
+    
+    auto playerDead = SpriteLoader::loadPlayerDead();
+    playerDead->setPosition(Vec2(152, visibleSize.height * 0.55));
+    root->addChild(playerDead);
+    
+    auto powerup = SpriteLoader::loadAnimatedCrackle();
+    powerup->setPosition(Vec2(0, visibleSize.height * 0.40));
+    root->addChild(powerup);
+    
     auto r1 = SpriteLoader::load(ROCK_MEDIUM);
     r1->setPosition(Vec2(-150, 300));
     root->addChild(r1);
     
     auto r2 = SpriteLoader::load(ROCK_SMALL);
-    r2->setPosition(Vec2(-150, 500));
+    r2->setPosition(Vec2(-150, 100));
     root->addChild(r2);
     
     auto b = SpriteLoader::load(GOLD_BAR_3X);
