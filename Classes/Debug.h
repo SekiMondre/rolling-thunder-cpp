@@ -12,4 +12,9 @@
 #include "Debug/DebugAnimationScene.h"
 #include "Debug/DebugCollisionScene.h"
 
+namespace Debug
+{
+    ax::MenuItem* createColorButton(std::string_view text, float fontSize, ax::Vec2 size, ax::Color4B color);
+}
+
 #endif /* Debug_h */

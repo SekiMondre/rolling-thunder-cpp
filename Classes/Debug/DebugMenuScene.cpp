@@ -6,46 +6,24 @@
 //
 
 #include "DebugMenuScene.h"
-#include "ui/CocosGUI.h"
+//#include "ui/CocosGUI.h"
+#include "Debug.h"
 
 USING_NS_AX;
 
 DebugMenuScene::DebugMenuScene()
 {
-    log("[DEBUG] Scene load: Debug Menu");
+    log("[DEBUG] Create scene: DebugMenu");
 }
 
 DebugMenuScene::~DebugMenuScene()
 {
-    log("[DEBUG] Scene delete: Debug Menu");
-}
-
-static MenuItem* createButton(std::string_view text, float fontSize, Vec2 size, Color4B color)
-{
-    auto selectedColor = Color4B(Color4F(color) * 0.8);
-    
-    auto normalSprite = DrawNode::create();
-    normalSprite->drawSolidRect(Vec2::ZERO, size, color);
-    normalSprite->setContentSize(size);
-    auto selectedSprite = DrawNode::create();
-    selectedSprite->drawSolidRect(Vec2::ZERO, size, selectedColor);
-    selectedSprite->setContentSize(size);
-    
-    auto label = Label::create();
-    label->setString(text);
-    label->setColor(Color3B::BLACK);
-    label->setSystemFontName("DPComicRegular");
-    label->setSystemFontSize(fontSize);
-    label->setPosition(size * 0.5);
-
-    auto button = MenuItemSprite::create(normalSprite, selectedSprite);
-    button->addChild(label);
-    return button;
+    log("[DEBUG] Destroy scene: DebugMenu");
 }
 
 static MenuItem* createMenuButton(std::string_view text, Color4B color)
 {
-    return createButton(text, 32, Vec2(460, 75), color);
+    return Debug::createColorButton(text, 32, Vec2(460, 75), color);
 }
 
 bool DebugMenuScene::init()
@@ -77,12 +55,12 @@ bool DebugMenuScene::init()
 
 void DebugMenuScene::presentGameScene()
 {
-    log("game scene");
+    _director->replaceScene(GameScene::create());
 }
 
 void DebugMenuScene::presentAnimationScene()
 {
-    log("animation scene here");
+    _director->replaceScene(DebugAnimationScene::create());
 }
 
 void DebugMenuScene::presentCollisionScene()

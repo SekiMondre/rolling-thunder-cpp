@@ -14,7 +14,13 @@
 class DebugAnimationScene : public ax::Scene
 {
 public:
+    CREATE_FUNC(DebugAnimationScene);
     virtual bool init() override;
+
+private:
+    DebugAnimationScene();
+    ~DebugAnimationScene();
+    void exitScene();
 };
 
 #endif /* DebugAnimationScene_h */
