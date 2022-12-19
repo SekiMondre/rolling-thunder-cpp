@@ -76,7 +76,6 @@ bool ObstacleNode::init()
     physicsBody->setDynamic(true);
     physicsBody->setRotationEnable(false);
     physicsBody->setGravityEnable(false);
-    
     physicsBody->setCategoryBitmask(CollisionMask::OBSTACLE);
     physicsBody->setCollisionBitmask(CollisionMask::NONE);
     physicsBody->setContactTestBitmask(CollisionMask::PLAYER);

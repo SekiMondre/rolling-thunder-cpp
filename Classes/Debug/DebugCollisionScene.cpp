@@ -42,38 +42,26 @@ bool DebugCollisionScene::init()
     auto player = PlayerNode::create();
     player->setPosition(Vec2(origin.x + visibleSize.width * 0.5, origin.y + visibleSize.height * 0.5));
     o = player;
-    log("Player bitmask: %x", player->getPhysicsBody()->getContactTestBitmask());
+//    log("Player bitmask: %x", player->getPhysicsBody()->getContactTestBitmask());
     
 //    root->addChild(obj);
     addChild(player);
     
-    auto body2 = PhysicsBody::createBox(Vec2(48, 48));
-    body2->setDynamic(true);
-    body2->setCategoryBitmask(CollisionMask::OBSTACLE);
-    body2->setCollisionBitmask(0x00);
-    body2->setContactTestBitmask(0x02);
-    
-    auto rock2 = SpriteLoader::load(ROCK_MEDIUM);
+    auto rock2 = ObstacleNode::createWithType(Obstacle::SMALL);
     rock2->setPosition(Vec2(origin.x + visibleSize.width * 0.3, origin.y + visibleSize.height * 0.7));
-    rock2->setPhysicsBody(body2);
-    
     addChild(rock2);
     
-    auto body3 = PhysicsBody::createBox(Vec2(64, 40));
-    body3->setDynamic(true);
-    body3->setCategoryBitmask(CollisionMask::ENEMY);
-    body3->setContactTestBitmask(0x01);
-    body3->setCollisionBitmask(0x0);
-    
-    auto rock3 = SpriteLoader::load(ROCK_SMALL);
+    auto rock3 = EnemyNode::create();
     rock3->setPosition(Vec2(origin.x + visibleSize.width * 0.7, origin.y + visibleSize.height * 0.7));
-    rock3->setPhysicsBody(body3);
-    
     addChild(rock3);
     
     auto node = ObstacleNode::createWithType(Obstacle::BIG);
     node->setPosition(Vec2(origin.x + visibleSize.width * 0.4, origin.y + visibleSize.height * 0.3));
     addChild(node);
+    
+    auto gold = CollectibleNode::create();
+    gold->setPosition(Vec2(origin.x + visibleSize.width * 0.75, origin.y + visibleSize.height * 0.25));
+    addChild(gold);
     
     auto contactListener = EventListenerPhysicsContact::create();
     contactListener->onContactBegin = AX_CALLBACK_1(DebugCollisionScene::onContactBegin, this);
@@ -83,20 +71,16 @@ bool DebugCollisionScene::init()
     auto listener = EventListenerTouchOneByOne::create();
     listener->onTouchBegan = [](Touch* touch, Event* event) {
         auto location = touch->getLocation();
-//        log("Touch began location: {%.2f, %.2f}", location.x, location.y);
         o->setPosition(location);
         return true;
     };
     listener->onTouchMoved = [](Touch* touch, Event* event) {
         auto location = touch->getLocation();
-//        log("Touch moved location: {%.2f, %.2f}", location.x, location.y);
         o->setPosition(location);
-//        return true;
     };
     listener->onTouchEnded = [](Touch* touch, Event* event) {
         auto location = touch->getLocation();
 //        log("Touch ended location: {%.2f, %.2f}", location.x, location.y);
-//        return true;
     };
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
     
@@ -119,12 +103,28 @@ bool DebugCollisionScene::onContactBegin(PhysicsContact& contact)
     
     if (bodyA->getCategoryBitmask() == CollisionMask::PLAYER)
     {
-        log("player collide...");
-        if (bodyB->getCategoryBitmask() == CollisionMask::OBSTACLE) {
-            log("...with obstacle");
-        } else if (bodyB->getCategoryBitmask() == CollisionMask::ENEMY) {
-            log("...with enemy");
+        auto node = bodyA->getNode();
+        
+//        PlayerNode* player = static_cast<PlayerNode*>(node);
+        PlayerNode* player = (PlayerNode*)node;
+//        player->testCall();
+        
+        if (bodyB->getCategoryBitmask() == CollisionMask::OBSTACLE)
+        {
+            log("player collide...with obstacle");
         }
+        else if (bodyB->getCategoryBitmask() == CollisionMask::ENEMY)
+        {
+            log("player collide...with enemy");
+        }
+        else if (bodyB->getCategoryBitmask() == CollisionMask::COLLECTIBLE)
+        {
+            log("player collide...with collectible");
+        }
+//        else if (bodyB->getCategoryBitmask() == CollisionMask::DEATH_ZONE)
+//        {
+//            log("player collide...with collectible");
+//        }
     }
     
     return true;

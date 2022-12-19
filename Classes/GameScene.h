@@ -16,13 +16,18 @@
 class GameScene : public ax::Scene
 {
 public:
-    GameScene();
+    CREATE_FUNC(GameScene);
     virtual bool init() override;
     void update(float deltaTime) override;
-    CREATE_FUNC(GameScene);
     
 private:
-    Node* aNode;
+    GameScene();
+    ~GameScene();
+    bool onTouchBegan(ax::Touch* touch, ax::Event* event);
+    void onTouchMoved(ax::Touch* touch, ax::Event* event);
+    void onTouchEnded(ax::Touch* touch, ax::Event* event);
+    void onTouchCancelled(ax::Touch* touch, ax::Event* event);
+    bool onContactBegin(ax::PhysicsContact& contact);
 };
 
 #endif /* GameScene_h */

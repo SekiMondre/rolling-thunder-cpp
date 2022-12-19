@@ -19,6 +19,7 @@ public:
 private:
     CollectibleNode();
     ~CollectibleNode();
+    ax::Sprite* _sprite;
 };
 
 #endif /* CollectibleNode_h */

@@ -11,24 +11,33 @@ USING_NS_AX;
 
 GameScene::GameScene()
 {
-    aNode = nullptr;
-    log("Game scene load");
+    log("Game scene created");
+}
+
+GameScene::~GameScene()
+{
+    log("Game scene destroyed");
 }
 
 bool GameScene::init()
 {
-    if (!Scene::init()) {
-        return false;
-    }
-    log("Game scene init"); 
+    if (!Scene::initWithPhysics()) return false;
+    log("Game scene init");
     
-    aNode = ObstacleNode::create();
-    if (aNode == nullptr) {
-        log("ERROR create node");
-////        return false;
-    }
-    aNode->setPosition(Vec2(300, 500));
-    addChild(aNode);
+    auto world = getPhysicsWorld();
+    world->setGravity(Vec2(0, 0));
+    world->setDebugDrawMask(0xFFFF); // #if DEBUG
+    
+    auto contactListener = EventListenerPhysicsContact::create();
+    contactListener->onContactBegin = AX_CALLBACK_1(GameScene::onContactBegin, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
+    
+    auto touchListener = EventListenerTouchOneByOne::create();
+    touchListener->onTouchBegan = AX_CALLBACK_2(GameScene::onTouchBegan, this);
+    touchListener->onTouchMoved = AX_CALLBACK_2(GameScene::onTouchMoved, this);
+    touchListener->onTouchEnded = AX_CALLBACK_2(GameScene::onTouchEnded, this);
+    touchListener->onTouchCancelled = AX_CALLBACK_2(GameScene::onTouchCancelled, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
     
     this->scheduleUpdate();
     return true;
@@ -36,15 +45,37 @@ bool GameScene::init()
 
 void GameScene::update(float deltaTime)
 {
-    static float count = 0;
-    count += deltaTime;
-    if (count > 2) {
-        if (aNode != nullptr) {
-            log("Removing node...");
-            aNode->removeFromParent();
-            aNode = nullptr;
-        }
-    }
-    
 //    log("Update delta: %f", deltaTime);
+}
+
+bool GameScene::onTouchBegan(Touch* touch, Event* event)
+{
+    auto location = touch->getLocation();
+    log("Touch began location: {%.2f, %.2f}", location.x, location.y);
+    return true;
+}
+
+void GameScene::onTouchMoved(Touch* touch, Event* event)
+{
+    auto location = touch->getLocation();
+    log("Touch moved location: {%.2f, %.2f}", location.x, location.y);
+}
+
+void GameScene::onTouchEnded(Touch* touch, Event* event)
+{
+    auto location = touch->getLocation();
+    log("Touch ended location: {%.2f, %.2f}", location.x, location.y);
+}
+
+void GameScene::onTouchCancelled(Touch* touch, Event* event)
+{
+//    auto location = touch->getLocation();
+}
+
+bool GameScene::onContactBegin(PhysicsContact& contact)
+{
+    auto bodyA = contact.getShapeA()->getBody();
+    auto bodyB = contact.getShapeB()->getBody();
+    log("contact begin");
+    return true;
 }

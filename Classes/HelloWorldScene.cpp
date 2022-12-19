@@ -134,8 +134,8 @@ void HelloWorld::menuCloseCallback(Ref* sender)
 {
     // Close the cocos2d-x game scene and quit the application
 //    _director->end();
-    auto scene = utils::createInstance<GameScene>();
-    _director->replaceScene(scene);
+//    auto scene = utils::createInstance<GameScene>();
+//    _director->replaceScene(scene);
 
     /*To navigate back to native iOS screen(if present) without quitting the application  ,do not use
      * _director->end() as given above,instead trigger a custom event created in RootViewController.mm

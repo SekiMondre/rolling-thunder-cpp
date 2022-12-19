@@ -19,6 +19,7 @@ public:
 private:
     EnemyNode();
     ~EnemyNode();
+    ax::Sprite* _sprite;
 };
 
 #endif /* EnemyNode_h */

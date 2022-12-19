@@ -27,11 +27,15 @@ bool PlayerNode::init()
     physicsBody->setDynamic(true);
     physicsBody->setRotationEnable(false);
     physicsBody->setGravityEnable(false);
-    
     physicsBody->setCategoryBitmask(CollisionMask::PLAYER);
     physicsBody->setCollisionBitmask(CollisionMask::NONE);
     physicsBody->setContactTestBitmask(CollisionMask::OBSTACLE | CollisionMask::ENEMY | CollisionMask::COLLECTIBLE);
     setPhysicsBody(physicsBody);
     
     return true;
+}
+
+void PlayerNode::testCall()
+{
+    log("player node call!!!!!!!!!");
 }

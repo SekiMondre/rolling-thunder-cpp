@@ -15,6 +15,7 @@ class PlayerNode : public ax::Node
 public:
     CREATE_FUNC(PlayerNode);
     virtual bool init() override;
+    void testCall();
 
 private:
     PlayerNode();
