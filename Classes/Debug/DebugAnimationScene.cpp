@@ -103,10 +103,28 @@ bool DebugAnimationScene::init()
     exitButton->setCallback(AX_CALLBACK_0(DebugAnimationScene::exitScene, this));
     exitButton->setPosition(Vec2(-visibleSize.width * 0.5 + 32 + 16, visibleSize.height * 0.5 - 32 - 16));
     
-    auto menu = Menu::create(exitButton, NULL);
+    auto playButton = Debug::createColorButton("P", 32, Vec2(64, 64), Color4B::BLUE);
+    playButton->setCallback(AX_CALLBACK_0(DebugAnimationScene::animateOnce, this));
+    playButton->setPosition(Vec2(visibleSize.width * 0.5 - 32 - 16, -visibleSize.height * 0.5 + 32 + 16));
+    
+    Vector<MenuItem*> menuItems;
+    menuItems.pushBack(exitButton);
+    menuItems.pushBack(playButton);
+    auto menu = Menu::createWithArray(menuItems);
     this->addChild(menu);
     
     return true;
+}
+
+void DebugAnimationScene::animateOnce() {
+    auto frames = SpriteLoader::loadAnimationFrames("smoke-hit", 5);
+    auto animation = SpriteLoader::loadAnimation(frames, 0.07, false);
+    auto sprite = Sprite::createWithSpriteFrame(frames.front());
+    sprite->setScale(2.5, 2.5);
+    sprite->setPosition(Vec2(300, 140));
+    auto animate = Animate::create(animation);
+    sprite->runAction(animate);
+    addChild(sprite);
 }
 
 void DebugAnimationScene::exitScene()

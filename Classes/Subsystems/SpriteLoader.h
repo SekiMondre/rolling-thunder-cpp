@@ -28,7 +28,7 @@ public:
     static void start();
     static ax::Sprite* load(std::string_view name);
     static ax::Sprite* loadAnimated(std::string name, int frameCount);
-    static ax::Animation* loadAnimation(const ax::Vector<ax::SpriteFrame*> frames, const float timePerFrame = 0.07);
+    static ax::Animation* loadAnimation(const ax::Vector<ax::SpriteFrame*> frames, const float timePerFrame = 0.07, const bool loop = true);
     static ax::Vector<ax::SpriteFrame*> loadAnimationFrames(const std::string name, const int frameCount);
     
     static ax::Sprite* loadPlayerIdle();

@@ -35,11 +35,12 @@ Sprite* SpriteLoader::loadAnimated(std::string name, int frameCount)
     return sprite;
 }
 
-Animation* SpriteLoader::loadAnimation(const Vector<SpriteFrame*> frames, const float timePerFrame)
+Animation* SpriteLoader::loadAnimation(const Vector<SpriteFrame*> frames, const float timePerFrame, const bool loop)
 {
     auto animation = Animation::createWithSpriteFrames(frames);
     animation->setDelayPerUnit(timePerFrame);
-    animation->setLoops(-1);
+    int loopValue = (loop) ? -1 : 1;
+    animation->setLoops(loopValue);
     return animation;
 }
 

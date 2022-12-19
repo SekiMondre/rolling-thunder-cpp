@@ -21,6 +21,8 @@ private:
     DebugAnimationScene();
     ~DebugAnimationScene();
     void exitScene();
+    
+    void animateOnce();
 };
 
 #endif /* DebugAnimationScene_h */
