@@ -19,6 +19,7 @@ public:
 private:
     PlayerNode();
     ~PlayerNode();
+    ax::Sprite* _sprite;
 };
 
 #endif /* PlayerNode_h */

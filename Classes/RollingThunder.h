@@ -12,6 +12,8 @@
 
 #include "Subsystems/SpriteLoader.h"
 
+#include "Game/CollisionMask.h"
+
 #include "Nodes/PlayerNode.h"
 #include "Nodes/ObstacleNode.h"
 #include "Nodes/RollingRockNode.h"

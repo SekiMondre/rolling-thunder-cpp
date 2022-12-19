@@ -39,25 +39,19 @@ bool DebugCollisionScene::init()
     world->setGravity(Vec2(0, 0));
     world->setDebugDrawMask(0xFFFF);
     
-    auto body = PhysicsBody::createBox(Vec2(64, 100));
-    body->setDynamic(true);
-    body->setCategoryBitmask(0x01);
-    body->setCollisionBitmask(0x0);
-    body->setContactTestBitmask(0xFF);
-    
-    auto obj = SpriteLoader::load(ROCK_BIG);
-    obj->setPosition(Vec2(origin.x + visibleSize.width * 0.5, origin.y + visibleSize.height * 0.5));
-    obj->setPhysicsBody(body);
-    o = obj;
+    auto player = PlayerNode::create();
+    player->setPosition(Vec2(origin.x + visibleSize.width * 0.5, origin.y + visibleSize.height * 0.5));
+    o = player;
+    log("Player bitmask: %x", player->getPhysicsBody()->getContactTestBitmask());
     
 //    root->addChild(obj);
-    addChild(obj);
+    addChild(player);
     
     auto body2 = PhysicsBody::createBox(Vec2(48, 48));
     body2->setDynamic(true);
-    body2->setCategoryBitmask(0x02);
+    body2->setCategoryBitmask(CollisionMask::OBSTACLE);
     body2->setCollisionBitmask(0x00);
-    body2->setContactTestBitmask(0x01);
+    body2->setContactTestBitmask(0x02);
     
     auto rock2 = SpriteLoader::load(ROCK_MEDIUM);
     rock2->setPosition(Vec2(origin.x + visibleSize.width * 0.3, origin.y + visibleSize.height * 0.7));
@@ -67,8 +61,8 @@ bool DebugCollisionScene::init()
     
     auto body3 = PhysicsBody::createBox(Vec2(64, 40));
     body3->setDynamic(true);
-    body3->setCategoryBitmask(0x03);
-    body3->setContactTestBitmask(0x04);
+    body3->setCategoryBitmask(CollisionMask::ENEMY);
+    body3->setContactTestBitmask(0x01);
     body3->setCollisionBitmask(0x0);
     
     auto rock3 = SpriteLoader::load(ROCK_SMALL);
@@ -76,6 +70,10 @@ bool DebugCollisionScene::init()
     rock3->setPhysicsBody(body3);
     
     addChild(rock3);
+    
+    auto node = ObstacleNode::createWithType(Obstacle::BIG);
+    node->setPosition(Vec2(origin.x + visibleSize.width * 0.4, origin.y + visibleSize.height * 0.3));
+    addChild(node);
     
     auto contactListener = EventListenerPhysicsContact::create();
     contactListener->onContactBegin = AX_CALLBACK_1(DebugCollisionScene::onContactBegin, this);
@@ -109,7 +107,26 @@ bool DebugCollisionScene::onContactBegin(PhysicsContact& contact)
 {
     auto bodyA = contact.getShapeA()->getBody();
     auto bodyB = contact.getShapeB()->getBody();
+    
     log("contact begin");
+//    auto nodeA = bodyA->getNode();
+    
+    if (bodyA->getCategoryBitmask() > bodyB->getCategoryBitmask())
+    {
+        bodyA = contact.getShapeB()->getBody();
+        bodyB = contact.getShapeA()->getBody();
+    }
+    
+    if (bodyA->getCategoryBitmask() == CollisionMask::PLAYER)
+    {
+        log("player collide...");
+        if (bodyB->getCategoryBitmask() == CollisionMask::OBSTACLE) {
+            log("...with obstacle");
+        } else if (bodyB->getCategoryBitmask() == CollisionMask::ENEMY) {
+            log("...with enemy");
+        }
+    }
+    
     return true;
 }
 
