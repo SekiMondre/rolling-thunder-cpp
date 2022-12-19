@@ -19,6 +19,7 @@ public:
 private:
     DebugCollisionScene();
     ~DebugCollisionScene();
+    void exitScene();
 };
 
 #endif /* DebugCollisionScene_h */

@@ -14,24 +14,18 @@ USING_NS_AX;
 //std::string name{getName()};
 //log("Scene init: %s", name.c_str());
 
-//auto rect = DrawNode::create();
-//rect->drawSolidRect(origin, Vec2(origin.x + visibleSize.x, origin.y + visibleSize.height), Color4B::BLUE);
-//rect->drawLine(Vec2(winSize.width / 2, 0), Vec2(winSize.width / 2, winSize.height), Color4B::RED);
-//this->addChild(rect, -1);
-
 DebugAnimationScene::DebugAnimationScene()
-{
-    log("[DEBUG] Create scene: DebugAnimation");
-}
+{}
 
 DebugAnimationScene::~DebugAnimationScene()
 {
-    log("[DEBUG] Destroy scene: DebugAnimation");
+    log("[DEBUG] Destroying: Animation Test");
 }
 
 bool DebugAnimationScene::init()
 {
     if (!Scene::init()) return false;
+    log("[DEBUG] Init scene: Animation Test");
     
     auto visibleSize = _director->getVisibleSize();
     auto origin = _director->getVisibleOrigin();
@@ -99,9 +93,7 @@ bool DebugAnimationScene::init()
     b->setPosition(Vec2(0, 200));
     root->addChild(b);
     
-    auto exitButton = Debug::createColorButton("X", 32, Vec2(64, 64), Color4B::RED);
-    exitButton->setCallback(AX_CALLBACK_0(DebugAnimationScene::exitScene, this));
-    exitButton->setPosition(Vec2(-visibleSize.width * 0.5 + 32 + 16, visibleSize.height * 0.5 - 32 - 16));
+    auto exitButton = Debug::createExitButton(AX_CALLBACK_0(DebugAnimationScene::exitScene, this));
     
     auto playButton = Debug::createColorButton("P", 32, Vec2(64, 64), Color4B::BLUE);
     playButton->setCallback(AX_CALLBACK_0(DebugAnimationScene::animateOnce, this));

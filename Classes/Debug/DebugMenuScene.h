@@ -20,8 +20,12 @@ private:
     DebugMenuScene();
     ~DebugMenuScene();
     void presentGameScene();
-    void presentAnimationScene();
-    void presentCollisionScene();
+    void presentSpriteTest();
+    void presentAnimationTest();
+    void presentCollisionTest();
+    void presentLevelModulesTest();
+    void presentLevelGenTest();
+    void presentSoundTest();
 };
 
 #endif /* DebugMenuScene_h */
