@@ -19,6 +19,8 @@ public:
 private:
     DebugCollisionScene();
     ~DebugCollisionScene();
+    bool onContactBegin(ax::PhysicsContact& contact);
+    void layoutMenu();
     void exitScene();
 };
 
