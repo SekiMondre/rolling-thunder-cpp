@@ -111,6 +111,7 @@ bool DebugCollisionScene::onContactBegin(PhysicsContact& contact)
         {
             auto nodeB = bodyB->getNode();
             
+            // TODO: pack effect into a single node
             auto smokeEmitter = Effects::createSmokeBurst(8);
             smokeEmitter->setPosition(nodeB->getPosition());
             addChild(smokeEmitter);
@@ -127,7 +128,11 @@ bool DebugCollisionScene::onContactBegin(PhysicsContact& contact)
         }
         else if (bodyB->getCategoryBitmask() == CollisionMask::COLLECTIBLE)
         {
-            log("player collide...with collectible");
+            auto nodeB = bodyB->getNode();
+            
+            auto twinkleEmitter = Effects::createTwinkleSparks(4, 0.1, 30); // twinkle if is money
+            twinkleEmitter->setPosition(nodeB->getPosition());
+            addChild(twinkleEmitter);
         }
 //        else if (bodyB->getCategoryBitmask() == CollisionMask::DEATH_ZONE)
 //        {

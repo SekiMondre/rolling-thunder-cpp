@@ -15,6 +15,7 @@ namespace Effects
 ax::Node* createSmokeBurst(int particleCount);
 ax::Node* createRockBurst(int particleCount, float radius);
 ax::Node* createSmokeHit();
+ax::Node* createTwinkleSparks(const int particleCount, const float interval, const float radius);
 }
 
 #endif /* Effects_h */

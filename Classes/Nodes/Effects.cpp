@@ -88,3 +88,31 @@ Node* Effects::createSmokeHit()
     sprite->runAction(sequence);
     return sprite;
 }
+
+Node* Effects::createTwinkleSparks(const int particleCount, const float interval, const float radius)
+{
+    float lifetime = interval * (particleCount - 1) + 0.56; // 8 frames * 0.07 t
+    auto frames = SpriteLoader::loadAnimationFrames("twinkle", 8);
+    auto animation = SpriteLoader::loadAnimation(frames, 0.07, false);
+    auto emitter = Node::create();
+    
+    for (int i = 0; i < particleCount; i++)
+    {
+        auto delay = DelayTime::create(i * interval);
+        auto animate = Animate::create(animation);
+        auto destroy = RemoveSelf::create();
+        auto sequence = Sequence::create(delay, animate, destroy, nullptr);
+        
+        auto particle = Sprite::create();
+        particle->setScale(2.5, 2.5);
+        particle->setPosition(URNG::randomInsideCircle() * radius);
+        particle->runAction(sequence);
+        emitter->addChild(particle);
+    }
+    
+    auto wait = DelayTime::create(lifetime);
+    auto destroy = RemoveSelf::create();
+    auto waitAndDestroy = Sequence::createWithTwoActions(wait, destroy);
+    emitter->runAction(waitAndDestroy);
+    return emitter;
+}
