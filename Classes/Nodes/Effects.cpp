@@ -10,63 +10,81 @@
 
 USING_NS_AX;
 
-Node* Effects::createSmokeBurst(int particleCount)
+Node* createSmokeParticle(float lifetime)
 {
-//    auto emitter = Node::create();
+    int image_idx = URNG::randomInt(1, 3);
+    float rotateDegrees = URNG::randomInt(0, 90) - 180; // Intentional angle
+    auto moveDelta = URNG::randomDirection() * 45;
     
-    float lifetime = 0.5;
-    
-    int randomIdx = 2; // rng
-    float randomAngle = 2.3; // rng
-    
-    auto direction = Vec2(cos(randomAngle), sin(randomAngle));
-    auto moveDelta = direction * 45;
-    
-    // z pos
-    
-    std::string spriteName = "smoke-particle-";
-    spriteName += std::to_string(randomIdx);
-    spriteName += ".png";
-    auto sprite = SpriteLoader::load(spriteName);
-    
-    float rotateAngle = 1.5; // rng
-    auto rotateBy = RotateBy::create(lifetime, rotateAngle);
-    auto moveBy = MoveBy::create(lifetime, moveDelta);
+    auto rotate = RotateBy::create(lifetime, rotateDegrees);
+    auto move = MoveBy::create(lifetime, moveDelta);
     auto fadeOut = FadeOut::create(lifetime);
-//    auto ease = EaseIn::create(fadeOut->clone());
     auto ease = EaseIn::create(fadeOut->clone(), 1);
-    
-    auto scaleBy = ScaleBy::create(lifetime, 2);
-    auto group = Spawn::create(rotateBy, moveBy, fadeOut, scaleBy, nullptr);
+    auto scale = ScaleBy::create(lifetime, 2);
+    auto group = Spawn::create(rotate, move, fadeOut, scale, nullptr);
     auto destroy = RemoveSelf::create();
     auto sequence = Sequence::createWithTwoActions(group, destroy);
+    
+    std::string spriteName = "smoke-particle-";
+    spriteName += std::to_string(image_idx);
+    spriteName += ".png";
+    auto sprite = SpriteLoader::load(spriteName);
     sprite->runAction(sequence);
     return sprite;
 }
 
-Node* Effects::createRockBurst(int particleCount, float radius)
+Node* createRockParticle(float lifetime)
 {
-//    auto emitter = Node::create();
+    int image_idx = URNG::randomInt(1, 5);
+    float rotateDegrees = URNG::randomInt(0, 360) - 180;
+    auto moveDelta = URNG::randomDirection() * 900;
     
-    float lifetime = 1;
-    
-    int randomIdx = 2; // rng
-    float randomAngle = 2.3; // rng
-    
-    auto direction = Vec2(cos(randomAngle), sin(randomAngle));
-    auto moveDelta = direction * 900;
-    
-    std::string spriteName = "particle-rock-";
-    spriteName += std::to_string(randomIdx);
-    spriteName += ".png";
-    auto sprite = SpriteLoader::load(spriteName);
-    
-    float rotateAngle = 1.5; // rng
-    auto rotate = RotateBy::create(lifetime, rotateAngle);
+    auto rotate = RotateBy::create(lifetime, rotateDegrees);
     auto move = MoveBy::create(lifetime, moveDelta);
     auto group = Spawn::createWithTwoActions(rotate, move);
     auto destroy = RemoveSelf::create();
     auto sequence = Sequence::createWithTwoActions(group, destroy);
+    
+    std::string spriteName = "particle-rock-";
+    spriteName += std::to_string(image_idx);
+    spriteName += ".png";
+    auto sprite = SpriteLoader::load(spriteName);
+    sprite->runAction(sequence);
+    return sprite;
+}
+
+Node* Effects::createSmokeBurst(int particleCount)
+{
+    auto emitter = Node::create();
+    for (int i = 0; i < particleCount; i++) {
+        auto particle = createSmokeParticle(0.5);
+        emitter->addChild(particle);
+    }
+    return emitter;
+}
+
+Node* Effects::createRockBurst(int particleCount, float radius)
+{
+    auto emitter = Node::create();
+    for (int i = 0; i < particleCount; i++) {
+        auto particle = createRockParticle(1.0);
+        particle->setPosition(URNG::randomInsideCircle() * radius);
+        emitter->addChild(particle);
+    }
+    return emitter;
+}
+
+Node* Effects::createSmokeHit()
+{
+    auto frames = SpriteLoader::loadAnimationFrames("smoke-hit", 5);
+    auto animation = SpriteLoader::loadAnimation(frames, 0.07, false);
+    
+    auto animate = Animate::create(animation);
+    auto destroy = RemoveSelf::create();
+    auto sequence = Sequence::createWithTwoActions(animate, destroy);
+    
+    auto sprite = Sprite::createWithSpriteFrame(frames.front());
+    sprite->setScale(2.5, 2.5);
     sprite->runAction(sequence);
     return sprite;
 }

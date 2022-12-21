@@ -91,8 +91,6 @@ bool DebugCollisionScene::onContactBegin(PhysicsContact& contact)
 {
     auto bodyA = contact.getShapeA()->getBody();
     auto bodyB = contact.getShapeB()->getBody();
-    
-    log("contact begin");
 //    auto nodeA = bodyA->getNode();
     
     if (bodyA->getCategoryBitmask() > bodyB->getCategoryBitmask())
@@ -112,13 +110,16 @@ bool DebugCollisionScene::onContactBegin(PhysicsContact& contact)
         if (bodyB->getCategoryBitmask() == CollisionMask::OBSTACLE)
         {
             auto nodeB = bodyB->getNode();
-            log("player collide...with obstacle");
+            
             auto smokeEmitter = Effects::createSmokeBurst(8);
             smokeEmitter->setPosition(nodeB->getPosition());
             addChild(smokeEmitter);
             auto rockEmitter = Effects::createRockBurst(5, 50);
             rockEmitter->setPosition(nodeB->getPosition());
             addChild(rockEmitter);
+            auto smokeHit = Effects::createSmokeHit();
+            smokeHit->setPosition(nodeB->getPosition());
+            addChild(smokeHit);
         }
         else if (bodyB->getCategoryBitmask() == CollisionMask::ENEMY)
         {

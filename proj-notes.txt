@@ -10,3 +10,5 @@
     for (auto& frame : frames) {
         frame->getSpriteFrame()->getTexture()->setAliasTexParameters();
     }
+
+- Z position (7) not set for homebrew particles

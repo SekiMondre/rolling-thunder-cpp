@@ -125,6 +125,7 @@ bool AppDelegate::applicationDidFinishLaunching()
     director->setClearColor(Color4F(0.1, 0.1, 0.1, 1));
     
     SpriteLoader::start();
+    RNG::start();
     
     // create a scene. it's an autorelease object
 //    auto scene = utils::createInstance<HelloWorld>();

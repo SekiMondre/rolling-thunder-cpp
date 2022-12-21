@@ -14,6 +14,7 @@ namespace Effects
 {
 ax::Node* createSmokeBurst(int particleCount);
 ax::Node* createRockBurst(int particleCount, float radius);
+ax::Node* createSmokeHit();
 }
 
 #endif /* Effects_h */
