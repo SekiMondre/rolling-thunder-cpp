@@ -15,6 +15,7 @@ class DebugCollisionScene : public ax::Scene
 public:
     CREATE_FUNC(DebugCollisionScene);
     virtual bool init() override;
+    void update(float deltaTime) override;
 
 private:
     DebugCollisionScene();

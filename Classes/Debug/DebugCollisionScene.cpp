@@ -18,14 +18,12 @@ DebugCollisionScene::~DebugCollisionScene()
     log("[DEBUG] Destroying: Collision Test");
 }
 
-Node* _playerNode;
+PlayerNode* _playerNode;
 
 bool DebugCollisionScene::init()
 {
     if (!Scene::initWithPhysics()) return false;
     log("[DEBUG] Init scene: Collision Test");
-    
-    this->layoutMenu();
     
     auto visibleSize = _director->getVisibleSize();
     auto origin = _director->getVisibleOrigin();
@@ -46,23 +44,27 @@ bool DebugCollisionScene::init()
     // TOUCH
     auto listener = EventListenerTouchOneByOne::create();
     listener->onTouchBegan = [](Touch* touch, Event* event) {
-        auto location = touch->getLocation();
-        _playerNode->setPosition(location);
+        _playerNode->onInteractionBegin(touch->getLocation());
         return true;
     };
     listener->onTouchMoved = [](Touch* touch, Event* event) {
-        auto location = touch->getLocation();
-        _playerNode->setPosition(location);
+        _playerNode->onInteractionMoved(touch->getLocation());
     };
     listener->onTouchEnded = [](Touch* touch, Event* event) {
-        auto location = touch->getLocation();
-//        log("Touch ended location: {%.2f, %.2f}", location.x, location.y);
+        _playerNode->onInteractionEnded(touch->getLocation());
     };
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
     
     this->resetNodes();
-    
+    this->scheduleUpdate();
     return true;
+}
+
+void DebugCollisionScene::update(float deltaTime)
+{
+    if (_playerNode) {
+        _playerNode->update(deltaTime);
+    }
 }
 
 bool DebugCollisionScene::onContactBegin(PhysicsContact& contact)
