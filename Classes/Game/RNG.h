@@ -12,12 +12,19 @@
 
 namespace RNG
 {
-
+void start();
+int randomInt(int min, int max);
+float randomUniform();
+// TODO: sign, bool
 }
 
 namespace URNG
 {
-
+int randomInt(int min, int max);
+float randomUniform();
+float randomAngle();
+ax::Vec2 randomDirection();
+ax::Vec2 randomInsideCircle();
 }
 
 #endif /* RNG_h */
