@@ -12,19 +12,20 @@ USING_NS_AX;
 
 EnemyNode::EnemyNode()
 {
-    // Constructor
+    log("EnemyNode created");
 }
 
 EnemyNode::~EnemyNode()
 {
-    // Destructor
+    log("EnemyNode destroyed");
 }
 
 bool EnemyNode::init()
 {
     if (!Node::init()) return false;
     
-    _sprite = SpriteLoader::load("enemy1-idle-0.png");
+//    _sprite = SpriteLoader::load("enemy1-idle-0.png");
+    _sprite = SpriteLoader::loadAnimated("enemy1-idle", 8);
     addChild(_sprite);
     
     auto physicsBody = PhysicsBody::createCircle(75 * 0.5);

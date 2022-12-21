@@ -40,6 +40,11 @@ int URNG::randomInt(int min, int max)
     return RandomHelper::random_int(min, max);
 }
 
+int URNG::randomSign()
+{
+    return RandomHelper::random_int(0, 1) * 2 - 1;
+}
+
 float URNG::randomUniform()
 {
     return RandomHelper::random_real(0.0, 1.0);

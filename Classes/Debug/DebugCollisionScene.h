@@ -21,6 +21,7 @@ private:
     ~DebugCollisionScene();
     bool onContactBegin(ax::PhysicsContact& contact);
     void layoutMenu();
+    void resetNodes();
     void exitScene();
 };
 

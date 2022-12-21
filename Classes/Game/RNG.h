@@ -21,6 +21,7 @@ float randomUniform();
 namespace URNG
 {
 int randomInt(int min, int max);
+int randomSign();
 float randomUniform();
 float randomAngle();
 ax::Vec2 randomDirection();
