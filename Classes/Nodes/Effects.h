@@ -16,6 +16,9 @@ ax::Node* createSmokeBurst(int particleCount);
 ax::Node* createRockBurst(int particleCount, float radius);
 ax::Node* createSmokeHit();
 ax::Node* createTwinkleSparks(const int particleCount, const float interval, const float radius);
+ax::Node* createHitFlash();
+ax::Node* createDamageFlash();
+ax::Node* createPowerFlash();
 }
 
 #endif /* Effects_h */

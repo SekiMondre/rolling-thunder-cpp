@@ -116,3 +116,53 @@ Node* Effects::createTwinkleSparks(const int particleCount, const float interval
     emitter->runAction(waitAndDestroy);
     return emitter;
 }
+
+Node* Effects::createHitFlash()
+{
+    auto size = Director::getInstance()->getWinSize();
+    
+    auto overlay = DrawNode::create();
+    overlay->drawSolidRect(Vec2::ZERO, size, Color4B::WHITE);
+    overlay->setOpacity(204); // 80% alpha
+//    sprite->setPositionZ(-9999); // FIXME: When z is defined
+    
+    auto fade = FadeOut::create(0.1);
+    auto destroy = RemoveSelf::create();
+    auto sequence = Sequence::createWithTwoActions(fade, destroy);
+    overlay->runAction(sequence);
+    
+    return overlay;
+}
+
+Node* Effects::createDamageFlash()
+{
+    auto size = Director::getInstance()->getWinSize();
+    
+    auto overlay = DrawNode::create();
+    overlay->drawSolidRect(Vec2::ZERO, size, Color4B::RED);
+    overlay->setOpacity(178); // 70% alpha
+//    sprite->setPositionZ(-9999); // FIXME: When z is defined
+    
+    auto fade = FadeOut::create(0.1);
+    auto destroy = RemoveSelf::create();
+    auto sequence = Sequence::createWithTwoActions(fade, destroy);
+    overlay->runAction(sequence);
+    
+    return overlay;
+}
+
+Node* Effects::createPowerFlash()
+{
+    auto size = Director::getInstance()->getWinSize();
+    
+    auto overlay = DrawNode::create();
+    overlay->drawSolidRect(Vec2::ZERO, size, Color4B::WHITE);
+//    sprite->setPositionZ(-9999); // FIXME: When z is defined
+    
+    auto wait = DelayTime::create(0.04);
+    auto destroy = RemoveSelf::create();
+    auto sequence = Sequence::createWithTwoActions(wait, destroy);
+    overlay->runAction(sequence);
+    
+    return overlay;
+}

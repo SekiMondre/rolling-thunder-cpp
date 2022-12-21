@@ -99,6 +99,8 @@ bool DebugCollisionScene::onContactBegin(PhysicsContact& contact)
             auto smokeHit = Effects::createSmokeHit();
             smokeHit->setPosition(nodeB->getPosition());
             addChild(smokeHit);
+            
+            addChild(Effects::createDamageFlash());
         }
         else if (bodyB->getCategoryBitmask() == CollisionMask::ENEMY)
         {
@@ -114,7 +116,9 @@ bool DebugCollisionScene::onContactBegin(PhysicsContact& contact)
             auto destroy = RemoveSelf::create();
             auto knockOff = Sequence::createWithTwoActions(launch, destroy);
 //            nodeB->stopAllActions(); // does nothing
-            nodeB->runAction(knockOff); // Needs to disable extra collision
+//            nodeB->runAction(knockOff); // Needs to disable extra collision
+            
+            addChild(Effects::createHitFlash());
         }
         else if (bodyB->getCategoryBitmask() == CollisionMask::COLLECTIBLE)
         {
