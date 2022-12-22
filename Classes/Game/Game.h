@@ -14,6 +14,10 @@ class Game
 {
 public:
     static Game* getInstance();
+    static ax::Vec2 getSceneSize();
+    static float getSceneWidth();
+    static float getSceneHeight();
+    
     void reset();
     
 private:

@@ -108,7 +108,6 @@ bool DebugCollisionScene::onContactBegin(PhysicsContact& contact)
         {
             auto nodeB = bodyB->getNode();
             
-            log("player collide...with enemy");
             auto contactPoint = contact.getContactData()->points[0];
             
             auto direction = (nodeB->getPosition() - contactPoint).getNormalized();
@@ -119,6 +118,8 @@ bool DebugCollisionScene::onContactBegin(PhysicsContact& contact)
             auto knockOff = Sequence::createWithTwoActions(launch, destroy);
 //            nodeB->stopAllActions(); // does nothing
 //            nodeB->runAction(knockOff); // Needs to disable extra collision
+            
+            player->applyBump(contactPoint);
             
             addChild(Effects::createHitFlash());
         }

@@ -12,6 +12,7 @@
 
 #include "Subsystems/SpriteLoader.h"
 
+#include "Game/Game.h"
 #include "Game/CollisionMask.h"
 #include "Game/RNG.h"
 

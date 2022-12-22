@@ -26,6 +26,7 @@ public:
     void onInteractionMoved(const ax::Vec2 touchLocation);
     void onInteractionEnded(const ax::Vec2 touchLocation);
     void onInteractionCancelled(const ax::Vec2 touchLocation);
+    void applyBump(const ax::Vec2 contactPoint);
 
 private:
     PlayerNode();
@@ -40,6 +41,7 @@ private:
     ax::Vec2 _decaySpeed;
     ax::Vec2 _bumpForce;
     float _internalAcceleration;
+    bool _invincible;
 };
 
 #endif /* PlayerNode_h */
