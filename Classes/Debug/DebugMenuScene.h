@@ -20,9 +20,9 @@ private:
     DebugMenuScene();
     ~DebugMenuScene();
     void presentGameScene();
-    void presentSpriteTest();
     void presentAnimationTest();
     void presentCollisionTest();
+    void presentLevelScrollTest();
     void presentLevelModulesTest();
     void presentLevelGenTest();
     void presentSoundTest();

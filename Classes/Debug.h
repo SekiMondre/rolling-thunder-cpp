@@ -9,9 +9,9 @@
 #define Debug_h
 
 #include "Debug/DebugMenuScene.h"
-#include "Debug/DebugSpriteScene.h"
 #include "Debug/DebugAnimationScene.h"
 #include "Debug/DebugCollisionScene.h"
+#include "Debug/DebugLevelScrollScene.h"
 #include "Debug/DebugLevelSectionScene.h"
 #include "Debug/DebugLevelGenScene.h"
 #include "Debug/DebugSoundScene.h"

@@ -47,17 +47,17 @@ bool DebugMenuScene::init()
     gameButton->setPosition(Vec2(0, 300));
     gameButton->setCallback(AX_CALLBACK_0(DebugMenuScene::presentGameScene, this));
     
-    auto spriteButton = createMenuButton("Sprite Test", Color4B(235, 185, 10, 255));
-    spriteButton->setPosition(Vec2(0, 200));
-    spriteButton->setCallback(AX_CALLBACK_0(DebugMenuScene::presentSpriteTest, this));
-    
     auto animationButton = createMenuButton("Animation Test", Color4B(45, 215, 0, 255));
-    animationButton->setPosition(Vec2(0, 100));
+    animationButton->setPosition(Vec2(0, 200));
     animationButton->setCallback(AX_CALLBACK_0(DebugMenuScene::presentAnimationTest, this));
     
     auto collisionButton = createMenuButton("Collision Test", Color4B(0, 130, 220, 255));
-    collisionButton->setPosition(Vec2(0, 0));
+    collisionButton->setPosition(Vec2(0, 100));
     collisionButton->setCallback(AX_CALLBACK_0(DebugMenuScene::presentCollisionTest, this));
+    
+    auto levelScrollButton = createMenuButton("Level Scroll Test", Color4B(235, 185, 10, 255));
+    levelScrollButton->setPosition(Vec2(0, 0));
+    levelScrollButton->setCallback(AX_CALLBACK_0(DebugMenuScene::presentLevelScrollTest, this));
     
     auto levelModulesButton = createMenuButton("Level Modules Test", Color4B(245, 145, 0, 255));
     levelModulesButton->setPosition(Vec2(0, -100));
@@ -73,9 +73,9 @@ bool DebugMenuScene::init()
     
     Vector<MenuItem*> menuItems;
     menuItems.pushBack(gameButton);
-    menuItems.pushBack(spriteButton);
     menuItems.pushBack(animationButton);
     menuItems.pushBack(collisionButton);
+    menuItems.pushBack(levelScrollButton);
     menuItems.pushBack(levelModulesButton);
     menuItems.pushBack(levelGenButton);
     menuItems.pushBack(soundButton);
@@ -90,11 +90,6 @@ void DebugMenuScene::presentGameScene()
     _director->replaceScene(GameScene::create());
 }
 
-void DebugMenuScene::presentSpriteTest()
-{
-    _director->replaceScene(DebugSpriteScene::create());
-}
-
 void DebugMenuScene::presentAnimationTest()
 {
     _director->replaceScene(DebugAnimationScene::create());
@@ -103,6 +98,11 @@ void DebugMenuScene::presentAnimationTest()
 void DebugMenuScene::presentCollisionTest()
 {
     _director->replaceScene(DebugCollisionScene::create());
+}
+
+void DebugMenuScene::presentLevelScrollTest()
+{
+    _director->replaceScene(DebugLevelScrollScene::create());
 }
 
 void DebugMenuScene::presentLevelModulesTest()
