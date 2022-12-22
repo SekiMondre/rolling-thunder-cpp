@@ -91,16 +91,9 @@ bool DebugCollisionScene::onContactBegin(PhysicsContact& contact)
         {
             auto nodeB = bodyB->getNode();
             
-            // TODO: pack effect into a single node
-            auto smokeEmitter = Effects::createSmokeBurst(8);
-            smokeEmitter->setPosition(nodeB->getPosition());
-            addChild(smokeEmitter);
-            auto rockEmitter = Effects::createRockBurst(5, 50);
-            rockEmitter->setPosition(nodeB->getPosition());
-            addChild(rockEmitter);
-            auto smokeHit = Effects::createSmokeHit();
-            smokeHit->setPosition(nodeB->getPosition());
-            addChild(smokeHit);
+            auto explosionEffect = Effects::createRockExplosion();
+            explosionEffect->setPosition(nodeB->getPosition());
+            addChild(explosionEffect);
             
             addChild(Effects::createDamageFlash());
         }
