@@ -36,14 +36,36 @@ float Game::getSceneHeight()
     return Director::getInstance()->getWinSize().height;
 }
 
+void Game::reset()
+{
+    _state = IDLE;
+    _playerHealth = 3;
+}
+
+GameState Game::getState()
+{
+    return _state;
+}
+
+void Game::setState(GameState state)
+{
+    _state = state;
+}
+
+float Game::getScrollingSpeed()
+{
+    return _scrollingSpeed;
+}
+
+void Game::setScrollingSpeed(float speed)
+{
+    _scrollingSpeed = speed;
+}
+
 // MARK: - Private:
 
 Game::Game()
-{
-    _playerHealth = 0;
-}
-
-void Game::reset()
-{
-    _playerHealth = 3;
-}
+    : _state(IDLE)
+    , _playerHealth(0)
+    , _scrollingSpeed(0.0f)
+{}

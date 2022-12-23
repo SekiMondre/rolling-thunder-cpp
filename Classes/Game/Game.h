@@ -10,19 +10,35 @@
 
 #include "axmol.h"
 
+enum GameState
+{
+    IDLE,
+    ACTIVE,
+    GAMEOVER
+};
+
 class Game
 {
 public:
     static Game* getInstance();
+    
     static ax::Vec2 getSceneSize();
     static float getSceneWidth();
     static float getSceneHeight();
     
     void reset();
     
+    GameState getState();
+    void setState(GameState state);
+    
+    float getScrollingSpeed();
+    void setScrollingSpeed(float speed);
+    
 private:
     Game();
+    GameState _state;
     int _playerHealth;
+    float _scrollingSpeed;
 };
 
 #endif /* Game_h */

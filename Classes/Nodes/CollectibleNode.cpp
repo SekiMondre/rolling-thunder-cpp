@@ -17,7 +17,7 @@ CollectibleNode::CollectibleNode()
 
 CollectibleNode::~CollectibleNode()
 {
-    // Destructor
+    log("CollectibleNode destroyed");
 }
 
 bool CollectibleNode::init()
@@ -27,6 +27,17 @@ bool CollectibleNode::init()
     _sprite = SpriteLoader::load("gold-bar.png");
     addChild(_sprite);
     
+    this->setupPhysicsBody();
+    return true;
+}
+
+void CollectibleNode::update(float deltaTime)
+{
+    this->setPositionY(this->getPositionY() - Game::getInstance()->getScrollingSpeed() * deltaTime);
+}
+
+void CollectibleNode::setupPhysicsBody()
+{
     auto physicsBody = PhysicsBody::createCircle(60 * 0.5);
     physicsBody->setDynamic(true);
     physicsBody->setRotationEnable(false);
@@ -35,6 +46,5 @@ bool CollectibleNode::init()
     physicsBody->setCollisionBitmask(CollisionMask::NONE);
     physicsBody->setContactTestBitmask(CollisionMask::PLAYER);
     setPhysicsBody(physicsBody);
-    
-    return true;
+    this->unscheduleUpdate(); // SAGAZ
 }

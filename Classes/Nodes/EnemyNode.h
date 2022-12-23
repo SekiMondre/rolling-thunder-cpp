@@ -15,10 +15,13 @@ class EnemyNode : public ax::Node
 public:
     CREATE_FUNC(EnemyNode);
     virtual bool init() override;
+    void update(float deltaTime) override;
 
 private:
     EnemyNode();
     ~EnemyNode();
+    void setupPhysicsBody();
+    
     ax::Sprite* _sprite;
 };
 

@@ -7,6 +7,7 @@
 
 #include "DebugAnimationScene.h"
 #include "Debug.h"
+#include "RollingThunder.h"
 
 USING_NS_AX;
 

@@ -9,7 +9,6 @@
 #define DebugAnimationScene_h
 
 #include "axmol.h"
-#include "RollingThunder.h"
 
 class DebugAnimationScene : public ax::Scene
 {

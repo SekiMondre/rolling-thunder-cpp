@@ -7,10 +7,12 @@
 
 #include "DebugLevelScrollScene.h"
 #include "Debug.h"
+#include "RollingThunder.h"
 
 USING_NS_AX;
 
 DebugLevelScrollScene::DebugLevelScrollScene()
+    : _world(nullptr)
 {}
 
 DebugLevelScrollScene::~DebugLevelScrollScene()
@@ -28,6 +30,10 @@ bool DebugLevelScrollScene::init()
     
     this->layoutMenu();
     this->scheduleUpdate();
+    
+    Game::getInstance()->setScrollingSpeed(500.0f);
+    Game::getInstance()->setState(ACTIVE);
+    
     return true;
 }
 

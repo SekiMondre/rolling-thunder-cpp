@@ -31,6 +31,7 @@ public:
 private:
     PlayerNode();
     ~PlayerNode();
+    void setupPhysicsBody();
     
     PlayerState _state;
     ax::Sprite* _sprite;

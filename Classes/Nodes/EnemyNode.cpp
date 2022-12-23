@@ -12,7 +12,7 @@ USING_NS_AX;
 
 EnemyNode::EnemyNode()
 {
-    log("EnemyNode created");
+//    log("EnemyNode created");
 }
 
 EnemyNode::~EnemyNode()
@@ -28,6 +28,17 @@ bool EnemyNode::init()
     _sprite = SpriteLoader::loadAnimated("enemy1-idle", 8);
     addChild(_sprite);
     
+    this->setupPhysicsBody();
+    return true;
+}
+
+void EnemyNode::update(float deltaTime)
+{
+    this->setPositionY(this->getPositionY() - Game::getInstance()->getScrollingSpeed() * deltaTime);
+}
+
+void EnemyNode::setupPhysicsBody()
+{
     auto physicsBody = PhysicsBody::createCircle(75 * 0.5);
     physicsBody->setDynamic(true);
     physicsBody->setRotationEnable(false);
@@ -36,6 +47,5 @@ bool EnemyNode::init()
     physicsBody->setCollisionBitmask(CollisionMask::NONE);
     physicsBody->setContactTestBitmask(CollisionMask::PLAYER);
     setPhysicsBody(physicsBody);
-    
-    return true;
+    this->unscheduleUpdate(); // SAGAZ
 }

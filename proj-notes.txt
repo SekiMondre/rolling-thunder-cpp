@@ -12,3 +12,6 @@
     }
 
 - Z position (7) not set for homebrew particles
+
+- Scene with scheduled update: If a child node has a PhysicsBody, it will automatically receive update calls.
+    * Gambiarra: call `this->unscheduleUpdate()` after setting the physicsBody in a node.

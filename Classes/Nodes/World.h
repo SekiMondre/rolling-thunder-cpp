@@ -10,6 +10,8 @@
 
 #include "axmol.h"
 
+class Game;
+
 class World : public ax::Node
 {
 public:
@@ -21,8 +23,14 @@ private:
     World();
     ~World();
     
+    void setupBackground();
+    void updateBackground(float deltaTime);
+    
+    ax::Node* _updateHierarchy;
     ax::Node* _background_0;
     ax::Node* _background_1;
+    
+    Game* _GAME;
 };
 
 #endif /* World_h */

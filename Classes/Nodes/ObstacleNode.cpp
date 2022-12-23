@@ -21,7 +21,7 @@ ObstacleNode::ObstacleNode()
     : _sprite(nullptr)
     , _size(Vec2::ZERO)
 {
-    log("ObstacleNode created");
+//    log("ObstacleNode created");
 }
 
 ObstacleNode::~ObstacleNode()
@@ -68,6 +68,17 @@ bool ObstacleNode::init()
     
     addChild(_sprite);
     
+    this->setupPhysicsBody();
+    return true;
+}
+
+void ObstacleNode::update(float deltaTime)
+{
+    this->setPositionY(this->getPositionY() - Game::getInstance()->getScrollingSpeed() * deltaTime);
+}
+
+void ObstacleNode::setupPhysicsBody()
+{
     auto boxSize = _size;
     boxSize.x -= 15;
     boxSize.y -= 20;
@@ -79,8 +90,6 @@ bool ObstacleNode::init()
     physicsBody->setCategoryBitmask(CollisionMask::OBSTACLE);
     physicsBody->setCollisionBitmask(CollisionMask::NONE);
     physicsBody->setContactTestBitmask(CollisionMask::PLAYER);
-    
     setPhysicsBody(physicsBody);
-    
-    return true;
+    this->unscheduleUpdate(); // SAGAZ
 }

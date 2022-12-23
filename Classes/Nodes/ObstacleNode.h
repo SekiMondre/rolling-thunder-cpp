@@ -30,10 +30,13 @@ public:
     static ObstacleNode* create();
     static ObstacleNode* createWithType(Obstacle type);
     virtual bool init() override;
+    void update(float deltaTime) override;
 
 private:
     ObstacleNode();
     ~ObstacleNode();
+    void setupPhysicsBody();
+    
     ax::Sprite* _sprite;
     ax::Vec2 _size;
 };

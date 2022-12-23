@@ -10,9 +10,8 @@
 USING_NS_AX;
 
 GameScene::GameScene()
-{
-    log("Game scene created");
-}
+    : _world(nullptr)
+{}
 
 GameScene::~GameScene()
 {
@@ -22,7 +21,6 @@ GameScene::~GameScene()
 bool GameScene::init()
 {
     if (!Scene::initWithPhysics()) return false;
-    log("Game scene init");
     
     auto world = getPhysicsWorld();
     world->setGravity(Vec2(0, 0));
@@ -39,13 +37,21 @@ bool GameScene::init()
     touchListener->onTouchCancelled = AX_CALLBACK_2(GameScene::onTouchCancelled, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
     
+    _world = World::create();
+    addChild(_world);
+    
     this->scheduleUpdate();
     return true;
 }
 
 void GameScene::update(float deltaTime)
 {
-//    log("Update delta: %f", deltaTime);
+    // update timer?
+    if (_world) {
+        _world->update(deltaTime);
+    }
+    // TODO: update running score
+    // TODO: update HUD
 }
 
 bool GameScene::onTouchBegan(Touch* touch, Event* event)

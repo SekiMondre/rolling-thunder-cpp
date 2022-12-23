@@ -37,21 +37,12 @@ bool PlayerNode::init()
 {
     if (!Node::init()) return false;
     
+    _state = ROLLING; // FIXME
+    
     _sprite = SpriteLoader::load("tatu-1-ball-0.png");
     addChild(_sprite);
     
-    auto physicsBody = PhysicsBody::createCircle(37.0f);
-    physicsBody->setDynamic(true);
-    physicsBody->setRotationEnable(false);
-    physicsBody->setGravityEnable(false);
-    physicsBody->setCategoryBitmask(CollisionMask::PLAYER);
-    physicsBody->setCollisionBitmask(CollisionMask::NONE);
-    physicsBody->setContactTestBitmask(CollisionMask::OBSTACLE | CollisionMask::ENEMY | CollisionMask::COLLECTIBLE);
-    setPhysicsBody(physicsBody);
-    setPosition(Vec2::ZERO);
-    
-    _state = ROLLING;
-    
+    this->setupPhysicsBody();
     return true;
 }
 
@@ -131,4 +122,17 @@ void PlayerNode::applyBump(const Vec2 contactPoint)
         _bumpForce.normalize();
         _bumpForce *= bumpMagnitude;
     }
+}
+
+void PlayerNode::setupPhysicsBody()
+{
+    auto physicsBody = PhysicsBody::createCircle(37.0f);
+    physicsBody->setDynamic(true);
+    physicsBody->setRotationEnable(false);
+    physicsBody->setGravityEnable(false);
+    physicsBody->setCategoryBitmask(CollisionMask::PLAYER);
+    physicsBody->setCollisionBitmask(CollisionMask::NONE);
+    physicsBody->setContactTestBitmask(CollisionMask::OBSTACLE | CollisionMask::ENEMY | CollisionMask::COLLECTIBLE);
+    setPhysicsBody(physicsBody);
+    this->unscheduleUpdate(); // SAGAZ
 }

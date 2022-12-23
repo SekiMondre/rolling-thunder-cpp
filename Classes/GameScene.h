@@ -11,7 +11,7 @@
 #include "axmol.h"
 #include "RollingThunder.h"
 
-//class ObstacleNode;
+class World;
 
 class GameScene : public ax::Scene
 {
@@ -23,11 +23,14 @@ public:
 private:
     GameScene();
     ~GameScene();
+    
     bool onTouchBegan(ax::Touch* touch, ax::Event* event);
     void onTouchMoved(ax::Touch* touch, ax::Event* event);
     void onTouchEnded(ax::Touch* touch, ax::Event* event);
     void onTouchCancelled(ax::Touch* touch, ax::Event* event);
     bool onContactBegin(ax::PhysicsContact& contact);
+    
+    World* _world;
 };
 
 #endif /* GameScene_h */
