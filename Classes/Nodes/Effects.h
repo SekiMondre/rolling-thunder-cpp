@@ -23,7 +23,6 @@ private:
     Effects();
     static ax::Node* createSmokeBurst(int particleCount);
     static ax::Node* createRockBurst(int particleCount, float radius);
-    static ax::Node* createSmokeHit();
     static ax::Node* createSmokeParticle(float lifetime);
     static ax::Node* createRockParticle(float lifetime);
 };

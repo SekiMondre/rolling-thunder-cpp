@@ -102,8 +102,8 @@ void World::setupBackground()
     auto visibleSize = _director->getVisibleSize();
     auto origin = _director->getVisibleOrigin();
     
-    _background_0 = SpriteLoader::load(BACKGROUND);
-    _background_1 = SpriteLoader::load(BACKGROUND);
+    _background_0 = SpriteLoader::load(ImageAsset::BACKGROUND);
+    _background_1 = SpriteLoader::load(ImageAsset::BACKGROUND);
     _background_0->setAnchorPoint(Vec2(0.5f, 0.0f));
     _background_1->setAnchorPoint(Vec2(0.5f, 0.0f));
     _background_0->setPosition(origin.x + visibleSize.x * 0.5f, 0.0f); // TODO: set z position

@@ -12,8 +12,8 @@ USING_NS_AX;
 
 Obstacle::Obstacle(std::string _imageName, Vec2 _size) : imageName(_imageName), size(_size) {}
 
-const Obstacle Obstacle::BIG(ROCK_BIG, Vec2(152, 152));
-const Obstacle Obstacle::SMALL(ROCK_SMALL, Vec2(77, 77));
+const Obstacle Obstacle::BIG(ImageAsset::ROCK_BIG, Vec2(152, 152));
+const Obstacle Obstacle::SMALL(ImageAsset::ROCK_SMALL, Vec2(77, 77));
 
 // --------------------------------------------------------------------------------
 

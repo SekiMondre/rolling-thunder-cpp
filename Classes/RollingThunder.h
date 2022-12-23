@@ -10,7 +10,9 @@
 
 #include "GameScene.h"
 
+#include "Subsystems/Subsystems.h"
 #include "Subsystems/SpriteLoader.h"
+#include "Subsystems/SpriteAnimation.h"
 
 #include "Game/Game.h"
 #include "Game/CollisionMask.h"

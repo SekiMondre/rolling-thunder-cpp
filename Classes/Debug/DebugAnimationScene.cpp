@@ -36,63 +36,63 @@ bool DebugAnimationScene::init()
     root->setPosition(Vec2(visibleSize.width * 0.5 + origin.x, origin.y));
     addChild(root);
     
-    auto bg = SpriteLoader::load(BACKGROUND);
+    auto bg = SpriteLoader::load(ImageAsset::BACKGROUND);
     bg->setAnchorPoint(Vec2(0.5, 0));
     root->addChild(bg);
     
     for (int i = 0; i < 3; i++)
     {
-        auto rock = SpriteLoader::load(ROCK_BIG);
+        auto rock = SpriteLoader::load(ImageAsset::ROCK_BIG);
         rock->setPosition(Vec2(152 * (i - 1), visibleSize.height - 76));
         root->addChild(rock);
     }
     
-    auto enemy1 = SpriteLoader::loadAnimated(ENEMY_COMMON, 8);
+    auto enemy1 = SpriteAnimation::createEnemyNormal();
     enemy1->setPosition(Vec2(-152 - 16, visibleSize.height - 152 - 76));
     root->addChild(enemy1);
     
-    auto enemy2 = SpriteLoader::loadAnimated(ENEMY_BIG, 8);
+    auto enemy2 = SpriteAnimation::createEnemyBig();
     enemy2->setPosition(Vec2(0, visibleSize.height - 152 - 76));
     root->addChild(enemy2);
     
-    auto enemy3 = SpriteLoader::loadAnimatedEnemy3();
+    auto enemy3 = SpriteAnimation::createEnemyDodger();
     enemy3->setPosition(Vec2(152 + 16, visibleSize.height - 152 - 76));
     root->addChild(enemy3);
     
     for (int i = 0; i < 5; i++)
     {
-        auto coin = SpriteLoader::loadAnimated(GOLD_COIN, 8);
+        auto coin = SpriteAnimation::createGoldCoin();
         coin->setPosition(Vec2(76 * (i - 2), visibleSize.height * 0.65));
         root->addChild(coin);
     }
     
-    auto playerIdle = SpriteLoader::loadPlayerIdle();
-    playerIdle->setPosition(Vec2(-152, visibleSize.height * 0.55));
-    root->addChild(playerIdle);
+    for (int i = 0; i < 3; i++)
+    {
+        int idx = i + 1;
+        float h = visibleSize.height * (0.57 - 0.10 * i);
+        
+        auto playerIdle = Sprite::create();
+        playerIdle->setScale(2.0f, 2.0f);
+        playerIdle->runAction(Animate::create(SpriteAnimation::loadPlayerIdleAnimation(idx)));
+        playerIdle->setPosition(Vec2(-140, h));
+        root->addChild(playerIdle);
+        
+        auto playerRoll = Sprite::create();
+        playerRoll->setScale(2.0f, 2.0f);
+        playerRoll->runAction(Animate::create(SpriteAnimation::loadPlayerRollAnimation(idx)));
+        playerRoll->setPosition(Vec2(0, h));
+        root->addChild(playerRoll);
+        
+        auto playerDead = Sprite::create();
+        playerDead->setScale(2.0f, 2.0f);
+        playerDead->runAction(Animate::create(SpriteAnimation::loadPlayerDeadAnimation(idx)));
+        playerDead->setPosition(Vec2(140, h));
+        root->addChild(playerDead);
+    }
     
-    auto playerRoll = SpriteLoader::loadAnimated("tatu-1-ball", 3);
-    playerRoll->setPosition(Vec2(0, visibleSize.height * 0.55));
-    root->addChild(playerRoll);
-    
-    auto playerDead = SpriteLoader::loadPlayerDead();
-    playerDead->setPosition(Vec2(152, visibleSize.height * 0.55));
-    root->addChild(playerDead);
-    
-    auto powerup = SpriteLoader::loadAnimatedCrackle();
-    powerup->setPosition(Vec2(0, visibleSize.height * 0.40));
+    auto powerup = SpriteAnimation::createCrackle();
+    powerup->setPosition(Vec2(0, visibleSize.height * 0.10));
     root->addChild(powerup);
-    
-    auto r1 = SpriteLoader::load(ROCK_MEDIUM);
-    r1->setPosition(Vec2(-150, 300));
-    root->addChild(r1);
-    
-    auto r2 = SpriteLoader::load(ROCK_SMALL);
-    r2->setPosition(Vec2(-150, 100));
-    root->addChild(r2);
-    
-    auto b = SpriteLoader::load(GOLD_BAR_3X);
-    b->setPosition(Vec2(0, 200));
-    root->addChild(b);
     
     auto exitButton = Debug::createExitButton(AX_CALLBACK_0(DebugAnimationScene::exitScene, this));
     
@@ -110,13 +110,8 @@ bool DebugAnimationScene::init()
 }
 
 void DebugAnimationScene::animateOnce() {
-    auto frames = SpriteLoader::loadAnimationFrames("smoke-hit", 5);
-    auto animation = SpriteLoader::loadAnimation(frames, 0.07, false);
-    auto sprite = Sprite::createWithSpriteFrame(frames.front());
-    sprite->setScale(2.5, 2.5);
+    auto sprite = SpriteAnimation::createEphemeralSmokeHit();
     sprite->setPosition(Vec2(300, 140));
-    auto animate = Animate::create(animation);
-    sprite->runAction(animate);
     addChild(sprite);
 }
 

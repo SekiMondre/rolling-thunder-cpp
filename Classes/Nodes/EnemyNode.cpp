@@ -24,8 +24,7 @@ bool EnemyNode::init()
 {
     if (!Node::init()) return false;
     
-//    _sprite = SpriteLoader::load("enemy1-idle-0.png");
-    _sprite = SpriteLoader::loadAnimated("enemy1-idle", 8);
+    _sprite = SpriteAnimation::createEnemyNormal();
     addChild(_sprite);
     
     this->setupPhysicsBody();
