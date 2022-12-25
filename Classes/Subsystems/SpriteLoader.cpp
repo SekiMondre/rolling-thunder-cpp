@@ -16,10 +16,18 @@ void SpriteLoader::start()
     _cache = SpriteFrameCache::getInstance();
 }
 
-Sprite* SpriteLoader::load(std::string_view name)
+Sprite* SpriteLoader::load(std::string name)
 {
     auto frame = _cache->getSpriteFrameByName(name); // TODO: handle nulls w/ log
+    if (!frame) {
+        log("[ERROR] Could not get sprite frame from cache: %s", name.c_str());
+        return nullptr;
+    }
     auto sprite = Sprite::createWithSpriteFrame(frame);
+    if (!sprite) {
+        log("[ERROR] Could not load sprite: %s", name.c_str());
+        return nullptr;
+    }
 //    sprite->getTexture()->setAliasTexParameters(); // Forced NEAREST params in-engine
     sprite->setScale(2.0f, 2.0f);
     return sprite;

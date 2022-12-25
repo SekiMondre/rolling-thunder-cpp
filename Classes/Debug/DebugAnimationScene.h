@@ -15,10 +15,12 @@ class DebugAnimationScene : public ax::Scene
 public:
     CREATE_FUNC(DebugAnimationScene);
     virtual bool init() override;
+    void update(float deltaTime) override;
 
 private:
     DebugAnimationScene();
     ~DebugAnimationScene();
+    void layoutMenu();
     void exitScene();
     
     void animateOnce();

@@ -45,6 +45,11 @@ int URNG::randomSign()
     return RandomHelper::random_int(0, 1) * 2 - 1;
 }
 
+bool URNG::randomBool()
+{
+    return randomInt(0, 1);
+}
+
 float URNG::randomUniform()
 {
     return RandomHelper::random_real(0.0, 1.0);

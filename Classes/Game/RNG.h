@@ -22,6 +22,7 @@ namespace URNG
 {
 int randomInt(int min, int max);
 int randomSign();
+bool randomBool();
 float randomUniform();
 float randomAngle();
 ax::Vec2 randomDirection();

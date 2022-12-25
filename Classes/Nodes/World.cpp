@@ -65,6 +65,21 @@ void World::update(float deltaTime)
         auto nodeC = EnemyNode::create();
         nodeC->setPosition(0.0f, Game::getSceneHeight() + 280);
         _updateHierarchy->addChild(nodeC);
+        
+        auto nodeD = RollingRockNode::create();
+        nodeD->setType(DIAGONAL);
+        nodeD->setPosition(-190, Game::getSceneHeight() + 500);
+        _updateHierarchy->addChild(nodeD);
+        
+        auto nodeE = RollingRockNode::create();
+        nodeE->setType(DIAGONAL);
+        nodeE->setPosition(190, Game::getSceneHeight() + 600);
+        _updateHierarchy->addChild(nodeE);
+        
+        auto nodeF = RollingRockNode::create();
+        nodeF->setType(VERTICAL);
+        nodeF->setPosition(150, Game::getSceneHeight() + 500);
+        _updateHierarchy->addChild(nodeF);
     }
     // end test ----------
     

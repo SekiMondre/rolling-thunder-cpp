@@ -23,9 +23,11 @@ DebugAnimationScene::~DebugAnimationScene()
     log("[DEBUG] Destroying: Animation Test");
 }
 
+RollingRockNode* _rockNode;
+
 bool DebugAnimationScene::init()
 {
-    if (!Scene::init()) return false;
+    if (!Scene::initWithPhysics()) return false;
     log("[DEBUG] Init scene: Animation Test");
     
     auto visibleSize = _director->getVisibleSize();
@@ -94,6 +96,34 @@ bool DebugAnimationScene::init()
     powerup->setPosition(Vec2(0, visibleSize.height * 0.10));
     root->addChild(powerup);
     
+    auto roll = RollingRockNode::create();
+    roll->setPosition(-150, visibleSize.height * 0.22);
+    root->addChild(roll);
+    roll->setType(DIAGONAL);
+    _rockNode = roll;
+    
+    this->layoutMenu();
+    this->scheduleUpdate();
+    return true;
+}
+
+void DebugAnimationScene::update(float deltaTime)
+{
+    if (_rockNode) {
+        _rockNode->update(deltaTime);
+    }
+}
+
+void DebugAnimationScene::animateOnce() {
+    auto sprite = SpriteAnimation::createEphemeralSmokeHit();
+    sprite->setPosition(Vec2(300, 140));
+    addChild(sprite);
+}
+
+void DebugAnimationScene::layoutMenu()
+{
+    auto visibleSize = _director->getVisibleSize();
+    
     auto exitButton = Debug::createExitButton(AX_CALLBACK_0(DebugAnimationScene::exitScene, this));
     
     auto playButton = Debug::createColorButton("P", 32, Vec2(64, 64), Color4B::BLUE);
@@ -105,14 +135,6 @@ bool DebugAnimationScene::init()
     menuItems.pushBack(playButton);
     auto menu = Menu::createWithArray(menuItems);
     this->addChild(menu);
-    
-    return true;
-}
-
-void DebugAnimationScene::animateOnce() {
-    auto sprite = SpriteAnimation::createEphemeralSmokeHit();
-    sprite->setPosition(Vec2(300, 140));
-    addChild(sprite);
 }
 
 void DebugAnimationScene::exitScene()

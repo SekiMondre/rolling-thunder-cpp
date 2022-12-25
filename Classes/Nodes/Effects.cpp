@@ -74,6 +74,16 @@ Node* Effects::createRockExplosion()
     return container;
 }
 
+Node* Effects::createSmokeBurst(int particleCount)
+{
+    auto emitter = Node::create();
+    for (int i = 0; i < particleCount; i++) {
+        auto particle = createSmokeParticle(0.5f);
+        emitter->addChild(particle);
+    }
+    return emitter;
+}
+
 Node* Effects::createTwinkleSparks(const int particleCount, const float interval, const float radius)
 {
     float lifetime = interval * (particleCount - 1.0f) + 0.56f; // 8 frames * 0.07 t
@@ -103,16 +113,6 @@ Node* Effects::createTwinkleSparks(const int particleCount, const float interval
 }
 
 // MARK: - Private
-
-Node* Effects::createSmokeBurst(int particleCount)
-{
-    auto emitter = Node::create();
-    for (int i = 0; i < particleCount; i++) {
-        auto particle = createSmokeParticle(0.5f);
-        emitter->addChild(particle);
-    }
-    return emitter;
-}
 
 Node* Effects::createRockBurst(int particleCount, float radius)
 {

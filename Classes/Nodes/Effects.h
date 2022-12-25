@@ -17,11 +17,11 @@ public:
     static ax::Node* createDamageFlash();
     static ax::Node* createPowerFlash();
     static ax::Node* createRockExplosion();
+    static ax::Node* createSmokeBurst(int particleCount);
     static ax::Node* createTwinkleSparks(const int particleCount, const float interval, const float radius);
     
 private:
     Effects();
-    static ax::Node* createSmokeBurst(int particleCount);
     static ax::Node* createRockBurst(int particleCount, float radius);
     static ax::Node* createSmokeParticle(float lifetime);
     static ax::Node* createRockParticle(float lifetime);
