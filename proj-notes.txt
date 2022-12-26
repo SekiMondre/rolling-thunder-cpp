@@ -15,3 +15,5 @@
 
 - Scene with scheduled update: If a child node has a PhysicsBody, it will automatically receive update calls.
     * Gambiarra: call `this->unscheduleUpdate()` after setting the physicsBody in a node.
+
+- C++ underline marks _ for private vars might help to restrict scope for code autocomplete (_sprite vs. Sprite)

@@ -14,6 +14,7 @@ class MovingNode : public ax::Node
 {
 public:
     CREATE_FUNC(MovingNode);
+    static MovingNode* createEphemeral(const float lifetime);
     virtual bool init() override;
     void update(float deltaTime) override;
     void setSprite(ax::Sprite* const sprite);

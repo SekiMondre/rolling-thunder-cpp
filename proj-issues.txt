@@ -6,7 +6,7 @@
 
 - SFX Audio formats: iOS (.caf) and Android (.ogg)
 
-- Sprite atlas packing and loading
+- [DONE] Sprite atlas packing and loading
 
 - Math functions (lerp, trigonometry, etc)
 

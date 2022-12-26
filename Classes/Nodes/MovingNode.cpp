@@ -19,6 +19,14 @@ MovingNode::~MovingNode()
     log("Moving node destroyed");
 }
 
+MovingNode* MovingNode::createEphemeral(const float lifetime)
+{
+    auto node = MovingNode::create();
+    auto waitAndDestroy = Sequence::createWithTwoActions(DelayTime::create(lifetime), RemoveSelf::create());
+    node->runAction(waitAndDestroy);
+    return node;
+}
+
 bool MovingNode::init()
 {
     if (!Node::init()) return false;

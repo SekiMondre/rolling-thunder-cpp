@@ -10,9 +10,15 @@
 
 USING_NS_AX;
 
+const float DODGE_THRESHOLD = 230.0f;
+const float CENTER_THRESHOLD = 50.0f;
+
+// TODO: Correctly setup needed values based on type
+
 EnemyNode::EnemyNode()
     : _type(NORMAL)
     , _sprite(nullptr)
+    , _hasDodged(false)
 {}
 
 EnemyNode::~EnemyNode()
@@ -27,7 +33,7 @@ bool EnemyNode::init()
     _sprite = SpriteAnimation::createEnemyNormal();
     addChild(_sprite);
     
-    this->setupPhysicsBody();
+    this->setupPhysicsBody(); // Needs to set physics after having a type (box size)
     return true;
 }
 
@@ -36,10 +42,22 @@ void EnemyNode::setType(const Enemy type)
     _type = type;
     
     if (_sprite) {
+        _sprite->stopAllActions();
         _sprite->removeFromParent();
     }
-    _sprite = SpriteAnimation::createEnemyDodger(); // force
+    
+    if (_type == DODGER) {
+        _sprite = SpriteAnimation::createEnemyDodger();
+    } else if (_type == BIG) {
+        _sprite = SpriteAnimation::createEnemyBig();
+    } else {
+        _sprite = SpriteAnimation::createEnemyNormal();
+    }
     addChild(_sprite);
+    
+    if (URNG::randomBool()) {
+        _sprite->setScaleX(_sprite->getScaleX() * -1);
+    }
 }
 
 void EnemyNode::update(float deltaTime)
@@ -47,9 +65,30 @@ void EnemyNode::update(float deltaTime)
     this->setPositionY(this->getPositionY() - Game::getInstance()->getScrollingSpeed() * deltaTime);
     
     if (_type == DODGER && !_hasDodged) {
-        // dodge
+        auto playerPosition = Vec2::ZERO; // TODO: get player node position
+        if (getPositionY() - playerPosition.y < DODGE_THRESHOLD) {
+            int direction = 0;
+            if (abs(getPositionX()) < CENTER_THRESHOLD) {
+                direction = (getPositionX() < playerPosition.x) ? -1 : 1; // Near the center, dodge relative to player
+            } else {
+                direction = (getPositionX() < 0.0f) ? 1 : -1; // Outer lanes, dodge to farthest wall
+            }
+            dodge(direction);
+            _hasDodged = true;
+        }
     }
 }
+
+void EnemyNode::simpleDodge()
+{
+    if (getPositionX() < 0.0f) {
+        dodge(1);
+    } else {
+        dodge(-1);
+    }
+}
+
+// MARK: - Private
 
 void EnemyNode::dodge(const int direction)
 {
@@ -74,31 +113,21 @@ void EnemyNode::dodge(const int direction)
     this->runAction(dodge);
 }
 
-void EnemyNode::simpleDodge()
-{
-    if (getPositionX() < 0.0f) {
-        dodge(1);
-    } else {
-        dodge(-1);
-    }
-}
-
 void EnemyNode::spawnAfterimage()
 {
     float duration = 0.2f;
     auto ghostSprite = Sprite::createWithSpriteFrame(_sprite->getSpriteFrame());
-    ghostSprite->setScale(_sprite->getScale());
+    ghostSprite->setScaleX(_sprite->getScaleX());
+    ghostSprite->setScaleY(_sprite->getScaleY());
     ghostSprite->setColor(Color3B::BLUE);
 //    ghostSprite->setBlendFunc(BlendFunc::ALPHA_NON_PREMULTIPLIED);
 //    ghostSprite->setOpacity(145); // 57%
     ghostSprite->setOpacity(65);
     ghostSprite->runAction(FadeOut::create(duration));
     
-    auto afterimage = MovingNode::create();
+    auto afterimage = MovingNode::createEphemeral(duration);
     afterimage->setSprite(ghostSprite);
     afterimage->setPosition(getPosition());
-    auto waitAndDestroy = Sequence::createWithTwoActions(DelayTime::create(duration), RemoveSelf::create());
-    afterimage->runAction(waitAndDestroy);
     if (_parent) {
         _parent->addChild(afterimage);
     }

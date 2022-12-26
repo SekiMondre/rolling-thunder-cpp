@@ -25,6 +25,8 @@ DebugAnimationScene::~DebugAnimationScene()
 
 RollingRockNode* _rockNode;
 EnemyNode* _dodger1;
+EnemyNode* _dodger2;
+Node* _root;
 
 bool DebugAnimationScene::init()
 {
@@ -38,6 +40,7 @@ bool DebugAnimationScene::init()
     auto root = Node::create();
     root->setPosition(Vec2(visibleSize.width * 0.5 + origin.x, origin.y));
     addChild(root);
+    _root = root;
     
     auto bg = SpriteLoader::load(ImageAsset::BACKGROUND);
     bg->setAnchorPoint(Vec2(0.5, 0));
@@ -46,33 +49,33 @@ bool DebugAnimationScene::init()
     for (int i = 0; i < 3; i++)
     {
         auto rock = SpriteLoader::load(ImageAsset::ROCK_BIG);
-        rock->setPosition(Vec2(152 * (i - 1), visibleSize.height - 76));
+        rock->setPosition(Vec2(152 * (i - 1), visibleSize.height + 20));
         root->addChild(rock);
     }
     
     auto enemy1 = SpriteAnimation::createEnemyNormal();
-    enemy1->setPosition(Vec2(-152 - 16, visibleSize.height - 152 - 76));
+    enemy1->setPosition(Vec2(-152 - 16, visibleSize.height - 120));
     root->addChild(enemy1);
     
     auto enemy2 = SpriteAnimation::createEnemyBig();
-    enemy2->setPosition(Vec2(0, visibleSize.height - 152 - 76));
+    enemy2->setPosition(Vec2(0, visibleSize.height - 120));
     root->addChild(enemy2);
     
     auto enemy3 = SpriteAnimation::createEnemyDodger();
-    enemy3->setPosition(Vec2(152 + 16, visibleSize.height - 152 - 76));
+    enemy3->setPosition(Vec2(152 + 16, visibleSize.height - 120));
     root->addChild(enemy3);
     
     for (int i = 0; i < 5; i++)
     {
         auto coin = SpriteAnimation::createGoldCoin();
-        coin->setPosition(Vec2(76 * (i - 2), visibleSize.height * 0.65));
+        coin->setPosition(Vec2(76 * (i - 2), visibleSize.height * 0.77));
         root->addChild(coin);
     }
     
     for (int i = 0; i < 3; i++)
     {
         int idx = i + 1;
-        float h = visibleSize.height * (0.57 - 0.10 * i);
+        float h = visibleSize.height * (0.69 - 0.10 * i);
         
         auto playerIdle = Sprite::create();
         playerIdle->setScale(2.0f, 2.0f);
@@ -95,9 +98,15 @@ bool DebugAnimationScene::init()
     
     auto dodgeEnemy1 = EnemyNode::create();
     dodgeEnemy1->setType(DODGER);
-    dodgeEnemy1->setPosition(-150, visibleSize.height * 0.23);
+    dodgeEnemy1->setPosition(-150, visibleSize.height * 0.38);
     root->addChild(dodgeEnemy1);
     _dodger1 = dodgeEnemy1;
+    
+    auto dodgeEnemy2 = EnemyNode::create();
+    dodgeEnemy2->setType(DODGER);
+    dodgeEnemy2->setPosition(150, visibleSize.height * 0.38 - 80);
+    root->addChild(dodgeEnemy2);
+    _dodger2 = dodgeEnemy2;
     
     auto powerup = SpriteAnimation::createCrackle();
     powerup->setPosition(Vec2(0, visibleSize.height * 0.10));
@@ -123,10 +132,11 @@ void DebugAnimationScene::update(float deltaTime)
 
 void DebugAnimationScene::animateOnce() {
     auto sprite = SpriteAnimation::createEphemeralSmokeHit();
-    sprite->setPosition(Vec2(300, 140));
-    addChild(sprite);
+    sprite->setPosition(Vec2(150, 140));
+    _root->addChild(sprite);
     
     _dodger1->simpleDodge();
+    _dodger2->simpleDodge();
 }
 
 void DebugAnimationScene::layoutMenu()
