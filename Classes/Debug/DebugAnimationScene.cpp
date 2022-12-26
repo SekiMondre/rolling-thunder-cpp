@@ -23,11 +23,6 @@ DebugAnimationScene::~DebugAnimationScene()
     log("[DEBUG] Destroying: Animation Test");
 }
 
-RollingRockNode* _rockNode;
-EnemyNode* _dodger1;
-EnemyNode* _dodger2;
-Node* _root;
-
 bool DebugAnimationScene::init()
 {
     if (!Scene::initWithPhysics()) return false;

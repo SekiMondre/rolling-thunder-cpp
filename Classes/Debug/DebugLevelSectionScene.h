@@ -10,6 +10,8 @@
 
 #include "axmol.h"
 
+class LevelGenerator;
+
 class DebugLevelSectionScene : public ax::Scene
 {
 public:
@@ -19,7 +21,13 @@ public:
 private:
     DebugLevelSectionScene();
     ~DebugLevelSectionScene();
+    void layoutMenu();
     void exitScene();
+    
+    void action1();
+    
+    LevelGenerator* _levelGen;
+    Node* _root;
 };
 
 #endif /* DebugLevelSectionScene_h */

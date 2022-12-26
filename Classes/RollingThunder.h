@@ -17,6 +17,7 @@
 #include "Game/Game.h"
 #include "Game/CollisionMask.h"
 #include "Game/RNG.h"
+#include "Game/LevelGenerator.h"
 
 #include "Nodes/World.h"
 #include "Nodes/PlayerNode.h"

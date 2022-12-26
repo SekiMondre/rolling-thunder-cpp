@@ -10,6 +10,9 @@
 
 #include "axmol.h"
 
+class RollingRockNode;
+class EnemyNode;
+
 class DebugAnimationScene : public ax::Scene
 {
 public:
@@ -24,6 +27,11 @@ private:
     void exitScene();
     
     void animateOnce();
+    
+    RollingRockNode* _rockNode;
+    EnemyNode* _dodger1;
+    EnemyNode* _dodger2;
+    ax::Node* _root;
 };
 
 #endif /* DebugAnimationScene_h */
