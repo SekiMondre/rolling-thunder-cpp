@@ -24,6 +24,7 @@ DebugAnimationScene::~DebugAnimationScene()
 }
 
 RollingRockNode* _rockNode;
+EnemyNode* _dodger1;
 
 bool DebugAnimationScene::init()
 {
@@ -92,12 +93,18 @@ bool DebugAnimationScene::init()
         root->addChild(playerDead);
     }
     
+    auto dodgeEnemy1 = EnemyNode::create();
+    dodgeEnemy1->setType(DODGER);
+    dodgeEnemy1->setPosition(-150, visibleSize.height * 0.23);
+    root->addChild(dodgeEnemy1);
+    _dodger1 = dodgeEnemy1;
+    
     auto powerup = SpriteAnimation::createCrackle();
     powerup->setPosition(Vec2(0, visibleSize.height * 0.10));
     root->addChild(powerup);
     
     auto roll = RollingRockNode::create();
-    roll->setPosition(-150, visibleSize.height * 0.22);
+    roll->setPosition(-150, visibleSize.height * 0.10);
     root->addChild(roll);
     roll->setType(DIAGONAL);
     _rockNode = roll;
@@ -118,6 +125,8 @@ void DebugAnimationScene::animateOnce() {
     auto sprite = SpriteAnimation::createEphemeralSmokeHit();
     sprite->setPosition(Vec2(300, 140));
     addChild(sprite);
+    
+    _dodger1->simpleDodge();
 }
 
 void DebugAnimationScene::layoutMenu()

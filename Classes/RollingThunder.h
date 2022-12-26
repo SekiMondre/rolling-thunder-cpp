@@ -24,6 +24,7 @@
 #include "Nodes/RollingRockNode.h"
 #include "Nodes/EnemyNode.h"
 #include "Nodes/CollectibleNode.h"
+#include "Nodes/MovingNode.h"
 #include "Nodes/Effects.h"
 
 #endif /* RollingThunder_h */

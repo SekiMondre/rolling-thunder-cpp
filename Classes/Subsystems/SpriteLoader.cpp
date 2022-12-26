@@ -80,3 +80,14 @@ Vector<SpriteFrame*> SpriteLoader::loadEnemy3Frames()
     frames.pushBack(_cache->getSpriteFrameByName("enemy3-idle-3.png"));
     return frames;
 }
+
+Vector<SpriteFrame*> SpriteLoader::loadEnemyDodgeFrames()
+{
+    Vector<SpriteFrame*> frames;
+    frames.pushBack(_cache->getSpriteFrameByName("enemy3-idle-2.png"));
+    frames.pushBack(_cache->getSpriteFrameByName("enemy3-idle-1.png"));
+    frames.pushBack(_cache->getSpriteFrameByName("enemy3-idle-0.png"));
+    frames.pushBack(_cache->getSpriteFrameByName("enemy3-idle-3.png"));
+    frames.pushBack(_cache->getSpriteFrameByName("enemy3-idle-4.png"));
+    return frames;
+}

@@ -83,6 +83,18 @@ Animation* SpriteAnimation::loadPlayerDeadAnimation(const int playerIndex)
     return SpriteAnimation::createAnimation(frames, 0.2f, true);
 }
 
+Animation* SpriteAnimation::loadEnemy3IdleAnimation()
+{
+    auto frames = SpriteLoader::loadEnemy3Frames();
+    return SpriteAnimation::createAnimation(frames, 0.07f, true);
+}
+
+Animation* SpriteAnimation::loadEnemy3DodgeAnimation()
+{
+    auto frames = SpriteLoader::loadEnemyDodgeFrames();
+    return SpriteAnimation::createAnimation(frames, 0.06f, false);
+}
+
 Animation* SpriteAnimation::createAnimation(const Vector<SpriteFrame*> frames, const float timePerFrame, const bool loop)
 {
     auto animation = Animation::createWithSpriteFrames(frames);

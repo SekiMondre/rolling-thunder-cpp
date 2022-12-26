@@ -23,6 +23,8 @@ public:
     static ax::Animation* loadPlayerIdleAnimation(const int playerIndex);
     static ax::Animation* loadPlayerRollAnimation(const int playerIndex);
     static ax::Animation* loadPlayerDeadAnimation(const int playerIndex);
+    static ax::Animation* loadEnemy3IdleAnimation();
+    static ax::Animation* loadEnemy3DodgeAnimation();
     
     static ax::Animation* createAnimation(const ax::Vector<ax::SpriteFrame*> frames, const float timePerFrame, const bool loop);
     

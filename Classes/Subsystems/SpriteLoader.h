@@ -34,6 +34,7 @@ private:
     static ax::Vector<ax::SpriteFrame*> loadPlayerIdleFrames(const int playerIndex);
     static ax::Vector<ax::SpriteFrame*> loadCrackleFrames();
     static ax::Vector<ax::SpriteFrame*> loadEnemy3Frames();
+    static ax::Vector<ax::SpriteFrame*> loadEnemyDodgeFrames();
 };
 
 #endif /* SpriteLoader_h */
