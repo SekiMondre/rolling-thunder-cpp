@@ -10,16 +10,9 @@
 
 USING_NS_AX;
 
-Obstacle::Obstacle(std::string _imageName, Vec2 _size) : imageName(_imageName), size(_size) {}
-
-const Obstacle Obstacle::BIG(ImageAsset::ROCK_BIG, Vec2(152, 152));
-const Obstacle Obstacle::SMALL(ImageAsset::ROCK_SMALL, Vec2(77, 77));
-
-// --------------------------------------------------------------------------------
-
-ObstacleNode::ObstacleNode()
-    : _sprite(nullptr)
-    , _size(Vec2::ZERO)
+ObstacleNode::ObstacleNode(Obstacle type)
+    : _type(type)
+    , _sprite(nullptr)
 {
 //    log("ObstacleNode created");
 }
@@ -31,7 +24,7 @@ ObstacleNode::~ObstacleNode()
 
 ObstacleNode* ObstacleNode::create()
 {
-    ObstacleNode* node = new ObstacleNode();
+    ObstacleNode* node = new ObstacleNode(Obstacle::BIG);
     if (node->init())
     {
         node->autorelease();
@@ -44,13 +37,9 @@ ObstacleNode* ObstacleNode::create()
 
 ObstacleNode* ObstacleNode::createWithType(Obstacle type)
 {
-    ObstacleNode* node = new ObstacleNode();
+    ObstacleNode* node = new ObstacleNode(type);
     if (node)
     {
-        // do things
-        node->_sprite = SpriteLoader::load(type.imageName);
-        node->_size = type.size;
-        
         if (node->init())
         {
             node->autorelease();
@@ -66,6 +55,13 @@ bool ObstacleNode::init()
 {
     if (!Node::init()) return false;
     
+    if (_type == Obstacle::SMALL) {
+        _sprite = (URNG::randomInt(1, 100) <= 60) ? SpriteLoader::load(ImageAsset::ROCK_SMALL) : SpriteLoader::load(ImageAsset::CACTUS);
+    } else if (_type == Obstacle::MEDIUM) {
+        _sprite = SpriteLoader::load(ImageAsset::ROCK_MEDIUM);
+    } else if (_type == Obstacle::BIG) {
+        _sprite = SpriteLoader::load(ImageAsset::ROCK_BIG);
+    }
     addChild(_sprite);
     
     this->setupPhysicsBody();
@@ -79,7 +75,7 @@ void ObstacleNode::update(float deltaTime)
 
 void ObstacleNode::setupPhysicsBody()
 {
-    auto boxSize = _size;
+    auto boxSize = _type.size;
     boxSize.x -= 15;
     boxSize.y -= 20;
     

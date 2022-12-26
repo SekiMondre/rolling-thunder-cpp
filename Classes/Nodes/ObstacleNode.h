@@ -9,19 +9,7 @@
 #define ObstacleNode_h
 
 #include "axmol.h"
-
-struct Obstacle
-{
-    Obstacle(std::string _imageName, ax::Vec2 _size);
-    
-    std::string imageName;
-    ax::Vec2 size = ax::Vec2::ZERO;
-    
-    static const Obstacle BIG;
-    static const Obstacle SMALL;
-};
-
-// --------------------------------------------------------------------------------
+#include "Game/Obstacle.h"
 
 class ObstacleNode : public ax::Node
 {
@@ -33,12 +21,12 @@ public:
     void update(float deltaTime) override;
 
 private:
-    ObstacleNode();
+    ObstacleNode(Obstacle type);
     ~ObstacleNode();
     void setupPhysicsBody();
     
+    Obstacle _type;
     ax::Sprite* _sprite;
-    ax::Vec2 _size;
 };
 
 #endif /* ObstacleNode_h */

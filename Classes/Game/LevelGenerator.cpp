@@ -6,11 +6,13 @@
 //
 
 #include "LevelGenerator.h"
+#include "RollingThunder.h"
 
 USING_NS_AX;
 
-LevelGenerator::LevelGenerator()
-    : _currentLevel(0)
+LevelGenerator::LevelGenerator(const float sceneHeight)
+    : _heightUnit(sceneHeight)
+    , _currentLevel(0)
 {}
 
 LevelGenerator::~LevelGenerator()
@@ -18,18 +20,44 @@ LevelGenerator::~LevelGenerator()
     log("Level generator destroyed");
 }
 
-std::list<Entity> LevelGenerator::spawnObstacles(const int n, const bool replaceEnemy)
+Obstacle selectObstacle()
 {
-    std::list<Entity> spawns;
+    int r = RNG::randomInt(0, 3);
+    if (r == 0) {
+        return Obstacle::BIG;
+    } else if (r == 1) {
+        return Obstacle::MEDIUM;
+    } else {
+        return Obstacle::SMALL;
+    }
+}
+
+int selectSlotIndex(Obstacle o)
+{
+    return RNG::randomInt(0, o.slotCount) + 1;
+}
+
+std::list<SpawnPoint> LevelGenerator::spawnObstacles(const int n, const bool replaceEnemy)
+{
+    std::list<SpawnPoint> spawns;
     
-    auto e1 = Entity(Entity::ENEMY_NORMAL, Vec2(-100, 500));
-    auto e2 = Entity(Entity::OBSTACLE_BIG, Vec2(152, 750));
-    auto e3 = Entity(Entity::OBSTACLE_SMALL, Vec2(-50, 250));
-//    auto e3 = Entity(Entity::OBSTACLE_MEDIUM, Vec2(-50, 250)); // explode
+//    int replaceIdx = (replaceEnemy) ? RNG::randomInt(0, n) : -1;
+    int replaceIdx = -1;
     
-    spawns.push_back(e1);
-    spawns.push_back(e2);
-    spawns.push_back(e3);
+    for (int i = 0; i < n; i++)
+    {
+        const float y = (_heightUnit / float(n * 2)) * float(i * 2 + 1);
+        
+        if (i != replaceIdx) {
+            auto obstacle = selectObstacle();
+            int slotIndex = selectSlotIndex(obstacle);
+            auto obstaclePosition = Vec2(obstacle.size.width * (float(slotIndex - 1) - obstacle.slotCorrectionFactor), y);
+            auto obstacleSpawn = SpawnPoint(obstacle.entityType, obstaclePosition);
+            spawns.push_back(obstacleSpawn);
+        } else {
+            // enemy
+        }
+    }
     
     return spawns;
 }

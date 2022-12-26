@@ -15,9 +15,11 @@
 #include "Subsystems/SpriteAnimation.h"
 
 #include "Game/Game.h"
-#include "Game/CollisionMask.h"
 #include "Game/RNG.h"
+#include "Game/CollisionMask.h"
 #include "Game/LevelGenerator.h"
+#include "Game/NodeFactory.h"
+#include "Game/Obstacle.h"
 
 #include "Nodes/World.h"
 #include "Nodes/PlayerNode.h"

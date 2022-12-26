@@ -10,7 +10,7 @@
 
 #include "axmol.h"
 
-enum Enemy
+enum class Enemy
 {
     NORMAL,
     BIG,

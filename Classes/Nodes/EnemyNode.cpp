@@ -16,7 +16,7 @@ const float CENTER_THRESHOLD = 50.0f;
 // TODO: Correctly setup needed values based on type
 
 EnemyNode::EnemyNode()
-    : _type(NORMAL)
+    : _type(Enemy::NORMAL)
     , _sprite(nullptr)
     , _hasDodged(false)
 {}
@@ -46,9 +46,9 @@ void EnemyNode::setType(const Enemy type)
         _sprite->removeFromParent();
     }
     
-    if (_type == DODGER) {
+    if (_type == Enemy::DODGER) {
         _sprite = SpriteAnimation::createEnemyDodger();
-    } else if (_type == BIG) {
+    } else if (_type == Enemy::BIG) {
         _sprite = SpriteAnimation::createEnemyBig();
     } else {
         _sprite = SpriteAnimation::createEnemyNormal();
@@ -64,7 +64,7 @@ void EnemyNode::update(float deltaTime)
 {
     this->setPositionY(this->getPositionY() - Game::getInstance()->getScrollingSpeed() * deltaTime);
     
-    if (_type == DODGER && !_hasDodged) {
+    if (_type == Enemy::DODGER && !_hasDodged) {
         auto playerPosition = Vec2::ZERO; // TODO: get player node position
         if (getPositionY() - playerPosition.y < DODGE_THRESHOLD) {
             int direction = 0;

@@ -10,33 +10,35 @@
 
 #include "axmol.h"
 
-struct Entity
+enum class Entity
 {
-    enum Category {
-        ENEMY_NORMAL,
-        ENEMY_BIG,
-        ENEMY_DODGER,
-        
-        OBSTACLE_BIG,
-        OBSTACLE_MEDIUM,
-        OBSTACLE_SMALL
-    };
+    ENEMY_NORMAL,
+    ENEMY_BIG,
+    ENEMY_DODGER,
+
+    OBSTACLE_BIG,
+    OBSTACLE_MEDIUM,
+    OBSTACLE_SMALL
+};
+
+struct SpawnPoint
+{
+    SpawnPoint(Entity type, ax::Vec2 pos) : type(type), position(pos) {}
     
-    Entity(Category type, ax::Vec2 pos) : type(type), position(pos) {}
-    
-    Category type;
+    Entity type;
     ax::Vec2 position;
 };
 
 class LevelGenerator
 {
 public:
-    LevelGenerator();
+    LevelGenerator(const float sceneHeight);
     ~LevelGenerator();
     
-    std::list<Entity> spawnObstacles(const int n, const bool replaceEnemy);
+    std::list<SpawnPoint> spawnObstacles(const int n, const bool replaceEnemy);
     
 private:
+    const float _heightUnit;
     int _currentLevel;
 };
 

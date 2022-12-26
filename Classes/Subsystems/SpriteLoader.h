@@ -16,6 +16,7 @@ const std::string BACKGROUND = "background-1.png";
 const std::string ROCK_BIG = "rock-big.png";
 const std::string ROCK_MEDIUM = "rock-medium.png";
 const std::string ROCK_SMALL = "rock-small.png";
+const std::string CACTUS = "obst-cactus.png";
 const std::string ROLLING_ROCK = "rolling-rock.png";
 const std::string GOLD_BAR_3X = "gold-combo.png";
 const std::string SHADOW_33PX = "shadow-33px.png";

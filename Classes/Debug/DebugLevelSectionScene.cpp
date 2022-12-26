@@ -13,7 +13,8 @@ USING_NS_AX;
 
 DebugLevelSectionScene::DebugLevelSectionScene()
 {
-    _levelGen = new LevelGenerator();
+    float h = Director::getInstance()->getWinSize().height;
+    _levelGen = new LevelGenerator(h);
 }
 
 DebugLevelSectionScene::~DebugLevelSectionScene()
@@ -25,6 +26,7 @@ DebugLevelSectionScene::~DebugLevelSectionScene()
 bool DebugLevelSectionScene::init()
 {
     if (!Scene::initWithPhysics()) return false;
+    getPhysicsWorld()->setDebugDrawMask(0xFFFF);
     
     auto visibleSize = _director->getVisibleSize();
     auto origin = _director->getVisibleOrigin();
@@ -64,45 +66,13 @@ void DebugLevelSectionScene::layoutMenu()
     this->addChild(menu);
 }
 
-// put this in a NodeFactory -> if any optimization is needed on obj creation, it can happen inside factory
-Node* parseEntity(const Entity entity)
-{
-    Node* node = nullptr;
-    
-    switch (entity.type)
-    {
-        case Entity::ENEMY_NORMAL: {
-            auto enemy = EnemyNode::create();
-            enemy->setType(NORMAL);
-            node = enemy;
-            break;
-        }
-        case Entity::OBSTACLE_BIG: {
-            auto obj = ObstacleNode::createWithType(Obstacle::BIG);
-            node = obj;
-            break;
-        }
-        case Entity::OBSTACLE_SMALL: {
-            auto obj2 = ObstacleNode::createWithType(Obstacle::SMALL);
-            node = obj2;
-            break;
-        }
-        default: {
-            log("UNHANDLED TYPE!!!");
-            break;
-        }
-    }
-    
-    return node;
-}
-
 void DebugLevelSectionScene::action1()
 {
     _root->removeAllChildren();
     
-    auto spawns = _levelGen->spawnObstacles(0, true);
-    for (Entity e : spawns) {
-        auto node = parseEntity(e);
+    auto spawns = _levelGen->spawnObstacles(4, true);
+    for (SpawnPoint e : spawns) {
+        auto node = NodeFactory::parseEntity(e);
         node->setPosition(e.position);
         _root->addChild(node);
     }

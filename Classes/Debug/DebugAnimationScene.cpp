@@ -92,13 +92,13 @@ bool DebugAnimationScene::init()
     }
     
     auto dodgeEnemy1 = EnemyNode::create();
-    dodgeEnemy1->setType(DODGER);
+    dodgeEnemy1->setType(Enemy::DODGER);
     dodgeEnemy1->setPosition(-150, visibleSize.height * 0.38);
     root->addChild(dodgeEnemy1);
     _dodger1 = dodgeEnemy1;
     
     auto dodgeEnemy2 = EnemyNode::create();
-    dodgeEnemy2->setType(DODGER);
+    dodgeEnemy2->setType(Enemy::DODGER);
     dodgeEnemy2->setPosition(150, visibleSize.height * 0.38 - 80);
     root->addChild(dodgeEnemy2);
     _dodger2 = dodgeEnemy2;
