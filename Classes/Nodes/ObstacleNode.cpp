@@ -38,13 +38,10 @@ ObstacleNode* ObstacleNode::create()
 ObstacleNode* ObstacleNode::createWithType(Obstacle type)
 {
     ObstacleNode* node = new ObstacleNode(type);
-    if (node)
+    if (node->init())
     {
-        if (node->init())
-        {
-            node->autorelease();
-            return node;
-        }
+        node->autorelease();
+        return node;
     }
     delete node;
     node = nullptr;

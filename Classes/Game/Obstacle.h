@@ -17,7 +17,7 @@ struct Obstacle
     Obstacle(Entity _entityType, ax::Vec2 _size, int _slotCount);
     
     Entity entityType;
-    ax::Vec2 size = ax::Vec2::ZERO;
+    ax::Vec2 size;
     int slotCount;
     float slotCorrectionFactor;
     

@@ -15,7 +15,7 @@ class ObstacleNode : public ax::Node
 {
 public:
 //    CREATE_FUNC(ObstacleNode);
-    static ObstacleNode* create();
+    static ObstacleNode* create(); // Remove default create func
     static ObstacleNode* createWithType(Obstacle type);
     virtual bool init() override;
     void update(float deltaTime) override;

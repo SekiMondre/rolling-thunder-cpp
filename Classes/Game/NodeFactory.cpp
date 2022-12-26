@@ -16,9 +16,15 @@ Node* NodeFactory::parseEntity(const SpawnPoint spawnPoint)
     switch (spawnPoint.type)
     {
         case Entity::ENEMY_NORMAL: {
-            auto enemy = EnemyNode::create();
-            enemy->setType(Enemy::NORMAL);
-            node = enemy;
+            node = EnemyNode::createWithType(Enemy::NORMAL);;
+            break;
+        }
+        case Entity::ENEMY_BIG: {
+            node = EnemyNode::createWithType(Enemy::BIG);;
+            break;
+        }
+        case Entity::ENEMY_DODGER: {
+            node = EnemyNode::createWithType(Enemy::DODGER);;
             break;
         }
         case Entity::OBSTACLE_BIG: {

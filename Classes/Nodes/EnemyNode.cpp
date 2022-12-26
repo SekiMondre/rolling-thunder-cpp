@@ -13,10 +13,8 @@ USING_NS_AX;
 const float DODGE_THRESHOLD = 230.0f;
 const float CENTER_THRESHOLD = 50.0f;
 
-// TODO: Correctly setup needed values based on type
-
-EnemyNode::EnemyNode()
-    : _type(Enemy::NORMAL)
+EnemyNode::EnemyNode(Enemy type)
+    : _type(type)
     , _sprite(nullptr)
     , _hasDodged(false)
 {}
@@ -26,25 +24,22 @@ EnemyNode::~EnemyNode()
     log("EnemyNode destroyed");
 }
 
+EnemyNode* EnemyNode::createWithType(Enemy type)
+{
+    EnemyNode* node = new EnemyNode(type);
+    if (node->init())
+    {
+        node->autorelease();
+        return node;
+    }
+    delete node;
+    node = nullptr;
+    return nullptr;
+}
+
 bool EnemyNode::init()
 {
     if (!Node::init()) return false;
-    
-    _sprite = SpriteAnimation::createEnemyNormal();
-    addChild(_sprite);
-    
-    this->setupPhysicsBody(); // Needs to set physics after having a type (box size)
-    return true;
-}
-
-void EnemyNode::setType(const Enemy type)
-{
-    _type = type;
-    
-    if (_sprite) {
-        _sprite->stopAllActions();
-        _sprite->removeFromParent();
-    }
     
     if (_type == Enemy::DODGER) {
         _sprite = SpriteAnimation::createEnemyDodger();
@@ -58,6 +53,9 @@ void EnemyNode::setType(const Enemy type)
     if (URNG::randomBool()) {
         _sprite->setScaleX(_sprite->getScaleX() * -1);
     }
+    
+    this->setupPhysicsBody();
+    return true;
 }
 
 void EnemyNode::update(float deltaTime)
@@ -135,7 +133,7 @@ void EnemyNode::spawnAfterimage()
 
 void EnemyNode::setupPhysicsBody()
 {
-    auto physicsBody = PhysicsBody::createCircle(75 * 0.5);
+    auto physicsBody = PhysicsBody::createCircle(_type.size.width * 0.5);
     physicsBody->setDynamic(true);
     physicsBody->setRotationEnable(false);
     physicsBody->setGravityEnable(false);

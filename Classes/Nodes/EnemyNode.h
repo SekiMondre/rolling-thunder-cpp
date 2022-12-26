@@ -9,25 +9,19 @@
 #define EnemyNode_h
 
 #include "axmol.h"
-
-enum class Enemy
-{
-    NORMAL,
-    BIG,
-    DODGER
-};
+#include "Game/Enemy.h"
 
 class EnemyNode : public ax::Node
 {
 public:
-    CREATE_FUNC(EnemyNode);
+//    CREATE_FUNC(EnemyNode);
+    static EnemyNode* createWithType(Enemy type);
     virtual bool init() override;
-    void setType(const Enemy type);
     void update(float deltaTime) override;
     void simpleDodge();
 
 private:
-    EnemyNode();
+    EnemyNode(Enemy type);
     ~EnemyNode();
     void setupPhysicsBody();
     void dodge(const int direction);
