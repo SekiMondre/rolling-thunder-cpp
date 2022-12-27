@@ -9,19 +9,21 @@
 #define CollectibleNode_h
 
 #include "axmol.h"
+#include "Game/Collectible.h"
 
 class CollectibleNode : public ax::Node
 {
 public:
-    CREATE_FUNC(CollectibleNode);
+    static CollectibleNode* createWithType(Collectible type);
     virtual bool init() override;
     void update(float deltaTime) override;
 
 private:
-    CollectibleNode();
+    CollectibleNode(Collectible type);
     ~CollectibleNode();
     void setupPhysicsBody();
     
+    Collectible _type;
     ax::Sprite* _sprite;
 };
 

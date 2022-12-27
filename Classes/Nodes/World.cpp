@@ -55,12 +55,21 @@ void World::update(float deltaTime)
         count = 0.0;
         
         auto nodeA = ObstacleNode::createWithType(Obstacle::BIG);
-        nodeA->setPosition(-100.0f, Game::getSceneHeight() + 100);
+        nodeA->setPosition(-100.0f, Game::getSceneHeight() + 200);
         _updateHierarchy->addChild(nodeA);
         
-        auto nodeB = CollectibleNode::create();
-        nodeB->setPosition(100.0f, Game::getSceneHeight() + 100);
+        auto nodeB = CollectibleNode::createWithType(Collectible::MONEY);
+        nodeB->setPosition(-150.0f, Game::getSceneHeight() + 100);
         _updateHierarchy->addChild(nodeB);
+        auto nodeB2 = CollectibleNode::createWithType(Collectible::GOLD_BAR);
+        nodeB2->setPosition(-50.0f, Game::getSceneHeight() + 100);
+        _updateHierarchy->addChild(nodeB2);
+        auto nodeB3 = CollectibleNode::createWithType(Collectible::GOLD_BAR_3X);
+        nodeB3->setPosition(50.0f, Game::getSceneHeight() + 100);
+        _updateHierarchy->addChild(nodeB3);
+        auto nodeB4 = CollectibleNode::createWithType(Collectible::CRACKLE);
+        nodeB4->setPosition(150.0f, Game::getSceneHeight() + 100);
+        _updateHierarchy->addChild(nodeB4);
 
         auto nodeC = EnemyNode::createWithType(Enemy::DODGER);
         nodeC->setPosition(0.0f, Game::getSceneHeight() + 280);

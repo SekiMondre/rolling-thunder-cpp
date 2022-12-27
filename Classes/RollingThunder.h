@@ -23,6 +23,7 @@
 #include "Game/Enemy.h"
 #include "Game/Obstacle.h"
 #include "Game/RollingRock.h"
+#include "Game/Collectible.h"
 
 #include "Nodes/World.h"
 #include "Nodes/PlayerNode.h"

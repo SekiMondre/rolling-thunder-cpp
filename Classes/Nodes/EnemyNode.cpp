@@ -51,7 +51,7 @@ bool EnemyNode::init()
     addChild(_sprite);
     
     if (URNG::randomBool()) {
-        _sprite->setScaleX(_sprite->getScaleX() * -1);
+        _sprite->setScaleX(_sprite->getScaleX() * -1.0f);
     }
     
     this->setupPhysicsBody();
@@ -91,7 +91,7 @@ void EnemyNode::simpleDodge()
 void EnemyNode::dodge(const int direction)
 {
     float dodgeDistance = abs(180.0f * (float)direction - getPositionX());
-    float maxDistance = 180 + 100;
+    float maxDistance = 180.0f + 100.0f;
     float duration = 0.5f * dodgeDistance / maxDistance; // Yea, don't ask me, again
     
     auto move = MoveTo::create(duration, Vec2(180.0f * (float)direction, getPositionY()));
@@ -133,7 +133,7 @@ void EnemyNode::spawnAfterimage()
 
 void EnemyNode::setupPhysicsBody()
 {
-    auto physicsBody = PhysicsBody::createCircle(_type.size.width * 0.5);
+    auto physicsBody = PhysicsBody::createCircle(_type.size.width * 0.5f);
     physicsBody->setDynamic(true);
     physicsBody->setRotationEnable(false);
     physicsBody->setGravityEnable(false);
