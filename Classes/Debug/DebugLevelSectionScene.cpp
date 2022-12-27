@@ -73,7 +73,8 @@ void DebugLevelSectionScene::action1()
     _root->removeAllChildren();
     
 //    auto spawns = _levelGen->spawnObstacles(4, true);
-    auto spawns = _levelGen->spawnRollingRock(0.5f);
+//    auto spawns = _levelGen->spawnRollingRock(0.5f);
+    auto spawns = _levelGen->spawnTripleRollingRocks();
     
     for (SpawnPoint e : spawns) {
         auto node = NodeFactory::parseEntity(e);

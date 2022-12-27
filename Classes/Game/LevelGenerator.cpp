@@ -131,6 +131,28 @@ std::list<SpawnPoint> LevelGenerator::spawnRollingRock(const float emptyChance)
 std::list<SpawnPoint> LevelGenerator::spawnTripleRollingRocks()
 {
     std::list<SpawnPoint> spawns;
+    
+    float sign = float(RNG::randomSign());
+    
+    if (RNG::randomUniform() < 0.33f) {
+        float centerDistance = _widthUnit * 0.2f;
+        auto position1 = Vec2(0.0f, _heightUnit * 0.75f);
+        auto position2 = Vec2(centerDistance, _heightUnit * 0.95f + _widthUnit * 0.1f * sign);
+        auto position3 = Vec2(-centerDistance, _heightUnit * 0.95f + _widthUnit * 0.1f * -sign);
+        spawns.push_back(SpawnPoint(Entity::ROLLING_ROCK_VERTICAL, position1));
+        spawns.push_back(SpawnPoint(Entity::ROLLING_ROCK_VERTICAL, position2));
+        spawns.push_back(SpawnPoint(Entity::ROLLING_ROCK_VERTICAL, position3));
+    } else {
+        float xCoordinate = _widthUnit * 0.37f;
+        bool isAlt = RNG::randomBool();
+        for (int i = 0; i < 3; i++) {
+            float altFactor = (isAlt) ? (1.0f - 2.0f * float(i % 2)) : 1.0f;
+            auto rockPosition = Vec2(xCoordinate * sign * altFactor, _heightUnit * (0.95f - 0.3f * float(i)));
+            auto rockSpawn = SpawnPoint(Entity::ROLLING_ROCK_DIAGONAL, rockPosition);
+            spawns.push_back(rockSpawn);
+        }
+    }
+    // TODO: Spawn coin pattern
     return spawns;
 }
 
