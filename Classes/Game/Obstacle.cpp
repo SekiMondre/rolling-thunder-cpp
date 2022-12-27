@@ -29,11 +29,11 @@ const Obstacle Obstacle::BIG(Entity::OBSTACLE_BIG,
                              );
 
 const Obstacle Obstacle::MEDIUM(Entity::OBSTACLE_MEDIUM,
-                                Vec2(115.0f, 115.0f),
+                                Vec2(114.0f, 114.0f),
                                 4
                                 );
 
 const Obstacle Obstacle::SMALL(Entity::OBSTACLE_SMALL,
-                               Vec2(77.0f, 77.0f),
+                               Vec2(76.0f, 76.0f),
                                6
                                );

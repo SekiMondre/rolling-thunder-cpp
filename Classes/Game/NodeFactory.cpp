@@ -39,6 +39,14 @@ Node* NodeFactory::parseEntity(const SpawnPoint spawnPoint)
             node = ObstacleNode::createWithType(Obstacle::SMALL);;
             break;
         }
+        case Entity::ROLLING_ROCK_VERTICAL: {
+            node = RollingRockNode::createWithType(RollingRock::VERTICAL);;
+            break;
+        }
+        case Entity::ROLLING_ROCK_DIAGONAL: {
+            node = RollingRockNode::createWithType(RollingRock::DIAGONAL);;
+            break;
+        }
         default: {
             log("UNHANDLED TYPE!!!");
             break;

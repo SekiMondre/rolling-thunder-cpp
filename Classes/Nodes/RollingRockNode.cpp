@@ -18,8 +18,8 @@ const float BOUNCE_GRAVITY = 2000.0f;
 
 const float SHADOW_OFFSET = -40.0f;
 
-RollingRockNode::RollingRockNode()
-    : _type(NONE)
+RollingRockNode::RollingRockNode(RollingRock type)
+    : _type(type)
     , _sprite(nullptr)
     , _shadowSprite(nullptr)
     , _direction(Vec2::ZERO)
@@ -34,9 +34,26 @@ RollingRockNode::~RollingRockNode()
     log("RollingRockNode destroyed");
 }
 
+RollingRockNode* RollingRockNode::createWithType(RollingRock type)
+{
+    RollingRockNode* node = new RollingRockNode(type);
+    if (node->init())
+    {
+        node->autorelease();
+        return node;
+    }
+    delete node;
+    node = nullptr;
+    return nullptr;
+}
+
 bool RollingRockNode::init()
 {
     if (!Node::init()) return false;
+    
+    _direction.x = _type.direction.x;
+    _direction.y = _type.direction.y;
+    _rollStartFactor = _type.rollStartFactor;
     
 //    _sprite = SpriteLoader::load(ImageAsset::ROLLING_ROCK);
 //    addChild(_sprite);
@@ -50,24 +67,6 @@ bool RollingRockNode::init()
     
     this->setupPhysicsBody();
     return true;
-}
-
-void RollingRockNode::setType(RollingRockType type)
-{
-    _type = type;
-    if (_type == VERTICAL) {
-        _direction.x = 0.0f;
-        _direction.y = -1.0f;
-        _rollStartFactor = 1.2f;
-    } else if (_type == DIAGONAL) {
-        _direction.x = 1.0f;
-        _direction.y = -1.0f;
-        _rollStartFactor = 0.9f;
-    } else {
-        _direction.x = 0.0f;
-        _direction.y = 0.0f;
-        _rollStartFactor = 0.0f;
-    }
 }
 
 void RollingRockNode::update(float deltaTime)
@@ -95,7 +94,7 @@ void RollingRockNode::update(float deltaTime)
     else if (getPositionY() < Game::getSceneHeight() * _rollStartFactor)
     {
         _isRolling = true;
-        if (_type == DIAGONAL) {
+        if (_type == RollingRock::DIAGONAL) {
             _direction.x = (getPositionX() < 0.0f) ? 1.0f : -1.0f;
         }
         this->bounce();

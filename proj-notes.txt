@@ -3,6 +3,7 @@
 ==================================================
 
 - C++ `inline` keyword allows code inlining of functions during compilation
+    * RNG functions
 
 - Color4B static constants to declare "enum" constants
 

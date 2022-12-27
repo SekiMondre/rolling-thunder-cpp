@@ -19,8 +19,10 @@
 #include "Game/CollisionMask.h"
 #include "Game/LevelGenerator.h"
 #include "Game/NodeFactory.h"
-#include "Game/Obstacle.h"
+
 #include "Game/Enemy.h"
+#include "Game/Obstacle.h"
+#include "Game/RollingRock.h"
 
 #include "Nodes/World.h"
 #include "Nodes/PlayerNode.h"

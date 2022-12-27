@@ -62,22 +62,19 @@ void World::update(float deltaTime)
         nodeB->setPosition(100.0f, Game::getSceneHeight() + 100);
         _updateHierarchy->addChild(nodeB);
 
-        auto nodeC = EnemyNode::create();
+        auto nodeC = EnemyNode::createWithType(Enemy::DODGER);
         nodeC->setPosition(0.0f, Game::getSceneHeight() + 280);
         _updateHierarchy->addChild(nodeC);
         
-        auto nodeD = RollingRockNode::create();
-        nodeD->setType(DIAGONAL);
+        auto nodeD = RollingRockNode::createWithType(RollingRock::DIAGONAL);
         nodeD->setPosition(-190, Game::getSceneHeight() + 500);
         _updateHierarchy->addChild(nodeD);
         
-        auto nodeE = RollingRockNode::create();
-        nodeE->setType(DIAGONAL);
+        auto nodeE = RollingRockNode::createWithType(RollingRock::DIAGONAL);
         nodeE->setPosition(190, Game::getSceneHeight() + 600);
         _updateHierarchy->addChild(nodeE);
         
-        auto nodeF = RollingRockNode::create();
-        nodeF->setType(VERTICAL);
+        auto nodeF = RollingRockNode::createWithType(RollingRock::VERTICAL);
         nodeF->setPosition(150, Game::getSceneHeight() + 500);
         _updateHierarchy->addChild(nodeF);
     }

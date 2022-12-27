@@ -105,10 +105,9 @@ bool DebugAnimationScene::init()
     powerup->setPosition(Vec2(0, visibleSize.height * 0.10));
     root->addChild(powerup);
     
-    auto roll = RollingRockNode::create();
+    auto roll = RollingRockNode::createWithType(RollingRock::DIAGONAL);
     roll->setPosition(-150, visibleSize.height * 0.10);
     root->addChild(roll);
-    roll->setType(DIAGONAL);
     _rockNode = roll;
     
     this->layoutMenu();

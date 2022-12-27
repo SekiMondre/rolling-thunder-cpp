@@ -27,6 +27,16 @@ int RNG::randomInt(int min, int max)
     return (randomize() % (max - min)) + min;
 }
 
+int RNG::randomSign()
+{
+    return randomInt(0, 2) * 2 - 1;
+}
+
+bool RNG::randomBool()
+{
+    return randomInt(0, 2);
+}
+
 float RNG::randomUniform()
 {
     return (float(randomize())/float(RAND_MAX));

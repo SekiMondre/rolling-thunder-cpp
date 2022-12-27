@@ -9,29 +9,22 @@
 #define RollingRockNode_h
 
 #include "axmol.h"
-
-enum RollingRockType
-{
-    VERTICAL,
-    DIAGONAL,
-    NONE
-};
+#include "Game/RollingRock.h"
 
 class RollingRockNode : public ax::Node
 {
 public:
-    CREATE_FUNC(RollingRockNode);
+    static RollingRockNode* createWithType(RollingRock type);
     virtual bool init() override;
-    void setType(RollingRockType type);
     void update(float deltaTime) override;
     
 private:
-    RollingRockNode();
+    RollingRockNode(RollingRock type);
     ~RollingRockNode();
     void setupPhysicsBody();
     void bounce();
     
-    RollingRockType _type;
+    RollingRock _type;
     ax::Sprite* _sprite;
     ax::Sprite* _shadowSprite;
     ax::Vec2 _direction;

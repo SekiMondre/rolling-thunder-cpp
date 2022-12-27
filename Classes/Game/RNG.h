@@ -14,8 +14,9 @@ namespace RNG
 {
 void start();
 int randomInt(int min, int max);
+int randomSign();
+bool randomBool();
 float randomUniform();
-// TODO: sign, bool
 }
 
 namespace URNG

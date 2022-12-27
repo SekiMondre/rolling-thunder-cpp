@@ -13,8 +13,10 @@ USING_NS_AX;
 
 DebugLevelSectionScene::DebugLevelSectionScene()
 {
+    float w = Director::getInstance()->getWinSize().width * 0.75f;
     float h = Director::getInstance()->getWinSize().height;
-    _levelGen = new LevelGenerator(h);
+    float spacing = 152.0f;
+    _levelGen = new LevelGenerator(w, h, spacing);
 }
 
 DebugLevelSectionScene::~DebugLevelSectionScene()
@@ -70,7 +72,9 @@ void DebugLevelSectionScene::action1()
 {
     _root->removeAllChildren();
     
-    auto spawns = _levelGen->spawnObstacles(4, true);
+//    auto spawns = _levelGen->spawnObstacles(4, true);
+    auto spawns = _levelGen->spawnRollingRock(0.5f);
+    
     for (SpawnPoint e : spawns) {
         auto node = NodeFactory::parseEntity(e);
         node->setPosition(e.position);
