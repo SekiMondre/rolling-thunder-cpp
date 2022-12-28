@@ -37,7 +37,10 @@ struct SpawnPoint
     ax::Vec2 position;
 };
 
+struct Enemy;
 struct RollingRock;
+
+class EnemySelector;
 
 class LevelGenerator
 {
@@ -52,8 +55,10 @@ public:
     std::list<SpawnPoint> spawnPowerUp();
     
 private:
+    Enemy selectEnemyForLevel() const; // remove? direct call
     float xShuffleForSingleRock(RollingRock type, bool hasObstacle);
     
+    const std::unique_ptr<const EnemySelector> _enemySelector;
     const float _widthUnit;
     const float _heightUnit;
     const float _laneSpacing;

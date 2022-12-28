@@ -11,7 +11,8 @@
 USING_NS_AX;
 
 LevelGenerator::LevelGenerator(const float sceneWidth, const float sceneHeight, const float laneSpacing)
-    : _widthUnit(sceneWidth)
+    : _enemySelector(std::unique_ptr<EnemySelector>(new EnemySelector()))
+    , _widthUnit(sceneWidth)
     , _heightUnit(sceneHeight)
     , _laneSpacing(laneSpacing)
     , _currentLevel(0)
@@ -39,9 +40,9 @@ RollingRock selectRollingRock()
     return RNG::randomBool() ? RollingRock::VERTICAL : RollingRock::DIAGONAL;
 }
 
-Enemy selectEnemyForLevel()
+Enemy LevelGenerator::selectEnemyForLevel() const  // maybe remove and call directly
 {
-    return Enemy::NORMAL; // TODO
+    return _enemySelector->nextEnemy(_currentLevel);
 }
 
 int selectSlotIndex(Obstacle o)

@@ -31,3 +31,9 @@ const Enemy Enemy::BIG(Entity::ENEMY_BIG,
 const Enemy Enemy::DODGER(Entity::ENEMY_DODGER,
                           Vec2(75.0f, 75.0f)
                           );
+
+const std::array<Enemy, 3> Enemy::ALL = {
+    Enemy::NORMAL,
+    Enemy::BIG,
+    Enemy::DODGER
+};

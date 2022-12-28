@@ -19,6 +19,7 @@
 #include "Game/CollisionMask.h"
 #include "Game/LevelGenerator.h"
 #include "Game/CoinStrategy.h"
+#include "Game/EnemySelector.h"
 #include "Game/NodeFactory.h"
 
 #include "Game/Enemy.h"

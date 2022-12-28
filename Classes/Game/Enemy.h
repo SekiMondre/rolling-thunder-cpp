@@ -24,6 +24,7 @@ struct Enemy
     static const Enemy NORMAL;
     static const Enemy BIG;
     static const Enemy DODGER;
+    static const std::array<Enemy, 3> ALL;
 };
 
 #endif /* Enemy_h */
