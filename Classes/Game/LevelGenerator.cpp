@@ -49,6 +49,30 @@ int selectSlotIndex(Obstacle o)
     return RNG::randomInt(0, o.slotCount) + 1;
 }
 
+CoinStrategy selectCoinStrategyForPowerUp()
+{
+    return (RNG::randomBool()) ? CoinCircle::makeDefault() : CoinSquare::makeDefault();
+}
+
+CoinStrategy selectCoinStrategyStandalone()
+{
+    int idx = RNG::randomInt(0, 5);
+    if (idx == 0) {
+        return CoinCircle::makeDefault();
+    } else if (idx == 1) {
+        return CoinSquare::makeDefault();
+    } else if (idx == 2) {
+        return CoinBigRhombus::makeDefault();
+    } else if (idx == 3) {
+        return CoinSineWave::makeDefault();
+    } else if (idx == 4) {
+        return CoinHalfSineWave::makeDefault();
+    } else {
+        log("[ERROR] Invalid coin strategy standalone index: %d", idx);
+        return CoinCircle::makeDefault();
+    }
+}
+
 float xShuffleForEnemy(Enemy e)
 {
     float laneSpacing = 153.0f; // Move to const init in class
@@ -159,11 +183,25 @@ std::list<SpawnPoint> LevelGenerator::spawnTripleRollingRocks()
 std::list<SpawnPoint> LevelGenerator::spawnCoinPattern()
 {
     std::list<SpawnPoint> spawns;
+    
+    CoinStrategy strategy = selectCoinStrategyStandalone();
+    for (Vec2 position : strategy.getPositions()) {
+        spawns.push_back(SpawnPoint(Entity::COLLECT_MONEY, position));
+    }
+    
+    // TODO: use pivot
+    
     return spawns;
 }
 
 std::list<SpawnPoint> LevelGenerator::spawnPowerUp()
 {
     std::list<SpawnPoint> spawns;
+    CoinStrategy strategy = selectCoinStrategyForPowerUp();
+    for (Vec2 position : strategy.getPositions()) {
+        spawns.push_back(SpawnPoint(Entity::COLLECT_MONEY, position));
+    }
+    auto powerSpawn = SpawnPoint(Entity::POWER_UP_CRACKLE, strategy.getPivot());
+    spawns.push_back(powerSpawn);
     return spawns;
 }

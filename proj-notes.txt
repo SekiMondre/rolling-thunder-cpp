@@ -18,3 +18,16 @@
     * Gambiarra: call `this->unscheduleUpdate()` after setting the physicsBody in a node.
 
 - C++ underline marks _ for private vars might help to restrict scope for code autocomplete (_sprite vs. Sprite)
+
+
+
+- Node get position func:
+
+.h:
+virtual const Vec2& getPosition() const;
+
+.cpp:
+const Vec2& Node::getPosition() const
+{
+    return _position;
+}

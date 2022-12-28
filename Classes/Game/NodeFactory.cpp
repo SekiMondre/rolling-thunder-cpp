@@ -47,8 +47,24 @@ Node* NodeFactory::parseEntity(const SpawnPoint spawnPoint)
             node = RollingRockNode::createWithType(RollingRock::DIAGONAL);;
             break;
         }
+        case Entity::COLLECT_MONEY: {
+            node = CollectibleNode::createWithType(Collectible::MONEY);
+            break;
+        }
+        case Entity::COLLECT_GOLD_BAR: {
+            node = CollectibleNode::createWithType(Collectible::GOLD_BAR);
+            break;
+        }
+        case Entity::COLLECT_GOLD_BAR_3X: {
+            node = CollectibleNode::createWithType(Collectible::GOLD_BAR_3X);
+            break;
+        }
+        case Entity::POWER_UP_CRACKLE: {
+            node = CollectibleNode::createWithType(Collectible::CRACKLE);
+            break;
+        }
         default: {
-            log("UNHANDLED TYPE!!!");
+            log("[ERROR] Parse Entity: Unhandled spawn type.");
             break;
         }
     }

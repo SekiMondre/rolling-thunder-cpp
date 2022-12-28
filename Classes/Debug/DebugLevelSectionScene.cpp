@@ -28,7 +28,7 @@ DebugLevelSectionScene::~DebugLevelSectionScene()
 bool DebugLevelSectionScene::init()
 {
     if (!Scene::initWithPhysics()) return false;
-    getPhysicsWorld()->setDebugDrawMask(0xFFFF);
+//    getPhysicsWorld()->setDebugDrawMask(0xFFFF);
     
     auto visibleSize = _director->getVisibleSize();
     auto origin = _director->getVisibleOrigin();
@@ -74,7 +74,9 @@ void DebugLevelSectionScene::action1()
     
 //    auto spawns = _levelGen->spawnObstacles(4, true);
 //    auto spawns = _levelGen->spawnRollingRock(0.5f);
-    auto spawns = _levelGen->spawnTripleRollingRocks();
+//    auto spawns = _levelGen->spawnTripleRollingRocks();
+//    auto spawns = _levelGen->spawnCoinPattern();
+    auto spawns = _levelGen->spawnPowerUp();
     
     for (SpawnPoint e : spawns) {
         auto node = NodeFactory::parseEntity(e);
