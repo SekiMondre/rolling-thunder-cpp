@@ -54,6 +54,8 @@ public:
     std::list<SpawnPoint> spawnCoinPattern();
     std::list<SpawnPoint> spawnPowerUp();
     
+    void testLevel();
+    
 private:
     Enemy selectEnemyForLevel() const; // remove? direct call
     float xShuffleForSingleRock(RollingRock type, bool hasObstacle);
@@ -63,6 +65,21 @@ private:
     const float _heightUnit;
     const float _laneSpacing;
     int _currentLevel;
+    
+    std::vector<std::vector<std::function<void(void)>>> _levelBuilders;
+    std::vector<std::vector<int>> _levelDistributions;
+    
+    void generateLevel(const int level, const int numberOfSections);
+    
+    void buildSingleObstacle();
+    void buildDoubleObstacle();
+    void buildTripleObstacle();
+    void buildSingleObstacleWithEnemy();
+    void buildDoubleObstacleWithEnemy();
+    void buildTripleObstacleWithEnemy();
+    void buildSingleRollingRock();
+    void buildTripleRollingRocks();
+    void buildCollectibles();
 };
 
 #endif /* LevelGenerator_h */

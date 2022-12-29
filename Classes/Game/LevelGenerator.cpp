@@ -16,12 +16,195 @@ LevelGenerator::LevelGenerator(const float sceneWidth, const float sceneHeight, 
     , _heightUnit(sceneHeight)
     , _laneSpacing(laneSpacing)
     , _currentLevel(0)
-{}
+{
+    std::vector<std::function<void(void)>> level1 = {
+        std::bind(&LevelGenerator::buildSingleObstacle, this),
+        std::bind(&LevelGenerator::buildSingleObstacleWithEnemy, this),
+        std::bind(&LevelGenerator::buildDoubleObstacle, this)
+    };
+    std::vector<int> chancesLevel1 = {35, 45, 20};
+    _levelBuilders.push_back(level1);
+    _levelDistributions.push_back(chancesLevel1);
+    
+    std::vector<std::function<void(void)>> level2 = {
+        std::bind(&LevelGenerator::buildSingleRollingRock, this),
+        std::bind(&LevelGenerator::buildSingleObstacleWithEnemy, this),
+        std::bind(&LevelGenerator::buildDoubleObstacle, this),
+        std::bind(&LevelGenerator::buildCollectibles, this)
+    };
+    std::vector<int> chancesLevel2 = {35, 27, 28, 10};
+    _levelBuilders.push_back(level2);
+    _levelDistributions.push_back(chancesLevel2);
+    
+    std::vector<std::function<void(void)>> level3 = {
+        std::bind(&LevelGenerator::buildTripleRollingRocks, this),
+        std::bind(&LevelGenerator::buildSingleObstacleWithEnemy, this),
+        std::bind(&LevelGenerator::buildDoubleObstacleWithEnemy, this),
+        std::bind(&LevelGenerator::buildDoubleObstacle, this),
+        std::bind(&LevelGenerator::buildTripleObstacle, this),
+        std::bind(&LevelGenerator::buildCollectibles, this)
+    };
+    std::vector<int> chancesLevel3 = {30, 25, 10, 10, 15, 10};
+    _levelBuilders.push_back(level3);
+    _levelDistributions.push_back(chancesLevel3);
+    
+    std::vector<std::function<void(void)>> level4 = {
+        std::bind(&LevelGenerator::buildTripleRollingRocks, this),
+        std::bind(&LevelGenerator::buildDoubleObstacle, this),
+        std::bind(&LevelGenerator::buildTripleObstacle, this),
+        std::bind(&LevelGenerator::buildDoubleObstacleWithEnemy, this),
+        std::bind(&LevelGenerator::buildTripleObstacleWithEnemy, this)
+    };
+    std::vector<int> chancesLevel4 = {30, 17, 17, 16, 20};
+    _levelBuilders.push_back(level4);
+    _levelDistributions.push_back(chancesLevel4);
+}
 
 LevelGenerator::~LevelGenerator()
 {
     log("Level generator destroyed");
 }
+
+void LevelGenerator::generateLevel(const int level, const int numberOfSections)
+{
+    int lvl_idx = std::clamp(level, 1, 4) - 1;
+    
+    for (int sec = 0; sec < numberOfSections; sec++) {
+        int random = RNG::randomInt(0, 100);
+        int acc = 0;
+        
+        for(int build_idx = 0; build_idx < _levelDistributions[lvl_idx].size(); build_idx++) {
+            acc += _levelDistributions[lvl_idx][build_idx];
+            if (random < acc) {
+                _levelBuilders[lvl_idx][build_idx]();
+                break;
+            }
+        }
+    }
+    // append power up
+}
+
+void LevelGenerator::testLevel()
+{
+    std::vector<std::vector<std::function<void(void)>>> levelBuilders;
+    std::vector<std::vector<int>> levelDistributions;
+    
+    std::vector<std::function<void(void)>> level1 = {
+        std::bind(&LevelGenerator::buildSingleObstacle, this),
+        std::bind(&LevelGenerator::buildSingleObstacleWithEnemy, this),
+        std::bind(&LevelGenerator::buildDoubleObstacle, this)
+    };
+    std::vector<int> chancesLevel1 = {35, 45, 20};
+    
+    levelBuilders.push_back(level1);
+    levelDistributions.push_back(chancesLevel1);
+    
+    std::vector<std::function<void(void)>> level2 = {
+        std::bind(&LevelGenerator::buildSingleRollingRock, this),
+        std::bind(&LevelGenerator::buildSingleObstacleWithEnemy, this),
+        std::bind(&LevelGenerator::buildDoubleObstacle, this),
+        std::bind(&LevelGenerator::buildCollectibles, this)
+    };
+    std::vector<int> chancesLevel2 = {35, 27, 28, 10};
+    
+    levelBuilders.push_back(level2);
+    levelDistributions.push_back(chancesLevel2);
+    
+    std::vector<std::function<void(void)>> level3 = {
+        std::bind(&LevelGenerator::buildTripleRollingRocks, this),
+        std::bind(&LevelGenerator::buildSingleObstacleWithEnemy, this),
+        std::bind(&LevelGenerator::buildDoubleObstacleWithEnemy, this),
+        std::bind(&LevelGenerator::buildDoubleObstacle, this),
+        std::bind(&LevelGenerator::buildTripleObstacle, this),
+        std::bind(&LevelGenerator::buildCollectibles, this)
+    };
+    std::vector<int> chancesLevel3 = {30, 25, 10, 10, 15, 10};
+    
+    levelBuilders.push_back(level3);
+    levelDistributions.push_back(chancesLevel3);
+    
+    std::vector<std::function<void(void)>> level4 = {
+        std::bind(&LevelGenerator::buildTripleRollingRocks, this),
+        std::bind(&LevelGenerator::buildDoubleObstacle, this),
+        std::bind(&LevelGenerator::buildTripleObstacle, this),
+        std::bind(&LevelGenerator::buildDoubleObstacleWithEnemy, this),
+        std::bind(&LevelGenerator::buildTripleObstacleWithEnemy, this)
+    };
+    std::vector<int> chancesLevel4 = {30, 17, 17, 16, 20};
+    
+    levelBuilders.push_back(level4);
+    levelDistributions.push_back(chancesLevel4);
+    
+    std::vector<std::function<void(void)>> funs = {
+        std::bind(&LevelGenerator::buildSingleObstacle, this),
+        std::bind(&LevelGenerator::buildSingleObstacleWithEnemy, this),
+        std::bind(&LevelGenerator::buildDoubleObstacle, this)
+    };
+    std::vector<int> probabilities = {35, 45, 20};
+    
+    int r = RNG::randomInt(0, 100);
+    int acc = 0;
+    for (int i = 0; i < 3; i++) {
+        acc += probabilities[i];
+        if (r < acc) {
+            funs[i]();
+            break;
+        }
+    }
+}
+
+void LevelGenerator::buildSingleObstacle()
+{
+    log("SINGLE obstacle");
+    // create list
+    // pass as reference to spawn func / fill
+    // make segment with list
+    // append to level array
+}
+
+void LevelGenerator::buildDoubleObstacle()
+{
+    log("DOUBLE obstacle");
+}
+
+void LevelGenerator::buildTripleObstacle()
+{
+    log("");
+}
+
+void LevelGenerator::buildSingleObstacleWithEnemy()
+{
+    log("");
+}
+
+void LevelGenerator::buildDoubleObstacleWithEnemy()
+{
+    log("");
+}
+
+void LevelGenerator::buildTripleObstacleWithEnemy()
+{
+    log("");
+}
+
+void LevelGenerator::buildSingleRollingRock()
+{
+    log("");
+}
+
+void LevelGenerator::buildTripleRollingRocks()
+{
+    log("");
+}
+
+void LevelGenerator::buildCollectibles()
+{
+    log("");
+}
+
+
+
+//void LevelGenerator::build
 
 Obstacle selectObstacle()
 {
