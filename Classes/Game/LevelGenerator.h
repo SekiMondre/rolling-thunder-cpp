@@ -46,8 +46,10 @@ public:
 };
 
 struct Enemy;
+struct Obstacle;
 struct RollingRock;
 
+class CoinStrategy;
 class EnemySelector;
 
 class LevelGenerator // TODO: Untangle the chaos!
@@ -67,6 +69,8 @@ public:
     std::list<SpawnPoint> popNextSection();
     
 private:
+    CoinStrategy selectLaneCoins(const int obsCount, const ax::Vec2 center, const Obstacle obsType, const int slotIndex) const;
+    int selectFreeLaneAgainst(const Obstacle o, const int slotIndex) const;
     Enemy selectEnemyForLevel() const; // remove? direct call
     float xShuffleForSingleRock(RollingRock type, bool hasObstacle);
     

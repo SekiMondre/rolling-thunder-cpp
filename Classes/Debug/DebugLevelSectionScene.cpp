@@ -28,7 +28,7 @@ DebugLevelSectionScene::~DebugLevelSectionScene()
 bool DebugLevelSectionScene::init()
 {
     if (!Scene::initWithPhysics()) return false;
-//    getPhysicsWorld()->setDebugDrawMask(0xFFFF);
+    getPhysicsWorld()->setDebugDrawMask(0xFFFF);
     
     auto visibleSize = _director->getVisibleSize();
     auto origin = _director->getVisibleOrigin();
@@ -149,7 +149,7 @@ void DebugLevelSectionScene::resetSpawn(const std::list<SpawnPoint>& spawns)
 //void DebugLevelSectionScene::action1()
 //{
 //    _root->removeAllChildren();
-//    
+//
 //    static bool hasGEN = false;
 //    if (!hasGEN) {
 //        hasGEN = true;

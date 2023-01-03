@@ -188,6 +188,22 @@ int selectSlotIndex(Obstacle o)
     return RNG::randomInt(0, o.slotCount) + 1;
 }
 
+int LevelGenerator::selectFreeLaneAgainst(const Obstacle o, const int slotIndex) const
+{
+    int laneToRemove = 0;
+    if (o == Obstacle::BIG) {
+        laneToRemove = slotIndex - 1;
+    } else if (o == Obstacle::MEDIUM) {
+        laneToRemove = slotIndex / 2;
+    } else { // SMALL
+        laneToRemove = (slotIndex - 1) / 2;
+    }
+    int lanes[2] = {0};
+    lanes[0] = 0 - (laneToRemove + 1) / 2; // SAGAZ trust the truncation
+    lanes[1] = 1 - laneToRemove / 2;
+    return lanes[RNG::randomInt(0, 2)];
+}
+
 CoinStrategy selectCoinStrategyForPowerUp()
 {
     return (RNG::randomBool()) ? CoinStrategy::makeCircle() : CoinStrategy::makeSquare();
@@ -210,6 +226,38 @@ CoinStrategy selectCoinStrategyStandalone()
         log("[ERROR] Invalid coin strategy standalone index: %d", idx);
         return CoinStrategy::makeCircle();
     }
+}
+
+CoinStrategy LevelGenerator::selectLaneCoins(const int obsCount, const Vec2 center, const Obstacle obsType, const int slotIndex) const
+{
+    const bool isSpecialCase = (obsType == Obstacle::MEDIUM && (slotIndex / 2 == 1));
+    if (obsCount == 1) {
+        if (isSpecialCase || RNG::randomBool()) {
+            return CoinStrategy::makeRow(center, 10, _heightUnit * 0.1f);
+        } else {
+            return CoinStrategy::makeZigZagRow(center, 10, _heightUnit * 0.1f);
+        }
+    } else if (obsCount == 2) {
+        if (isSpecialCase || RNG::randomBool()) {
+            return CoinStrategy::makeRow(center, 4, _heightUnit * 0.125f);
+        } else {
+            return CoinStrategy::makeSmallRhombus(center);
+        }
+    } else if (obsCount == 3) {
+        if (isSpecialCase || RNG::randomBool()) {
+            return CoinStrategy::makeRow(center, 3, _heightUnit * 0.111f);
+        } else {
+            return CoinStrategy::makeSmallRhombus(center);
+        }
+    } else if (obsCount == 4) {
+        if (_currentLevel >= 5) {
+            return CoinStrategy::makeRow(center, 3, _heightUnit * 0.083f);
+        } else {
+            return CoinStrategy::makeRow(center, 2, _heightUnit * 0.125f);
+        }
+    }
+    log("[ERROR] Invalid obstacle count for lane coins: %d", obsCount);
+    return CoinStrategy::makeRow(center, 1, 0.0f);
 }
 
 float xShuffleForEnemy(Enemy e)
@@ -250,14 +298,20 @@ void LevelGenerator::spawnObstacles(std::list<SpawnPoint>& spawns, const int n, 
     {
         const float y = (_heightUnit / float(n * 2)) * float(i * 2 + 1);
         if (i != replaceIdx) {
-            auto obstacle = selectObstacle();
-            int slotIndex = selectSlotIndex(obstacle);
-            auto obstaclePosition = Vec2(obstacle.size.width * (float(slotIndex - 1) - obstacle.slotCorrectionFactor), y);
+            const auto obstacle = selectObstacle();
+            const int slotIndex = selectSlotIndex(obstacle);
+            const auto obstaclePosition = Vec2(obstacle.size.width * (float(slotIndex - 1) - obstacle.slotCorrectionFactor), y);
             spawns.emplace_back(SpawnPoint(obstacle.entityType, obstaclePosition)); // Construct in-place to apply move semantics
-            // TODO: Spawn coins
+            
+            // Spawn coins
+            const auto coinSpawnCenter = Vec2(_laneSpacing * float(selectFreeLaneAgainst(obstacle, slotIndex)), y);
+            const auto strategy = selectLaneCoins(n, coinSpawnCenter, obstacle, slotIndex);
+            for (const Vec2& position : strategy.getPositions()) {
+                spawns.emplace_back(SpawnPoint(Entity::COLLECT_MONEY, position));
+            }
         } else {
-            auto enemy = selectEnemyForLevel();
-            auto enemyPosition = Vec2(xShuffleForEnemy(enemy), y);
+            const auto enemy = selectEnemyForLevel();
+            const auto enemyPosition = Vec2(xShuffleForEnemy(enemy), y);
             spawns.emplace_back(SpawnPoint(enemy.entityType, enemyPosition));
         }
     }
