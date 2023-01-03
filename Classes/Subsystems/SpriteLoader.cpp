@@ -18,7 +18,7 @@ void SpriteLoader::start()
 
 Sprite* SpriteLoader::load(std::string name)
 {
-    auto frame = _cache->getSpriteFrameByName(name); // TODO: handle nulls w/ log
+    auto frame = _cache->getSpriteFrameByName(name);
     if (!frame) {
         log("[ERROR] Could not get sprite frame from cache: %s", name.c_str());
         return nullptr;
@@ -31,6 +31,16 @@ Sprite* SpriteLoader::load(std::string name)
 //    sprite->getTexture()->setAliasTexParameters(); // Forced NEAREST params in-engine
     sprite->setScale(2.0f, 2.0f);
     return sprite;
+}
+
+SpriteFrame* SpriteLoader::loadFrame(std::string name)
+{
+    auto frame = _cache->getSpriteFrameByName(name);
+    if (!frame) {
+        log("[ERROR] Could not get sprite frame from cache: %s", name.c_str());
+        return nullptr;
+    }
+    return frame;
 }
 
 Vector<SpriteFrame*> SpriteLoader::loadAnimationFrames(const std::string name, const int frameCount)

@@ -21,6 +21,8 @@
 
 - Level generator sections threadmill must be a list for back appending and front taking
 
+- Mind the safe area for buttons: touch doesn't reach button parts that are under a safe area
+
 
 
 - Node get position func:

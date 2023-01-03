@@ -9,7 +9,6 @@
 #define GameScene_h
 
 #include "axmol.h"
-#include "RollingThunder.h"
 
 class World;
 
@@ -29,6 +28,8 @@ private:
     void onTouchEnded(ax::Touch* touch, ax::Event* event);
     void onTouchCancelled(ax::Touch* touch, ax::Event* event);
     bool onContactBegin(ax::PhysicsContact& contact);
+    
+//    void testCall();
     
     World* _world;
 };

@@ -6,6 +6,7 @@
 //
 
 #include "GameScene.h"
+#include "RollingThunder.h"
 
 USING_NS_AX;
 
@@ -37,12 +38,20 @@ bool GameScene::init()
     touchListener->onTouchCancelled = AX_CALLBACK_2(GameScene::onTouchCancelled, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
     
-    _world = World::create();
-    addChild(_world);
+//    _world = World::create();
+//    addChild(_world);
+    
+    auto gui = GUINode::create();
+    addChild(gui);
     
     this->scheduleUpdate();
     return true;
 }
+
+//void GameScene::testCall()
+//{
+//    log("test call");
+//}
 
 void GameScene::update(float deltaTime)
 {
@@ -57,20 +66,20 @@ void GameScene::update(float deltaTime)
 bool GameScene::onTouchBegan(Touch* touch, Event* event)
 {
     auto location = touch->getLocation();
-    log("Touch began location: {%.2f, %.2f}", location.x, location.y);
+//    log("Touch began location: {%.2f, %.2f}", location.x, location.y);
     return true;
 }
 
 void GameScene::onTouchMoved(Touch* touch, Event* event)
 {
     auto location = touch->getLocation();
-    log("Touch moved location: {%.2f, %.2f}", location.x, location.y);
+//    log("Touch moved location: {%.2f, %.2f}", location.x, location.y);
 }
 
 void GameScene::onTouchEnded(Touch* touch, Event* event)
 {
     auto location = touch->getLocation();
-    log("Touch ended location: {%.2f, %.2f}", location.x, location.y);
+//    log("Touch ended location: {%.2f, %.2f}", location.x, location.y);
 }
 
 void GameScene::onTouchCancelled(Touch* touch, Event* event)
