@@ -69,7 +69,7 @@ void LevelGenerator::generateLevel(const int level, const int numberOfSections)
 {
     int lvl_idx = std::clamp(level, 1, 4) - 1;
     
-    for (int sec = 0; sec < numberOfSections; sec++) {
+    for (int section_idx = 0; section_idx < numberOfSections; section_idx++) {
         int random = RNG::randomInt(0, 100);
         int acc = 0;
         
@@ -81,130 +81,85 @@ void LevelGenerator::generateLevel(const int level, const int numberOfSections)
             }
         }
     }
-    // append power up
+    log("--- power up");
+    _levelModules.emplace_back(std::list<SpawnPoint>());
+    this->spawnPowerUp(_levelModules.back());
+    log("--- END LEVEL GEN");
 }
 
-void LevelGenerator::testLevel()
+std::list<SpawnPoint> LevelGenerator::popNextSection()
 {
-    std::vector<std::vector<std::function<void(void)>>> levelBuilders;
-    std::vector<std::vector<int>> levelDistributions;
-    
-    std::vector<std::function<void(void)>> level1 = {
-        std::bind(&LevelGenerator::buildSingleObstacle, this),
-        std::bind(&LevelGenerator::buildSingleObstacleWithEnemy, this),
-        std::bind(&LevelGenerator::buildDoubleObstacle, this)
-    };
-    std::vector<int> chancesLevel1 = {35, 45, 20};
-    
-    levelBuilders.push_back(level1);
-    levelDistributions.push_back(chancesLevel1);
-    
-    std::vector<std::function<void(void)>> level2 = {
-        std::bind(&LevelGenerator::buildSingleRollingRock, this),
-        std::bind(&LevelGenerator::buildSingleObstacleWithEnemy, this),
-        std::bind(&LevelGenerator::buildDoubleObstacle, this),
-        std::bind(&LevelGenerator::buildCollectibles, this)
-    };
-    std::vector<int> chancesLevel2 = {35, 27, 28, 10};
-    
-    levelBuilders.push_back(level2);
-    levelDistributions.push_back(chancesLevel2);
-    
-    std::vector<std::function<void(void)>> level3 = {
-        std::bind(&LevelGenerator::buildTripleRollingRocks, this),
-        std::bind(&LevelGenerator::buildSingleObstacleWithEnemy, this),
-        std::bind(&LevelGenerator::buildDoubleObstacleWithEnemy, this),
-        std::bind(&LevelGenerator::buildDoubleObstacle, this),
-        std::bind(&LevelGenerator::buildTripleObstacle, this),
-        std::bind(&LevelGenerator::buildCollectibles, this)
-    };
-    std::vector<int> chancesLevel3 = {30, 25, 10, 10, 15, 10};
-    
-    levelBuilders.push_back(level3);
-    levelDistributions.push_back(chancesLevel3);
-    
-    std::vector<std::function<void(void)>> level4 = {
-        std::bind(&LevelGenerator::buildTripleRollingRocks, this),
-        std::bind(&LevelGenerator::buildDoubleObstacle, this),
-        std::bind(&LevelGenerator::buildTripleObstacle, this),
-        std::bind(&LevelGenerator::buildDoubleObstacleWithEnemy, this),
-        std::bind(&LevelGenerator::buildTripleObstacleWithEnemy, this)
-    };
-    std::vector<int> chancesLevel4 = {30, 17, 17, 16, 20};
-    
-    levelBuilders.push_back(level4);
-    levelDistributions.push_back(chancesLevel4);
-    
-    std::vector<std::function<void(void)>> funs = {
-        std::bind(&LevelGenerator::buildSingleObstacle, this),
-        std::bind(&LevelGenerator::buildSingleObstacleWithEnemy, this),
-        std::bind(&LevelGenerator::buildDoubleObstacle, this)
-    };
-    std::vector<int> probabilities = {35, 45, 20};
-    
-    int r = RNG::randomInt(0, 100);
-    int acc = 0;
-    for (int i = 0; i < 3; i++) {
-        acc += probabilities[i];
-        if (r < acc) {
-            funs[i]();
-            break;
-        }
-    }
+    auto section = _levelModules.front(); // check empty? -> .front() on empty list is undefined behavior
+    _levelModules.pop_front();
+    return section;
 }
+
+// MARK: - Builder methods
 
 void LevelGenerator::buildSingleObstacle()
 {
-    log("SINGLE obstacle");
-    // create list
-    // pass as reference to spawn func / fill
-    // make segment with list
-    // append to level array
+    log("--- 1x obstacle");
+    _levelModules.emplace_back(std::list<SpawnPoint>());
+    this->spawnObstacles(_levelModules.back(), 1, false);
 }
 
 void LevelGenerator::buildDoubleObstacle()
 {
-    log("DOUBLE obstacle");
+    log("--- 2x obstacle");
+    _levelModules.emplace_back(std::list<SpawnPoint>());
+    this->spawnObstacles(_levelModules.back(), 2, false);
 }
 
 void LevelGenerator::buildTripleObstacle()
 {
-    log("");
+    log("--- 3x obstacle");
+    _levelModules.emplace_back(std::list<SpawnPoint>());
+    this->spawnObstacles(_levelModules.back(), 3, false);
 }
 
 void LevelGenerator::buildSingleObstacleWithEnemy()
 {
-    log("");
+    log("--- 1x obstacle + enemy");
+    _levelModules.emplace_back(std::list<SpawnPoint>());
+    this->spawnObstacles(_levelModules.back(), 2, true);
 }
 
 void LevelGenerator::buildDoubleObstacleWithEnemy()
 {
-    log("");
+    log("--- 2x obstacle + enemy");
+    _levelModules.emplace_back(std::list<SpawnPoint>());
+    this->spawnObstacles(_levelModules.back(), 3, true);
 }
 
 void LevelGenerator::buildTripleObstacleWithEnemy()
 {
-    log("");
+    log("--- 3x obstacle + enemy");
+    _levelModules.emplace_back(std::list<SpawnPoint>());
+    this->spawnObstacles(_levelModules.back(), 4, true);
 }
 
 void LevelGenerator::buildSingleRollingRock()
 {
-    log("");
+    log("--- 1x rolling rock");
+    _levelModules.emplace_back(std::list<SpawnPoint>());
+    this->spawnRollingRock(_levelModules.back(), 0.5f);
 }
 
 void LevelGenerator::buildTripleRollingRocks()
 {
-    log("");
+    log("--- 3x rolling rock");
+    _levelModules.emplace_back(std::list<SpawnPoint>());
+    this->spawnTripleRollingRocks(_levelModules.back());
 }
 
 void LevelGenerator::buildCollectibles()
 {
-    log("");
+    log("--- collectible fiesta");
+    _levelModules.emplace_back(std::list<SpawnPoint>());
+    this->spawnCoinPattern(_levelModules.back());
 }
 
-
-
-//void LevelGenerator::build
+// MARK: - Selector methods
 
 Obstacle selectObstacle()
 {
@@ -285,61 +240,49 @@ float LevelGenerator::xShuffleForSingleRock(RollingRock type, bool hasObstacle)
     }
 }
 
-std::list<SpawnPoint> LevelGenerator::spawnObstacles(const int n, const bool replaceEnemy)
+// MARK: - Spawn methods
+
+void LevelGenerator::spawnObstacles(std::list<SpawnPoint>& spawns, const int n, const bool replaceEnemy)
 {
-    std::list<SpawnPoint> spawns;
-    
     int replaceIdx = (replaceEnemy) ? RNG::randomInt(0, n) : -1;
     
     for (int i = 0; i < n; i++)
     {
         const float y = (_heightUnit / float(n * 2)) * float(i * 2 + 1);
-        
         if (i != replaceIdx) {
             auto obstacle = selectObstacle();
             int slotIndex = selectSlotIndex(obstacle);
             auto obstaclePosition = Vec2(obstacle.size.width * (float(slotIndex - 1) - obstacle.slotCorrectionFactor), y);
-            auto obstacleSpawn = SpawnPoint(obstacle.entityType, obstaclePosition);
-            spawns.push_back(obstacleSpawn);
+            spawns.emplace_back(SpawnPoint(obstacle.entityType, obstaclePosition)); // Construct in-place to apply move semantics
             // TODO: Spawn coins
         } else {
             auto enemy = selectEnemyForLevel();
             auto enemyPosition = Vec2(xShuffleForEnemy(enemy), y);
-            auto enemySpawn = SpawnPoint(enemy.entityType, enemyPosition);
-            spawns.push_back(enemySpawn);
+            spawns.emplace_back(SpawnPoint(enemy.entityType, enemyPosition));
         }
     }
-    
-    return spawns;
 }
 
-std::list<SpawnPoint> LevelGenerator::spawnRollingRock(const float emptyChance)
+void LevelGenerator::spawnRollingRock(std::list<SpawnPoint>& spawns, const float emptyChance)
 {
-    std::list<SpawnPoint> spawns;
-    
     bool hasObstacle = !(RNG::randomUniform() < emptyChance);
     auto rock = selectRollingRock();
     auto rockPosition = Vec2(xShuffleForSingleRock(rock, hasObstacle), _heightUnit * 0.85f);
-    auto rockSpawn = SpawnPoint(rock.entityType, rockPosition);
-    spawns.push_back(rockSpawn);
+    spawns.emplace_back(SpawnPoint(rock.entityType, rockPosition));
     
     if (hasObstacle) {
         auto obstacle = RNG::randomBool() ? Obstacle::SMALL : Obstacle::MEDIUM;
         int slotIndex = selectSlotIndex(obstacle);
         auto obstaclePosition = Vec2(obstacle.size.width * (float(slotIndex - 1) - obstacle.slotCorrectionFactor), _heightUnit * 0.3f);
-        auto obstacleSpawn = SpawnPoint(obstacle.entityType, obstaclePosition);
-        spawns.push_back(obstacleSpawn);
+        spawns.emplace_back(SpawnPoint(obstacle.entityType, obstaclePosition));
         // TODO: Spawn coins
     } else {
         // TODO: Spawn coin pattern
     }
-    return spawns;
 }
 
-std::list<SpawnPoint> LevelGenerator::spawnTripleRollingRocks()
+void LevelGenerator::spawnTripleRollingRocks(std::list<SpawnPoint>& spawns)
 {
-    std::list<SpawnPoint> spawns;
-    
     float sign = float(RNG::randomSign());
     
     if (RNG::randomUniform() < 0.33f) {
@@ -347,45 +290,36 @@ std::list<SpawnPoint> LevelGenerator::spawnTripleRollingRocks()
         auto position1 = Vec2(0.0f, _heightUnit * 0.75f);
         auto position2 = Vec2(centerDistance, _heightUnit * 0.95f + _widthUnit * 0.1f * sign);
         auto position3 = Vec2(-centerDistance, _heightUnit * 0.95f + _widthUnit * 0.1f * -sign);
-        spawns.push_back(SpawnPoint(Entity::ROLLING_ROCK_VERTICAL, position1));
-        spawns.push_back(SpawnPoint(Entity::ROLLING_ROCK_VERTICAL, position2));
-        spawns.push_back(SpawnPoint(Entity::ROLLING_ROCK_VERTICAL, position3));
+        spawns.emplace_back(SpawnPoint(Entity::ROLLING_ROCK_VERTICAL, position1));
+        spawns.emplace_back(SpawnPoint(Entity::ROLLING_ROCK_VERTICAL, position2));
+        spawns.emplace_back(SpawnPoint(Entity::ROLLING_ROCK_VERTICAL, position3));
     } else {
         float xCoordinate = _widthUnit * 0.37f;
         bool isAlt = RNG::randomBool();
         for (int i = 0; i < 3; i++) {
             float altFactor = (isAlt) ? (1.0f - 2.0f * float(i % 2)) : 1.0f;
             auto rockPosition = Vec2(xCoordinate * sign * altFactor, _heightUnit * (0.95f - 0.3f * float(i)));
-            auto rockSpawn = SpawnPoint(Entity::ROLLING_ROCK_DIAGONAL, rockPosition);
-            spawns.push_back(rockSpawn);
+            spawns.emplace_back(SpawnPoint(Entity::ROLLING_ROCK_DIAGONAL, rockPosition));
         }
     }
     // TODO: Spawn coin pattern
-    return spawns;
 }
 
-std::list<SpawnPoint> LevelGenerator::spawnCoinPattern()
+void LevelGenerator::spawnCoinPattern(std::list<SpawnPoint>& spawns)
 {
-    std::list<SpawnPoint> spawns;
-    
     CoinStrategy strategy = selectCoinStrategyStandalone();
     for (Vec2 position : strategy.getPositions()) {
-        spawns.push_back(SpawnPoint(Entity::COLLECT_MONEY, position));
+        spawns.emplace_back(SpawnPoint(Entity::COLLECT_MONEY, position));
     }
     
     // TODO: use pivot
-    
-    return spawns;
 }
 
-std::list<SpawnPoint> LevelGenerator::spawnPowerUp()
+void LevelGenerator::spawnPowerUp(std::list<SpawnPoint>& spawns)
 {
-    std::list<SpawnPoint> spawns;
     CoinStrategy strategy = selectCoinStrategyForPowerUp();
     for (Vec2 position : strategy.getPositions()) {
-        spawns.push_back(SpawnPoint(Entity::COLLECT_MONEY, position));
+        spawns.emplace_back(SpawnPoint(Entity::COLLECT_MONEY, position));
     }
-    auto powerSpawn = SpawnPoint(Entity::POWER_UP_CRACKLE, strategy.getPivot());
-    spawns.push_back(powerSpawn);
-    return spawns;
+    spawns.emplace_back(SpawnPoint(Entity::POWER_UP_CRACKLE, strategy.getPivot()));
 }

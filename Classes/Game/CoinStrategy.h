@@ -10,6 +10,7 @@
 
 #include "axmol.h"
 
+// TODO: transform subclasses into static factory methods to avoid the whole virtual destructor problem.
 class CoinStrategy
 {
 public:
@@ -24,6 +25,8 @@ public:
     const ax::Vec2& getPivot() const {
         return _pivotPosition;
     }
+    
+    virtual ~CoinStrategy() {}
     
 protected:
     std::vector<ax::Vec2> _positions;

@@ -19,6 +19,8 @@
 
 - C++ underline marks _ for private vars might help to restrict scope for code autocomplete (_sprite vs. Sprite)
 
+- Level generator sections threadmill must be a list for back appending and front taking
+
 
 
 - Node get position func:

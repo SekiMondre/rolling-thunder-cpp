@@ -17,7 +17,7 @@ CollectibleNode::CollectibleNode(Collectible type)
 
 CollectibleNode::~CollectibleNode()
 {
-    log("CollectibleNode destroyed");
+//    log("CollectibleNode destroyed");
 }
 
 CollectibleNode* CollectibleNode::createWithType(Collectible type)

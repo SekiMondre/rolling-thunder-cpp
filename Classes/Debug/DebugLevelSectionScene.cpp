@@ -72,19 +72,25 @@ void DebugLevelSectionScene::action1()
 {
     _root->removeAllChildren();
     
-//    auto spawns = _levelGen->spawnObstacles(4, true);
+//    std::list<SpawnPoint> spawns;
+//    _levelGen->spawnObstacles(spawns, 4, true);
 //    auto spawns = _levelGen->spawnRollingRock(0.5f);
 //    auto spawns = _levelGen->spawnTripleRollingRocks();
-//    auto spawns = _levelGen->spawnCoinPattern();
+//    _levelGen->spawnCoinPattern(spawns);
 //    auto spawns = _levelGen->spawnPowerUp();
     
-    _levelGen->testLevel();
-    
-//    for (SpawnPoint e : spawns) {
-//        auto node = NodeFactory::parseEntity(e);
-//        node->setPosition(e.position);
-//        _root->addChild(node);
-//    }
+    static bool hasGEN = false;
+    if (!hasGEN) {
+        hasGEN = true;
+        _levelGen->generateLevel(3, 10);
+    }
+    std::list<SpawnPoint> spawns = _levelGen->popNextSection();
+
+    for (const auto &e : spawns) {
+        auto node = NodeFactory::parseEntity(e);
+        node->setPosition(e.position);
+        _root->addChild(node);
+    }
 }
 
 void DebugLevelSectionScene::exitScene()

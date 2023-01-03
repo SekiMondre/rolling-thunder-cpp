@@ -29,12 +29,20 @@ enum class Entity
     POWER_UP_CRACKLE
 };
 
-struct SpawnPoint
+class SpawnPoint
 {
-    SpawnPoint(Entity type, ax::Vec2 pos) : type(type), position(pos) {}
-    
+public:
     Entity type;
     ax::Vec2 position;
+    
+    SpawnPoint(Entity type, ax::Vec2 pos) : type(type), position(pos) {}
+    SpawnPoint(const SpawnPoint& spawnPoint) : type(spawnPoint.type), position(spawnPoint.position) {
+        ax::log("COPY!!!");
+    }
+    SpawnPoint(SpawnPoint&& spawnPoint) : type(spawnPoint.type), position(spawnPoint.position) {
+        ax::log("MOVE!!!");
+    }
+    SpawnPoint& operator=(const SpawnPoint& other) = default;
 };
 
 struct Enemy;
@@ -42,19 +50,21 @@ struct RollingRock;
 
 class EnemySelector;
 
-class LevelGenerator
+class LevelGenerator // TODO: Untangle the chaos!
 {
 public:
     LevelGenerator(const float sceneWidth, const float sceneHeight, const float laneSpacing);
     ~LevelGenerator();
     
-    std::list<SpawnPoint> spawnObstacles(const int n, const bool replaceEnemy); // true -> replaces 1 obstacle for an enemy
-    std::list<SpawnPoint> spawnRollingRock(const float emptyChance); // if !empty, spawns an obstacle / chance -> {0.0...1.0}
-    std::list<SpawnPoint> spawnTripleRollingRocks();
-    std::list<SpawnPoint> spawnCoinPattern();
-    std::list<SpawnPoint> spawnPowerUp();
+    void spawnObstacles(std::list<SpawnPoint>& spawns, const int n, const bool replaceEnemy); // true -> replaces 1 obstacle for an enemy
+    void spawnRollingRock(std::list<SpawnPoint>& spawns, const float emptyChance); // if !empty, spawns an obstacle / chance -> {0.0...1.0}
+    void spawnTripleRollingRocks(std::list<SpawnPoint>& spawns);
+    void spawnCoinPattern(std::list<SpawnPoint>& spawns);
+    void spawnPowerUp(std::list<SpawnPoint>& spawns);
     
-    void testLevel();
+    void generateLevel(const int level, const int numberOfSections);
+    
+    std::list<SpawnPoint> popNextSection();
     
 private:
     Enemy selectEnemyForLevel() const; // remove? direct call
@@ -69,7 +79,9 @@ private:
     std::vector<std::vector<std::function<void(void)>>> _levelBuilders;
     std::vector<std::vector<int>> _levelDistributions;
     
-    void generateLevel(const int level, const int numberOfSections);
+    std::list<std::list<SpawnPoint>> _levelModules;
+    
+//    void generateLevel(const int level, const int numberOfSections);
     
     void buildSingleObstacle();
     void buildDoubleObstacle();

@@ -9,7 +9,7 @@
 
 USING_NS_AX;
 
-Node* NodeFactory::parseEntity(const SpawnPoint spawnPoint)
+Node* NodeFactory::parseEntity(const SpawnPoint& spawnPoint)
 {
     Node* node = nullptr;
     

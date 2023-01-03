@@ -14,7 +14,7 @@
 class NodeFactory
 {
 public:
-    static ax::Node* parseEntity(const SpawnPoint spawnPoint);
+    static ax::Node* parseEntity(const SpawnPoint& spawnPoint);
     
 private:
     NodeFactory();
