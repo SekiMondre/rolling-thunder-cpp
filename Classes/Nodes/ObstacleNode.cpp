@@ -19,7 +19,7 @@ ObstacleNode::ObstacleNode(Obstacle type)
 
 ObstacleNode::~ObstacleNode()
 {
-    log("ObstacleNode destroyed");
+//    log("ObstacleNode destroyed");
 }
 
 ObstacleNode* ObstacleNode::create()
