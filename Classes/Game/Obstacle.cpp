@@ -37,3 +37,9 @@ const Obstacle Obstacle::SMALL(Entity::OBSTACLE_SMALL,
                                Vec2(76.0f, 76.0f),
                                6
                                );
+
+const std::array<Obstacle, 3> Obstacle::ALL = {
+    Obstacle::BIG,
+    Obstacle::MEDIUM,
+    Obstacle::SMALL
+};

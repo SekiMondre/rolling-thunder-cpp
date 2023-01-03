@@ -161,39 +161,27 @@ void LevelGenerator::buildCollectibles()
 
 // MARK: - Selector methods
 
-Obstacle selectObstacle()
-{
-    int r = RNG::randomInt(0, 3);
-    if (r == 0) {
-        return Obstacle::BIG;
-    } else if (r == 1) {
-        return Obstacle::MEDIUM;
-    } else {
-        return Obstacle::SMALL;
-    }
-}
-
-RollingRock selectRollingRock()
-{
-    return RNG::randomBool() ? RollingRock::VERTICAL : RollingRock::DIAGONAL;
-}
-
-Enemy LevelGenerator::selectEnemyForLevel() const  // maybe remove and call directly
+const Enemy& LevelGenerator::selectEnemyForLevel() const
 {
     return _enemySelector->nextEnemy(_currentLevel);
 }
 
-int selectSlotIndex(Obstacle o)
+const Obstacle& LevelGenerator::selectObstacle() const
 {
-    return RNG::randomInt(0, o.slotCount) + 1;
+    return Obstacle::ALL[RNG::randomInt(0, 3)];
 }
 
-int LevelGenerator::selectFreeLaneAgainst(const Obstacle o, const int slotIndex) const
+int LevelGenerator::selectSlotIndex(Obstacle obstacle) const
+{
+    return RNG::randomInt(0, obstacle.slotCount) + 1;
+}
+
+int LevelGenerator::selectFreeLaneAgainst(const Obstacle obstacle, const int slotIndex) const
 {
     int laneToRemove = 0;
-    if (o == Obstacle::BIG) {
+    if (obstacle == Obstacle::BIG) {
         laneToRemove = slotIndex - 1;
-    } else if (o == Obstacle::MEDIUM) {
+    } else if (obstacle == Obstacle::MEDIUM) {
         laneToRemove = slotIndex / 2;
     } else { // SMALL
         laneToRemove = (slotIndex - 1) / 2;
@@ -204,12 +192,7 @@ int LevelGenerator::selectFreeLaneAgainst(const Obstacle o, const int slotIndex)
     return lanes[RNG::randomInt(0, 2)];
 }
 
-CoinStrategy selectCoinStrategyForPowerUp()
-{
-    return (RNG::randomBool()) ? CoinStrategy::makeCircle() : CoinStrategy::makeSquare();
-}
-
-CoinStrategy selectCoinStrategyStandalone()
+CoinStrategy LevelGenerator::selectCoinStrategyStandalone() const
 {
     int idx = RNG::randomInt(0, 5);
     if (idx == 0) {
@@ -260,14 +243,14 @@ CoinStrategy LevelGenerator::selectLaneCoins(const int obsCount, const Vec2 cent
     return CoinStrategy::makeRow(center, 1, 0.0f);
 }
 
-float xShuffleForEnemy(Enemy e)
+float LevelGenerator::xShuffleForEnemy(const Enemy enemy) const
 {
     float laneSpacing = 153.0f; // Move to const init in class
-    if (e == Enemy::DODGER) {
-        float limit = laneSpacing - e.size.width * 0.64f;
+    if (enemy == Enemy::DODGER) {
+        float limit = laneSpacing - enemy.size.width * 0.64f;
         int maxDelta = 2 * (int)limit;
         return float(RNG::randomInt(0, maxDelta)) - limit;
-    } else if (e == Enemy::BIG) {
+    } else if (enemy == Enemy::BIG) {
         return float(RNG::randomInt(0, 5) - 2) * laneSpacing * 0.5f;
     } else { // NORMAL
         int maxDelta = 2 * (int)laneSpacing;
@@ -275,7 +258,7 @@ float xShuffleForEnemy(Enemy e)
     }
 }
 
-float LevelGenerator::xShuffleForSingleRock(RollingRock type, bool hasObstacle)
+float LevelGenerator::xShuffleForSingleRock(const RollingRock type, bool hasObstacle) const
 {
     if (type == RollingRock::VERTICAL) {
         if (hasObstacle) {
@@ -290,7 +273,7 @@ float LevelGenerator::xShuffleForSingleRock(RollingRock type, bool hasObstacle)
 
 // MARK: - Spawn methods
 
-void LevelGenerator::spawnObstacles(std::list<SpawnPoint>& spawns, const int n, const bool replaceEnemy)
+void LevelGenerator::spawnObstacles(std::list<SpawnPoint>& spawns, const int n, const bool replaceEnemy) const
 {
     int replaceIdx = (replaceEnemy) ? RNG::randomInt(0, n) : -1;
     
@@ -305,8 +288,8 @@ void LevelGenerator::spawnObstacles(std::list<SpawnPoint>& spawns, const int n, 
             
             // Spawn coins
             const auto coinSpawnCenter = Vec2(_laneSpacing * float(selectFreeLaneAgainst(obstacle, slotIndex)), y);
-            const auto strategy = selectLaneCoins(n, coinSpawnCenter, obstacle, slotIndex);
-            for (const Vec2& position : strategy.getPositions()) {
+            const auto coinStrategy = selectLaneCoins(n, coinSpawnCenter, obstacle, slotIndex);
+            for (const Vec2& position : coinStrategy.getPositions()) {
                 spawns.emplace_back(SpawnPoint(Entity::COLLECT_MONEY, position));
             }
         } else {
@@ -317,62 +300,87 @@ void LevelGenerator::spawnObstacles(std::list<SpawnPoint>& spawns, const int n, 
     }
 }
 
-void LevelGenerator::spawnRollingRock(std::list<SpawnPoint>& spawns, const float emptyChance)
+void LevelGenerator::spawnRollingRock(std::list<SpawnPoint>& spawns, const float emptyChance) const
 {
-    bool hasObstacle = !(RNG::randomUniform() < emptyChance);
-    auto rock = selectRollingRock();
-    auto rockPosition = Vec2(xShuffleForSingleRock(rock, hasObstacle), _heightUnit * 0.85f);
+    const bool hasObstacle = !(RNG::randomUniform() < emptyChance);
+    const auto rock = RNG::randomBool() ? RollingRock::VERTICAL : RollingRock::DIAGONAL;;
+    const auto rockPosition = Vec2(xShuffleForSingleRock(rock, hasObstacle), _heightUnit * 0.85f);
     spawns.emplace_back(SpawnPoint(rock.entityType, rockPosition));
     
     if (hasObstacle) {
-        auto obstacle = RNG::randomBool() ? Obstacle::SMALL : Obstacle::MEDIUM;
-        int slotIndex = selectSlotIndex(obstacle);
-        auto obstaclePosition = Vec2(obstacle.size.width * (float(slotIndex - 1) - obstacle.slotCorrectionFactor), _heightUnit * 0.3f);
+        const auto obstacle = RNG::randomBool() ? Obstacle::SMALL : Obstacle::MEDIUM;
+        const int slotIndex = selectSlotIndex(obstacle);
+        const auto obstaclePosition = Vec2(obstacle.size.width * (float(slotIndex - 1) - obstacle.slotCorrectionFactor), _heightUnit * 0.3f);
         spawns.emplace_back(SpawnPoint(obstacle.entityType, obstaclePosition));
-        // TODO: Spawn coins
+        
+        // Spawn coins
+        const auto coinSpawnCenter = Vec2(_laneSpacing * float(selectFreeLaneAgainst(obstacle, slotIndex)), _heightUnit * 0.5f);
+        const auto coinStrategy = selectLaneCoins(1, coinSpawnCenter, obstacle, slotIndex);
+        for (const Vec2& position : coinStrategy.getPositions()) {
+            spawns.emplace_back(SpawnPoint(Entity::COLLECT_MONEY, position));
+        }
     } else {
-        // TODO: Spawn coin pattern
+        this->spawnCoinPattern(spawns);
     }
 }
 
-void LevelGenerator::spawnTripleRollingRocks(std::list<SpawnPoint>& spawns)
+void LevelGenerator::spawnTripleRollingRocks(std::list<SpawnPoint>& spawns) const
 {
-    float sign = float(RNG::randomSign());
+    const float sign = float(RNG::randomSign());
     
     if (RNG::randomUniform() < 0.33f) {
-        float centerDistance = _widthUnit * 0.2f;
-        auto position1 = Vec2(0.0f, _heightUnit * 0.75f);
-        auto position2 = Vec2(centerDistance, _heightUnit * 0.95f + _widthUnit * 0.1f * sign);
-        auto position3 = Vec2(-centerDistance, _heightUnit * 0.95f + _widthUnit * 0.1f * -sign);
+        const float centerDistance = _widthUnit * 0.2f;
+        const auto position1 = Vec2(0.0f, _heightUnit * 0.75f);
+        const auto position2 = Vec2(centerDistance, _heightUnit * 0.95f + _widthUnit * 0.1f * sign);
+        const auto position3 = Vec2(-centerDistance, _heightUnit * 0.95f + _widthUnit * 0.1f * -sign);
         spawns.emplace_back(SpawnPoint(Entity::ROLLING_ROCK_VERTICAL, position1));
         spawns.emplace_back(SpawnPoint(Entity::ROLLING_ROCK_VERTICAL, position2));
         spawns.emplace_back(SpawnPoint(Entity::ROLLING_ROCK_VERTICAL, position3));
     } else {
-        float xCoordinate = _widthUnit * 0.37f;
-        bool isAlt = RNG::randomBool();
+        const float xCoordinate = _widthUnit * 0.37f;
+        const bool isAlt = RNG::randomBool();
         for (int i = 0; i < 3; i++) {
-            float altFactor = (isAlt) ? (1.0f - 2.0f * float(i % 2)) : 1.0f;
-            auto rockPosition = Vec2(xCoordinate * sign * altFactor, _heightUnit * (0.95f - 0.3f * float(i)));
+            const float altFactor = (isAlt) ? (1.0f - 2.0f * float(i % 2)) : 1.0f;
+            const auto rockPosition = Vec2(xCoordinate * sign * altFactor, _heightUnit * (0.95f - 0.3f * float(i)));
             spawns.emplace_back(SpawnPoint(Entity::ROLLING_ROCK_DIAGONAL, rockPosition));
         }
     }
-    // TODO: Spawn coin pattern
+    this->spawnCoinPattern(spawns);
 }
 
-void LevelGenerator::spawnCoinPattern(std::list<SpawnPoint>& spawns)
+void LevelGenerator::spawnCoinPattern(std::list<SpawnPoint>& spawns) const
 {
-    CoinStrategy strategy = selectCoinStrategyStandalone();
-    for (Vec2 position : strategy.getPositions()) {
+    const CoinStrategy strategy = selectCoinStrategyStandalone();
+    for (const Vec2& position : strategy.getPositions()) {
         spawns.emplace_back(SpawnPoint(Entity::COLLECT_MONEY, position));
     }
     
-    // TODO: use pivot
+    const auto pivot = strategy.getPivot();
+    if (pivot != Vec2::ZERO) {
+        if (_currentLevel < 4) {
+            // 1-gold, enemy, coin
+            if (RNG::randomUniform() < 0.2f) {
+                spawns.emplace_back(SpawnPoint(Entity::COLLECT_GOLD_BAR, pivot));
+            } else {
+                const auto enemy = selectEnemyForLevel();
+                spawns.emplace_back(SpawnPoint(enemy.entityType, pivot));
+            }
+        } else {
+            if (RNG::randomUniform() < 0.3f) {
+                // super gold -1
+                spawns.emplace_back(SpawnPoint(Entity::COLLECT_GOLD_BAR_3X, pivot));
+            } else {
+                const auto enemy = selectEnemyForLevel();
+                spawns.emplace_back(SpawnPoint(enemy.entityType, pivot));
+            }
+        }
+    }
 }
 
-void LevelGenerator::spawnPowerUp(std::list<SpawnPoint>& spawns)
+void LevelGenerator::spawnPowerUp(std::list<SpawnPoint>& spawns) const
 {
-    CoinStrategy strategy = selectCoinStrategyForPowerUp();
-    for (Vec2 position : strategy.getPositions()) {
+    const CoinStrategy strategy = (RNG::randomBool()) ? CoinStrategy::makeCircle() : CoinStrategy::makeSquare();
+    for (const Vec2& position : strategy.getPositions()) {
         spawns.emplace_back(SpawnPoint(Entity::COLLECT_MONEY, position));
     }
     spawns.emplace_back(SpawnPoint(Entity::POWER_UP_CRACKLE, strategy.getPivot()));

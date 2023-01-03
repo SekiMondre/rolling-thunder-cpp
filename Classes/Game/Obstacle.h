@@ -26,6 +26,7 @@ struct Obstacle
     static const Obstacle BIG;
     static const Obstacle MEDIUM;
     static const Obstacle SMALL;
+    static const std::array<Obstacle, 3> ALL;
 };
 
 #endif /* Obstacle_h */
