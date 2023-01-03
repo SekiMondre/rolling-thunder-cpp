@@ -190,25 +190,25 @@ int selectSlotIndex(Obstacle o)
 
 CoinStrategy selectCoinStrategyForPowerUp()
 {
-    return (RNG::randomBool()) ? CoinCircle::makeDefault() : CoinSquare::makeDefault();
+    return (RNG::randomBool()) ? CoinStrategy::makeCircle() : CoinStrategy::makeSquare();
 }
 
 CoinStrategy selectCoinStrategyStandalone()
 {
     int idx = RNG::randomInt(0, 5);
     if (idx == 0) {
-        return CoinCircle::makeDefault();
+        return CoinStrategy::makeCircle();
     } else if (idx == 1) {
-        return CoinSquare::makeDefault();
+        return CoinStrategy::makeSquare();
     } else if (idx == 2) {
-        return CoinBigRhombus::makeDefault();
+        return CoinStrategy::makeBigRhombus();
     } else if (idx == 3) {
-        return CoinSineWave::makeDefault();
+        return CoinStrategy::makeSineWave();
     } else if (idx == 4) {
-        return CoinHalfSineWave::makeDefault();
+        return CoinStrategy::makeHalfSineWave();
     } else {
         log("[ERROR] Invalid coin strategy standalone index: %d", idx);
-        return CoinCircle::makeDefault();
+        return CoinStrategy::makeCircle();
     }
 }
 
