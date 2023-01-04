@@ -25,6 +25,11 @@ const std::string GOLD_BAR = "gold-bar.png";
 const std::string GOLD_BAR_3X = "gold-combo.png";
 const std::string SHADOW_33PX = "shadow-33px.png";
 
+const std::string HEART_FULL = "heart-full.png";
+const std::string HEART_EMPTY = "heart-empty.png";
+const std::string HEART_GOLDEN = "heart-golden.png";
+const std::string CLOCK_ICON = "clock.png";
+
 const std::string BUTTON_CREDITS_NORMAL = "button-credits-normal.png";
 const std::string BUTTON_CREDITS_PRESSED = "button-credits-active.png";
 const std::string BUTTON_RANKING_NORMAL = "button-ranking-normal.png";
@@ -33,6 +38,11 @@ const std::string BUTTON_MUSIC_ON_NORMAL = "button-music-on-normal.png";
 const std::string BUTTON_MUSIC_ON_PRESSED = "button-music-on-active.png";
 const std::string BUTTON_SOUND_ON_NORMAL = "button-sound-on-normal.png";
 const std::string BUTTON_SOUND_ON_PRESSED = "button-sound-on-active.png";
+const std::string BUTTON_BACK_NORMAL = "button-ok_rank-normal.png";
+const std::string BUTTON_BACK_PRESSED = "button-ok_rank-active.png";
+
+const std::string RANKING_WINDOW = "ranking.png";
+const std::string CREDITS_WINDOW = "credits.png";
 }
 
 class SpriteLoader

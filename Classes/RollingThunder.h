@@ -36,8 +36,13 @@
 #include "Nodes/MovingNode.h"
 #include "Nodes/Effects.h"
 
+#include "UI/GUI.h"
 #include "UI/GUINode.h"
+#include "UI/HUDView.h"
 #include "UI/MenuView.h"
+#include "UI/RankingView.h"
+#include "UI/CreditsView.h"
+#include "UI/GameOverView.h"
 #include "UI/ShadowLabel.h"
 
 #endif /* RollingThunder_h */

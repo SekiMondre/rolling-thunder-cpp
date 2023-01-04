@@ -27,6 +27,16 @@ bool GUINode::init()
     auto mainMenu = MenuView::create();
     this->addChild(mainMenu);
     
+//    auto hud = HUDView::create();
+//    this->addChild(hud);
+    
+//    auto rank = RankingView::create();
+//    rank->setPosition(Vec2(0.0f, 0.0f));
+//    this->addChild(rank);
+    
+//    auto cre = CreditsView::create();
+//    this->addChild(cre);
+    
     return true;
 }
 
