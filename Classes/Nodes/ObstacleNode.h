@@ -19,6 +19,8 @@ public:
     static ObstacleNode* createWithType(Obstacle type);
     virtual bool init() override;
     void update(float deltaTime) override;
+    
+    const Obstacle& getType() const;
 
 private:
     ObstacleNode(Obstacle type);

@@ -11,6 +11,7 @@
 #include "axmol.h"
 
 class Game;
+class LevelGenerator;
 
 class World : public ax::Node
 {
@@ -19,6 +20,8 @@ public:
     virtual bool init() override;
     void update(float deltaTime) override;
 
+    ax::Node* _updateHierarchy;
+    
 private:
     World();
     ~World();
@@ -26,11 +29,15 @@ private:
     void setupBackground();
     void updateBackground(float deltaTime);
     
-    ax::Node* _updateHierarchy;
+//    ax::Node* _updateHierarchy;
     ax::Node* _background_0;
     ax::Node* _background_1;
     
     Game* _GAME;
+    
+    std::unique_ptr<LevelGenerator> _levelGenerator;
+    
+    bool _shouldSpawnNextSection;
 };
 
 #endif /* World_h */

@@ -46,6 +46,11 @@ bool PlayerNode::init()
     return true;
 }
 
+bool PlayerNode::isInvincible() const
+{
+    return _invincible;
+}
+
 void PlayerNode::update(float deltaTime)
 {
     if (_state == ROLLING)
@@ -80,7 +85,13 @@ void PlayerNode::update(float deltaTime)
             }
         }
         // FIXME: Clamp correctly when game coordinates are resolved
-        this->setPosition(std::clamp(this->getPosition().x, -200.0f, 1200.0f), //std::clamp(this->getPosition().x, -xMoveRange, xMoveRange),
+//        this->setPosition(std::clamp(this->getPosition().x, -200.0f, 1200.0f), //std::clamp(this->getPosition().x, -xMoveRange, xMoveRange),
+//                          std::clamp(this->getPosition().y, -310.0f, Game::getSceneHeight()));
+        
+        const float xLimitLeft = Game::getSceneWidth() * 0.5f - xMoveRange;
+        const float xLimitRight = Game::getSceneWidth() * 0.5f + xMoveRange;
+        
+        this->setPosition(std::clamp(this->getPosition().x, xLimitLeft, xLimitRight), //std::clamp(this->getPosition().x, -xMoveRange, xMoveRange),
                           std::clamp(this->getPosition().y, -310.0f, Game::getSceneHeight()));
     }
 }

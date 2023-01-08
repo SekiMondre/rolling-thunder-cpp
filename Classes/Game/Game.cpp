@@ -38,7 +38,7 @@ float Game::getSceneHeight()
 
 void Game::reset()
 {
-    _state = IDLE;
+    _state = GameState::IDLE;
     _playerHealth = 3;
 }
 
@@ -62,10 +62,20 @@ void Game::setScrollingSpeed(float speed)
     _scrollingSpeed = speed;
 }
 
+int Game::getPlayerHealth()
+{
+    return _playerHealth;
+}
+
+void Game::damagePlayerHealth()
+{
+    _playerHealth -= 1;
+}
+
 // MARK: - Private:
 
 Game::Game()
-    : _state(IDLE)
+    : _state(GameState::IDLE)
     , _playerHealth(0)
     , _scrollingSpeed(0.0f)
 {}

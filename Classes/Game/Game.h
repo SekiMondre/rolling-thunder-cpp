@@ -10,7 +10,7 @@
 
 #include "axmol.h"
 
-enum GameState
+enum class GameState
 {
     IDLE,
     ACTIVE,
@@ -33,6 +33,9 @@ public:
     
     float getScrollingSpeed();
     void setScrollingSpeed(float speed);
+    
+    int getPlayerHealth();
+    void damagePlayerHealth();
     
 private:
     Game();

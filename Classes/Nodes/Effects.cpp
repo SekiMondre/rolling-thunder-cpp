@@ -67,7 +67,7 @@ Node* Effects::createRockExplosion()
     auto smokeEmitter = Effects::createSmokeBurst(8);
     auto rockEmitter = Effects::createRockBurst(5, 50);
     auto smokeHit = SpriteAnimation::createEphemeralSmokeHit();
-    auto container = Node::create(); // TODO: Needs clean up from scene
+    auto container = MovingNode::create();
     container->addChild(smokeEmitter);
     container->addChild(rockEmitter);
     container->addChild(smokeHit);
@@ -76,7 +76,7 @@ Node* Effects::createRockExplosion()
 
 Node* Effects::createSmokeBurst(int particleCount)
 {
-    auto emitter = Node::create();
+    auto emitter = MovingNode::create();
     for (int i = 0; i < particleCount; i++) {
         auto particle = createSmokeParticle(0.5f);
         emitter->addChild(particle);
@@ -89,7 +89,7 @@ Node* Effects::createTwinkleSparks(const int particleCount, const float interval
     float lifetime = interval * (particleCount - 1.0f) + 0.56f; // 8 frames * 0.07 t
     auto frames = SpriteLoader::loadAnimationFrames("twinkle", 8);
     auto animation = SpriteAnimation::createAnimation(frames, 0.07f, false);
-    auto emitter = Node::create();
+    auto emitter = MovingNode::create();
     
     for (int i = 0; i < particleCount; i++)
     {

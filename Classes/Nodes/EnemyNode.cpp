@@ -37,6 +37,11 @@ EnemyNode* EnemyNode::createWithType(Enemy type)
     return nullptr;
 }
 
+const Enemy& EnemyNode::getType() const
+{
+    return _type;
+}
+
 bool EnemyNode::init()
 {
     if (!Node::init()) return false;

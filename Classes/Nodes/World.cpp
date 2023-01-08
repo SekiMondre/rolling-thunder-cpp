@@ -15,6 +15,8 @@ World::World()
     , _background_0(nullptr)
     , _background_1(nullptr)
     , _GAME(nullptr)
+    , _levelGenerator(nullptr)
+    , _shouldSpawnNextSection(false)
 {}
 
 World::~World()
@@ -23,6 +25,8 @@ World::~World()
     _background_0 = nullptr;
     _background_1 = nullptr;
     _GAME = nullptr;
+    
+    log("World destroy");
 }
 
 bool World::init()
@@ -33,6 +37,10 @@ bool World::init()
     
     auto visibleSize = _director->getVisibleSize();
     auto origin = _director->getVisibleOrigin();
+    auto winSize = _director->getWinSize();
+    
+    const float spacing = 152.0f; // MAGIC
+    _levelGenerator = std::make_unique<LevelGenerator>(winSize.width * 0.75f, winSize.height, spacing);
     
     this->setupBackground();
     
@@ -47,47 +55,29 @@ void World::update(float deltaTime)
 {
     if (_GAME->getState() == GameState::IDLE) return;
     
-    // spawn test ----------
-    static float count = 0.0;
-    count += deltaTime;
-    if (count > 1.5f)
-    {
-        count = 0.0;
+    // TODO: modify speed if needed / game over
+    
+    this->updateBackground(deltaTime);
+    
+    if (_shouldSpawnNextSection) {
         
-        auto nodeA = ObstacleNode::createWithType(Obstacle::BIG);
-        nodeA->setPosition(-100.0f, Game::getSceneHeight() + 200);
-        _updateHierarchy->addChild(nodeA);
+        if (_levelGenerator->isEndOfLevel()) {
+            // TODO: rise speed
+            const float worldSpeed = 500.0f; // FIXME
+            _levelGenerator->generateNextLevel(worldSpeed);
+        }
         
-        auto nodeB = CollectibleNode::createWithType(Collectible::MONEY);
-        nodeB->setPosition(-150.0f, Game::getSceneHeight() + 100);
-        _updateHierarchy->addChild(nodeB);
-        auto nodeB2 = CollectibleNode::createWithType(Collectible::GOLD_BAR);
-        nodeB2->setPosition(-50.0f, Game::getSceneHeight() + 100);
-        _updateHierarchy->addChild(nodeB2);
-        auto nodeB3 = CollectibleNode::createWithType(Collectible::GOLD_BAR_3X);
-        nodeB3->setPosition(50.0f, Game::getSceneHeight() + 100);
-        _updateHierarchy->addChild(nodeB3);
-        auto nodeB4 = CollectibleNode::createWithType(Collectible::CRACKLE);
-        nodeB4->setPosition(150.0f, Game::getSceneHeight() + 100);
-        _updateHierarchy->addChild(nodeB4);
-
-        auto nodeC = EnemyNode::createWithType(Enemy::DODGER);
-        nodeC->setPosition(0.0f, Game::getSceneHeight() + 280);
-        _updateHierarchy->addChild(nodeC);
+        auto spawnList = _levelGenerator->popNextSection();
         
-        auto nodeD = RollingRockNode::createWithType(RollingRock::DIAGONAL);
-        nodeD->setPosition(-190, Game::getSceneHeight() + 500);
-        _updateHierarchy->addChild(nodeD);
-        
-        auto nodeE = RollingRockNode::createWithType(RollingRock::DIAGONAL);
-        nodeE->setPosition(190, Game::getSceneHeight() + 600);
-        _updateHierarchy->addChild(nodeE);
-        
-        auto nodeF = RollingRockNode::createWithType(RollingRock::VERTICAL);
-        nodeF->setPosition(150, Game::getSceneHeight() + 500);
-        _updateHierarchy->addChild(nodeF);
+        for (const auto &spawn : spawnList) {
+            auto node = NodeFactory::parseEntity(spawn);
+            node->setPositionX(spawn.position.x);
+            node->setPositionY(spawn.position.y + Game::getSceneHeight());
+            _updateHierarchy->addChild(node);
+            // TODO: bind player ref if dodge enemy
+        }
+        _shouldSpawnNextSection = false;
     }
-    // end test ----------
     
     auto children = _updateHierarchy->getChildren();
     for (Node* child : children) {
@@ -96,8 +86,6 @@ void World::update(float deltaTime)
             child->removeFromParentAndCleanup(true);
         }
     }
-    this->updateBackground(deltaTime);
-    // TODO: Did finish update (spawn nodes if needed)
 }
 
 void World::updateBackground(float deltaTime)
@@ -110,9 +98,11 @@ void World::updateBackground(float deltaTime)
     
     if (yTarget_0 < -scaledHeight_0) {
         yTarget_0 = yTarget_1 + scaledHeight_0;
+        _shouldSpawnNextSection = true;
     }
     if (yTarget_1 < -scaledHeight_1) {
         yTarget_1 = yTarget_0 + scaledHeight_1;
+        _shouldSpawnNextSection = true;
     }
     _background_0->setPositionY(yTarget_0);
     _background_1->setPositionY(yTarget_1);

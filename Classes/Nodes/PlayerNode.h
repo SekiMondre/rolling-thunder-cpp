@@ -27,6 +27,8 @@ public:
     void onInteractionEnded(const ax::Vec2 touchLocation);
     void onInteractionCancelled(const ax::Vec2 touchLocation);
     void applyBump(const ax::Vec2 contactPoint);
+    
+    bool isInvincible() const;
 
 private:
     PlayerNode();

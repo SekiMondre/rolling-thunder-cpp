@@ -19,6 +19,8 @@ public:
     virtual bool init() override;
     void update(float deltaTime) override;
     void simpleDodge();
+    
+    const Enemy& getType() const;
 
 private:
     EnemyNode(Enemy type);

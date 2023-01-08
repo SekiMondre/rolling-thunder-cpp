@@ -65,6 +65,37 @@ LevelGenerator::~LevelGenerator()
     log("Level generator destroyed");
 }
 
+int LevelGenerator::getCurrentLevel()
+{
+    return _currentLevel;
+}
+
+bool LevelGenerator::isEndOfLevel()
+{
+    return _levelModules.empty();
+}
+
+//void LevelGenerator::increaseLevel()
+//{
+//    _currentLevel += 1;
+//}
+
+std::list<SpawnPoint> LevelGenerator::popNextSection()
+{
+    auto section = _levelModules.front(); // check empty? -> .front() on empty list is undefined behavior
+    _levelModules.pop_front();
+    return section;
+}
+
+void LevelGenerator::generateNextLevel(const float scrollSpeed)
+{
+    _currentLevel += 1;
+    const float sectionDeltaTime = _heightUnit / scrollSpeed;
+    const float levelApproximateDuration = (_currentLevel > 1) ? 45.0f : 23.0f;
+    const int numberOfSections = int(levelApproximateDuration / sectionDeltaTime);
+    this->generateLevel(_currentLevel, numberOfSections);
+}
+
 void LevelGenerator::generateLevel(const int level, const int numberOfSections)
 {
     int lvl_idx = std::clamp(level, 1, 4) - 1;
@@ -85,13 +116,6 @@ void LevelGenerator::generateLevel(const int level, const int numberOfSections)
     _levelModules.emplace_back(std::list<SpawnPoint>());
     this->spawnPowerUp(_levelModules.back());
     log("--- END LEVEL GEN");
-}
-
-std::list<SpawnPoint> LevelGenerator::popNextSection()
-{
-    auto section = _levelModules.front(); // check empty? -> .front() on empty list is undefined behavior
-    _levelModules.pop_front();
-    return section;
 }
 
 // MARK: - Builder methods

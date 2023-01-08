@@ -48,6 +48,11 @@ ObstacleNode* ObstacleNode::createWithType(Obstacle type)
     return nullptr;
 }
 
+const Obstacle& ObstacleNode::getType() const
+{
+    return _type;
+}
+
 bool ObstacleNode::init()
 {
     if (!Node::init()) return false;
@@ -60,6 +65,8 @@ bool ObstacleNode::init()
         _sprite = SpriteLoader::load(ImageAsset::ROCK_BIG);
     }
     addChild(_sprite);
+    
+    this->setTag(42); // SAGAZ
     
     this->setupPhysicsBody();
     return true;

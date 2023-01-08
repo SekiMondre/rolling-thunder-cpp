@@ -58,8 +58,12 @@ public:
     LevelGenerator(const float sceneWidth, const float sceneHeight, const float laneSpacing);
     ~LevelGenerator();
     
+    int getCurrentLevel();
     std::list<SpawnPoint> popNextSection();
+    void generateNextLevel(const float scrollSpeed);
     void generateLevel(const int level, const int numberOfSections);
+    bool isEndOfLevel();
+//    void increaseLevel();
     
     void spawnObstacles(std::list<SpawnPoint>& spawns, const int n, const bool replaceEnemy) const; // true -> replaces 1 obstacle for an enemy
     void spawnRollingRock(std::list<SpawnPoint>& spawns, const float emptyChance) const; // if !empty, spawns an obstacle / chance -> {0.0...1.0}
