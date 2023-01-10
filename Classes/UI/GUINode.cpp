@@ -27,8 +27,8 @@ bool GUINode::init()
 //    auto mainMenu = MenuView::create();
 //    this->addChild(mainMenu);
     
-    auto hud = HUDView::create();
-    this->addChild(hud);
+    _hud = HUDView::create();
+    this->addChild(_hud);
     
 //    auto rank = RankingView::create();
 //    rank->setPosition(Vec2(0.0f, 0.0f));
@@ -44,3 +44,8 @@ bool GUINode::init()
 //{
 //    log("test call");
 //}
+
+HUDView* GUINode::getHUD()
+{
+    return _hud;
+}

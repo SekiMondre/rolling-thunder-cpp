@@ -13,6 +13,8 @@
 class Game;
 class World;
 class PlayerNode;
+class ScoreCounter;
+class GUINode;
 
 class GameScene : public ax::Scene
 {
@@ -36,6 +38,9 @@ private:
     Game* _GAME;
     World* _world;
     PlayerNode* _player;
+    std::unique_ptr<ScoreCounter> _score;
+    
+    GUINode* _gui;
 };
 
 #endif /* GameScene_h */

@@ -26,6 +26,9 @@ bool GameScene::init()
     
     _GAME = Game::getInstance();
     
+    _score = std::make_unique<ScoreCounter>();
+//    _score->setTimeElapsed(0.0f);
+    
     auto world = getPhysicsWorld();
     world->setGravity(Vec2(0, 0));
     world->setDebugDrawMask(0xFFFF); // #if DEBUG
@@ -50,8 +53,8 @@ bool GameScene::init()
 //    _world->_updateHierarchy->addChild(_player);
     _player->setPosition(400.0f, 200.0f);
     
-    auto gui = GUINode::create();
-    addChild(gui);
+    _gui = GUINode::create();
+    addChild(_gui);
     
     this->scheduleUpdate();
     return true;
@@ -75,8 +78,11 @@ void GameScene::update(float deltaTime)
     if (_world) {
         _world->update(deltaTime);
     }
-    // TODO: update running score
-    // TODO: update HUD
+    if (_GAME->getState() == GameState::ACTIVE) {
+        _score->addTimeElapsed(deltaTime);
+        // TODO: update running score
+    }
+    _gui->getHUD()->updateScore(_score->getScore());
 }
 
 bool GameScene::onTouchBegan(Touch* touch, Event* event)

@@ -21,6 +21,7 @@
 #include "Game/CoinStrategy.h"
 #include "Game/EnemySelector.h"
 #include "Game/NodeFactory.h"
+#include "Game/ScoreCounter.h"
 
 #include "Game/Enemy.h"
 #include "Game/Obstacle.h"
