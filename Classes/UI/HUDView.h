@@ -21,6 +21,7 @@ public:
     virtual bool init() override;
     
     void updateScore(Score score);
+    void updateLife(const int health);
 
 private:
     HUDView();
@@ -29,6 +30,8 @@ private:
     ShadowLabel* _timeLabel;
     ShadowLabel* _coinLabel;
     ShadowLabel* _tr00scoreLabel;
+    
+    ax::Vector<ax::Sprite*> _lifeBar;
 };
 
 #endif /* HUDView_h */

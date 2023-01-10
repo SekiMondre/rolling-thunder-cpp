@@ -12,6 +12,15 @@ USING_NS_AX;
 
 // MARK: - Public
 
+ActionInterval* Effects::createBlink(const float period, const int count)
+{
+    auto blink = Sequence::create(Hide::create(),
+                                  DelayTime::create(period * 0.5f),
+                                  Show::create(),
+                                  DelayTime::create(period * 0.5f), NULL);
+    return Repeat::create(blink, count);
+}
+
 Node* Effects::createHitFlash()
 {
     auto size = Director::getInstance()->getWinSize();

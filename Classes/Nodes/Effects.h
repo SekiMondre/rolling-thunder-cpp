@@ -13,6 +13,7 @@
 class Effects
 {
 public:
+    static ax::ActionInterval* createBlink(const float period, const int count);
     static ax::Node* createHitFlash();
     static ax::Node* createDamageFlash();
     static ax::Node* createPowerFlash();

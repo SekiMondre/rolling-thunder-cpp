@@ -10,7 +10,7 @@
 
 #include "axmol.h"
 
-enum PlayerState
+enum class PlayerState
 {
     INACTIVE,
     ROLLING
@@ -21,22 +21,35 @@ class PlayerNode : public ax::Node
 public:
     CREATE_FUNC(PlayerNode);
     virtual bool init() override;
+    
+    bool isInvincible() const;
+    
+    void setRollingState();
+    void setInvincibleFrames();
+    void applyBump(const ax::Vec2 contactPoint);
+    
     void update(float deltaTime) override;
     void onInteractionBegin(const ax::Vec2 touchLocation);
     void onInteractionMoved(const ax::Vec2 touchLocation);
     void onInteractionEnded(const ax::Vec2 touchLocation);
     void onInteractionCancelled(const ax::Vec2 touchLocation);
-    void applyBump(const ax::Vec2 contactPoint);
     
-    bool isInvincible() const;
-
 private:
     PlayerNode();
     ~PlayerNode();
     void setupPhysicsBody();
+    void endInvincibleFrames();
+    
+    ax::Sprite* _sprite;
+    ax::Animation* _idleAnimation; //
+//    ax::Animation* _rollAnimation;
+//    ax::Animation* _deadAnimation;
+//    ax::ActionInterval* _idleAnimation;
+//    ax::ActionInterval* _rollAnimation;
+//    ax::ActionInterval* _deadAnimation;
     
     PlayerState _state;
-    ax::Sprite* _sprite;
+    
     ax::Vec2 _touchPosition;
     ax::Vec2 _velocity;
     ax::Vec2 _direction;

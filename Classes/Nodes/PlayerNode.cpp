@@ -11,14 +11,14 @@
 
 USING_NS_AX;
 
-const float verticalOffset = 30.0f; // TODO: define differently based on device category (phone, pad)
+const float verticalOffset = 50.0f; // TODO: define differently based on device category (phone, pad)
 const float movespeed = 3000.0f;
 const float bumpMagnitude = 2000.0f;
 const float maxDecayFactor = 500.0f;
 const float xMoveRange = 195.0f;
 
 PlayerNode::PlayerNode()
-    : _state(INACTIVE)
+    : _state(PlayerState::INACTIVE)
     , _sprite(nullptr)
     , _touchPosition(Vec2::ZERO)
     , _velocity(Vec2::ZERO)
@@ -37,10 +37,21 @@ bool PlayerNode::init()
 {
     if (!Node::init()) return false;
     
-    _state = ROLLING; // FIXME
+    _state = PlayerState::INACTIVE;
     
-    _sprite = SpriteLoader::load("tatu-1-ball-0.png");
+    _sprite = Sprite::create();
+    _sprite->setScale(2.0f, 2.0f);
     addChild(_sprite);
+    
+    int player_idx = 1;
+    
+    _idleAnimation = SpriteAnimation::loadPlayerIdleAnimation(player_idx); // something bad happens with cached anims
+//    _rollAnimation = SpriteAnimation::loadPlayerRollAnimation(player_idx);
+//    _rollAnimation = Animate::create(SpriteAnimation::loadPlayerRollAnimation(player_idx));
+//    _deadAnimation = SpriteAnimation::loadPlayerDeadAnimation(player_idx);
+    
+    _sprite->setSpriteFrame(_idleAnimation->getFrames().front()->getSpriteFrame());
+    _sprite->runAction(Animate::create(_idleAnimation));
     
     this->setupPhysicsBody();
     return true;
@@ -51,9 +62,28 @@ bool PlayerNode::isInvincible() const
     return _invincible;
 }
 
+void PlayerNode::setRollingState()
+{
+    _state = PlayerState::ROLLING;
+    
+    _sprite->stopAllActions();
+    _sprite->runAction(Animate::create(SpriteAnimation::loadPlayerRollAnimation(1)));
+}
+
+void PlayerNode::setInvincibleFrames()
+{
+    _invincible = true;
+    auto blink = Sequence::create(Effects::createBlink(0.3f, 3),
+                                  Effects::createBlink(0.2f, 5),
+                                  Effects::createBlink(0.1f, 10),
+                                  CallFunc::create(AX_CALLBACK_0(PlayerNode::endInvincibleFrames, this)),
+                                  nullptr);
+    this->runAction(blink); // 2.9s invincible
+}
+
 void PlayerNode::update(float deltaTime)
 {
-    if (_state == ROLLING)
+    if (_state == PlayerState::ROLLING)
     {
         if (_touchPosition != Vec2::ZERO) {
             _internalAcceleration = std::min(_internalAcceleration + deltaTime, 1.0f);
@@ -133,6 +163,11 @@ void PlayerNode::applyBump(const Vec2 contactPoint)
         _bumpForce.normalize();
         _bumpForce *= bumpMagnitude;
     }
+}
+
+void PlayerNode::endInvincibleFrames()
+{
+    _invincible = false;
 }
 
 void PlayerNode::setupPhysicsBody()

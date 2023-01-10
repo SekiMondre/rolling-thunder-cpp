@@ -12,12 +12,18 @@ const int MAX_COMBO_COUNT = 10;
 
 Score ScoreCounter::getScore() const
 {
-    return Score { _points, _moneyCount, _timeElapsed };
+    int totalPoints = _points + _runningPoints;
+    return Score { totalPoints, _moneyCount, _timeElapsed };
 }
 
-void ScoreCounter::addMoneyScore(const int score, const int money)
+void ScoreCounter::addRunningScore(const float points)
 {
-    _points += score;
+    _runningPoints += points;
+}
+
+void ScoreCounter::addMoneyScore(const int points, const int money)
+{
+    _points += points;
     _moneyCount += money;
 }
 

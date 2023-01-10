@@ -44,12 +44,20 @@ bool HUDView::init()
     _timeLabel->setAnchorPoint(Vec2(1.0f, 0.0f));
     
     _coinLabel = GUI::createHUDLabel();
-    _coinLabel->setString("999999");
+    _coinLabel->setString("0");
     _coinLabel->setAnchorPoint(Vec2(1.0f, 0.0f));
     
     _tr00scoreLabel = GUI::createHUDLabel();
-    _tr00scoreLabel->setString("9999999");
+    _tr00scoreLabel->setString("0");
     _tr00scoreLabel->setAnchorPoint(Vec2(0.0f, 0.0f));
+    
+    for (int i = 0; i < 3; i++) {
+        auto heart = SpriteLoader::load(ImageAsset::HEART_FULL);
+        heart->setAnchorPoint(Vec2(0.5f, 1.0f));
+        heart->setPosition(origin.x + visibleSize.width * 0.5f + 50.0f * (i - 1), origin.y + visibleSize.height - 30.0f);
+        addChild(heart);
+        _lifeBar.pushBack(heart);
+    }
     
     addChild(_timeLabel);
     addChild(_coinLabel);
@@ -93,4 +101,14 @@ void HUDView::updateScore(Score score)
     char timeString[10] = {'\0'}; // Minimum is 8
     snprintf(timeString, 10, "%d:%.2d.%.2d", minutes, seconds, millis);
     _timeLabel->setString(timeString);
+}
+
+void HUDView::updateLife(const int health)
+{
+    if (health > 3 || health < 0) {
+        return;
+    }
+    for (int i = 0; i < (3 - health); i++) {
+        _lifeBar.at(2 - i)->setSpriteFrame(SpriteLoader::loadFrame(ImageAsset::HEART_EMPTY));
+    }
 }

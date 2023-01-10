@@ -25,13 +25,14 @@ bool GameScene::init()
     if (!Scene::initWithPhysics()) return false;
     
     _GAME = Game::getInstance();
+    _GAME->reset();
     
     _score = std::make_unique<ScoreCounter>();
 //    _score->setTimeElapsed(0.0f);
     
     auto world = getPhysicsWorld();
     world->setGravity(Vec2(0, 0));
-    world->setDebugDrawMask(0xFFFF); // #if DEBUG
+//    world->setDebugDrawMask(0xFFFF); // #if DEBUG
     
     auto contactListener = EventListenerPhysicsContact::create();
     contactListener->onContactBegin = AX_CALLBACK_1(GameScene::onContactBegin, this);
@@ -71,16 +72,15 @@ void GameScene::startGame()
 
 void GameScene::update(float deltaTime)
 {
-    // update timer?
-    if (_player) {
-        _player->update(deltaTime);
-    }
     if (_world) {
         _world->update(deltaTime);
     }
+    if (_player) {
+        _player->update(deltaTime);
+    }
     if (_GAME->getState() == GameState::ACTIVE) {
         _score->addTimeElapsed(deltaTime);
-        // TODO: update running score
+        _score->addRunningScore(deltaTime * _GAME->getScrollingSpeed() * 0.3f); // MAGIC rolling factor
     }
     _gui->getHUD()->updateScore(_score->getScore());
 }
@@ -93,6 +93,7 @@ bool GameScene::onTouchBegan(Touch* touch, Event* event)
     if (_GAME->getState() == GameState::IDLE) {
         _GAME->setState(GameState::ACTIVE);
         _GAME->setScrollingSpeed(500.0f);
+        _player->setRollingState();
     }
     _player->onInteractionBegin(location);
     
@@ -167,11 +168,11 @@ bool GameScene::onContactBegin(PhysicsContact& contact)
             if (!player->isInvincible()) {
                 _GAME->damagePlayerHealth();
                 if (_GAME->getPlayerHealth() > 0) {
-                    // set invincible frames
+                    _player->setInvincibleFrames();
                 } else {
                     // game over
                 }
-                // update life bar
+                _gui->getHUD()->updateLife(_GAME->getPlayerHealth());
                 // play sound
                 addChild(Effects::createDamageFlash());
             } else {
@@ -190,7 +191,6 @@ bool GameScene::onContactBegin(PhysicsContact& contact)
             
             // --- hit effect
             nodeB->removeComponent(nodeB->getPhysicsBody());
-//            auto localContact = _world->_updateHierarchy->convertToNodeSpace(contactPoint);
             auto localContact = nodeB->getParent()->convertToNodeSpace(contactPoint);
             auto direction = (nodeB->getPosition() - localContact).getNormalized();
             auto move = MoveBy::create(2, direction * 3000); // 3000
@@ -222,7 +222,7 @@ bool GameScene::onContactBegin(PhysicsContact& contact)
             
             CollectibleNode* collectible = static_cast<CollectibleNode*>(nodeB);
             
-            _score->addMoneyScore(collectible->getType().score, collectible->getType().score);
+            _score->addMoneyScore(collectible->getType().score, collectible->getType().moneyValue);
             // show score text
             // play sound
             
