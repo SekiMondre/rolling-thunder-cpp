@@ -17,7 +17,7 @@ CreditsView::CreditsView()
 
 CreditsView::~CreditsView()
 {
-    // Destructor
+    log("credits view destroy");
 }
 
 bool CreditsView::init()
@@ -38,10 +38,16 @@ bool CreditsView::init()
     titleLabel->setPosition(center.x, center.y + 428.0f);
     addChild(titleLabel);
     
-    auto backButton = GUI::createMenuButton(ImageAsset::BUTTON_BACK_NORMAL, ImageAsset::BUTTON_BACK_PRESSED);
-    backButton->setPosition(0.0f, -420.0f);
-    auto menu = Menu::createWithItem(backButton);
+    _backButton = GUI::createMenuButton(ImageAsset::BUTTON_BACK_NORMAL, ImageAsset::BUTTON_BACK_PRESSED);
+//    _backButton->setCallback(AX_CALLBACK_0(CreditsView::dismiss, this));
+    _backButton->setPosition(0.0f, -420.0f);
+    auto menu = Menu::createWithItem(_backButton);
     addChild(menu);
     
     return true;
+}
+
+void CreditsView::setDismissCallback(const ccMenuCallback& callback)
+{
+    _backButton->setCallback(callback);
 }

@@ -27,7 +27,11 @@ private:
     GameScene();
     ~GameScene();
     
+    void enablePregame();
     void startGame();
+    
+    void enableTouch();
+    void disableTouch();
     
     bool onTouchBegan(ax::Touch* touch, ax::Event* event);
     void onTouchMoved(ax::Touch* touch, ax::Event* event);
@@ -41,6 +45,8 @@ private:
     std::unique_ptr<ScoreCounter> _score;
     
     GUINode* _gui;
+    
+    bool _isTouchEnabled;
 };
 
 #endif /* GameScene_h */
