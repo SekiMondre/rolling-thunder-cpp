@@ -14,10 +14,12 @@ enum class Entity;
 
 struct Collectible
 {
-    Collectible(Entity _entityType, ax::Vec2 _size);
+    Collectible(Entity _entityType, ax::Vec2 _size, int _score, int _moneyValue);
     
     Entity entityType;
     ax::Vec2 size;
+    int score;
+    int moneyValue;
     
     bool operator==(const Collectible& right) const;
     

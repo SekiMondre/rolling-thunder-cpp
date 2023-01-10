@@ -10,9 +10,10 @@
 
 USING_NS_AX;
 
-Enemy::Enemy(Entity _entityType, Vec2 _size)
+Enemy::Enemy(Entity _entityType, Vec2 _size, int _score)
     : entityType(_entityType)
     , size(_size)
+    , score(_score)
 {}
 
 bool Enemy::operator==(const Enemy& right) const
@@ -21,15 +22,18 @@ bool Enemy::operator==(const Enemy& right) const
 }
 
 const Enemy Enemy::NORMAL(Entity::ENEMY_NORMAL,
-                          Vec2(75.0f, 75.0f)
+                          Vec2(75.0f, 75.0f),
+                          1000
                           );
 
 const Enemy Enemy::BIG(Entity::ENEMY_BIG,
-                       Vec2(125.0f, 125.0f)
+                       Vec2(125.0f, 125.0f),
+                       3000
                        );
 
 const Enemy Enemy::DODGER(Entity::ENEMY_DODGER,
-                          Vec2(75.0f, 75.0f)
+                          Vec2(75.0f, 75.0f),
+                          5000
                           );
 
 const std::array<Enemy, 3> Enemy::ALL = {

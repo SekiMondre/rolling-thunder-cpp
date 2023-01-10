@@ -161,7 +161,7 @@ bool GameScene::onContactBegin(PhysicsContact& contact)
             explosionEffect->setPosition(nodeB->getPosition());
             _world->_updateHierarchy->addChild(explosionEffect);
             
-            // add score
+            _score->addComboScore(2000); // MAGIC
             // show score text
             
             if (!player->isInvincible()) {
@@ -178,7 +178,7 @@ bool GameScene::onContactBegin(PhysicsContact& contact)
                 // play sound
                 addChild(Effects::createHitFlash());
             }
-            nodeB->removeFromParent();
+            nodeB->removeFromParentAndCleanup(true);
         }
         else if (bodyB->getCategoryBitmask() == CollisionMask::ENEMY)
         {
@@ -202,7 +202,7 @@ bool GameScene::onContactBegin(PhysicsContact& contact)
             nodeB->runAction(knockOff); // Needs to disable extra collision
             // --- end hit effect
             
-            // add score
+            _score->addComboScore(enemy->getType().score);
             // show score text
             // play sound
             
@@ -218,13 +218,17 @@ bool GameScene::onContactBegin(PhysicsContact& contact)
             // TODO: twinkle only if is money
             auto twinkleEmitter = Effects::createTwinkleSparks(4, 0.1, 30);
             twinkleEmitter->setPosition(nodeB->getPosition());
-            addChild(twinkleEmitter);
+            nodeB->getParent()->addChild(twinkleEmitter);
             
-            // add score
+            CollectibleNode* collectible = static_cast<CollectibleNode*>(nodeB);
+            
+            _score->addMoneyScore(collectible->getType().score, collectible->getType().score);
             // show score text
             // play sound
             
             // activate power up effect if so
+            
+            nodeB->removeFromParentAndCleanup(true);
         }
 //        else if (bodyB->getCategoryBitmask() == CollisionMask::DEATH_ZONE)
 //        {

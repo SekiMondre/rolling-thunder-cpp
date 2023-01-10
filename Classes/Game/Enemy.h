@@ -14,10 +14,11 @@ enum class Entity;
 
 struct Enemy
 {
-    Enemy(Entity _entityType, ax::Vec2 _size);
+    Enemy(Entity _entityType, ax::Vec2 _size, int _score);
     
     Entity entityType;
     ax::Vec2 size;
+    int score;
     
     bool operator==(const Enemy& right) const;
     

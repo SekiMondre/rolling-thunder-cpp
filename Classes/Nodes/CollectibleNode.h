@@ -17,6 +17,8 @@ public:
     static CollectibleNode* createWithType(Collectible type);
     virtual bool init() override;
     void update(float deltaTime) override;
+    
+    const Collectible& getType() const;
 
 private:
     CollectibleNode(Collectible type);

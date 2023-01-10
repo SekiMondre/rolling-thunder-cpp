@@ -33,6 +33,11 @@ CollectibleNode* CollectibleNode::createWithType(Collectible type)
     return nullptr;
 }
 
+const Collectible& CollectibleNode::getType() const
+{
+    return _type;
+}
+
 bool CollectibleNode::init()
 {
     if (!Node::init()) return false;
